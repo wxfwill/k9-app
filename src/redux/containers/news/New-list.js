@@ -1,0 +1,69 @@
+import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
+import ReactDOM from "react-dom";
+import { Tabs, List, Badge } from "antd-mobile";
+import Header from "components/common/Header";
+import NewNoList from "./New-no-list";
+import NewYesList from "./New-yes-list";
+require("style/own/own.less");
+const tabs = [
+  { title: "待办", label: "no-done" },
+  { title: "已办", sub: "yes-done" },
+];
+
+class NewList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: "",
+      tabType: "no-done",
+    };
+    // this.parent = null;
+    // this.listRef = (e) => {
+    //   this.parent = e;
+    // };
+  }
+  componentDidMount() {
+    console.log(666);
+  }
+  addTask = () => {};
+  componentWillMount() {
+    let obj = util.urlParse(this.props.location.search);
+    this.setState({ title: obj.title });
+  }
+
+  onRef = (name, ref) => {
+    if (name == "parent") {
+      this.parent = ref;
+    }
+  };
+  handleClickTab = (item, index) => {
+    console.log("111" + item);
+    this.setState({ tabType: item.sub });
+    console.log(this.parent.noData());
+  };
+  render() {
+    return (
+      <div className="new-list-wrap Own">
+        <Header pointer title={this.state.title} isSet="+" handleShow={this.addTask.bind(this)} />
+        <Tabs
+          tabs={tabs}
+          initialPage={0}
+          swipeable={false}
+          onTabClick={(tab, index) => {
+            this.handleClickTab(tab, index);
+          }}
+        >
+          <div style={{ boxSizing: "border-box" }}>
+            <NewNoList onRef={this.onRef.bind(this)}></NewNoList>
+          </div>
+          <div style={{ boxSizing: "border-box" }}>
+            <NewYesList></NewYesList>
+          </div>
+        </Tabs>
+      </div>
+    );
+  }
+}
+
+export default withRouter(NewList);

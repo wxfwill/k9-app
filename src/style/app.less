@@ -1,0 +1,109 @@
+/* Base Application Styles */
+* {
+  *{margin:0;padding:0;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-overflow-scrolling: touch;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-tap-highlight-color: transparent;}
+}
+html{
+  font-size:100px;
+  height:100%;
+  font-family: PingFang-SC-Medium, PingFang-SC;
+}
+body {
+  color: black;
+  background: white;
+  height:100%;
+  font-size: .12rem;
+  #root,.app{
+    height: 100%;
+    background: #F5F6F7;
+    max-width: 10rem;
+    margin: auto;
+  }
+}
+a{
+  text-decoration: none;
+}
+ul,li,p{
+  padding: 0px;
+  margin: 0px;
+  list-style-type: none;
+}
+h1,h2,h3,h4,h5{
+  margin: 0;
+  padding:0;
+  font-weight: normal;
+}
+img{
+  max-width: 100%;
+}
+.mtp-16 {
+  margin-top: 0.213333rem;
+}
+.mtp-24 {
+  margin-top: 0.32rem;
+}
+.mtb-30 {
+  margin-bottom: 0.4rem;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="file"] {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* 改变光标的额颜色 */
+// input {
+//   color: #999999;
+// }
+input::input-placeholder {
+  color: #adb0bc !important;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  color: #adb0bc !important;
+}
+input:-moz-placeholder,
+textarea:-moz-placeholder {
+  color: #adb0bc !important;
+}
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+  color: #adb0bc !important;
+}
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+  color: #adb0bc !important;
+}
+
+.Own {
+  width: 100%;
+	height:100%;
+	box-sizing: border-box;
+	display: flex;
+  flex-direction: column;
+  .midder-content {
+		flex: 1;
+		position: relative;
+		.inner-content {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			box-sizing: border-box;
+			height: 100%;
+			overflow: auto;
+      padding: 0 0.32rem;
+    }
+  }
+}
+

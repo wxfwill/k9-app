@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="702px" height="287px" viewBox="0 0 702 287" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>名片背景</title>
+    <defs>
+        <linearGradient x1="5.50584783%" y1="41.6428235%" x2="98.0920601%" y2="58.0196955%" id="linearGradient-1">
+            <stop stop-color="#78A4EF" offset="0%"></stop>
+            <stop stop-color="#5A86EC" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-2" x="0" y="0" width="702" height="287" rx="16"></rect>
+        <linearGradient x1="28.8019868%" y1="38.9406151%" x2="64.0404238%" y2="68.3325298%" id="linearGradient-4">
+            <stop stop-color="#78A4EF" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#5A86EC" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="-4.18751686%" x2="62.5946134%" y2="82.9528766%" id="linearGradient-5">
+            <stop stop-color="#78A4EF" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#5A86EC" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="63.0881505%" y1="6.35632797%" x2="20.45266%" y2="73.7656727%" id="linearGradient-6">
+            <stop stop-color="#78A4EF" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#5A86EC" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="4-我的" transform="translate(-24.000000, -152.000000)">
+            <g id="我的任务" transform="translate(24.000000, 152.000000)">
+                <g id="名片背景">
+                    <mask id="mask-3" fill="white">
+                        <use xlink:href="#path-2"></use>
+                    </mask>
+                    <use id="蒙版" fill="url(#linearGradient-1)" xlink:href="#path-2"></use>
+                    <path d="M-89.4504742,291 C-71.6005046,323.919629 -31.0168827,251.986404 27.7843177,235.5 C86.5855181,219.013596 96.1965471,242 156.648236,222 C217.099925,202 239.579875,135.625671 286.773472,103.504182 C333.967068,71.382693 399.938559,87.4731985 414.501445,50 C429.06433,12.5268015 419.715515,-15 353.549526,-41 C309.438866,-58.3333333 142.922358,-73 -146,-85 C-120.200296,143.720247 -101.350454,269.053581 -89.4504742,291 Z" id="路径-2" fill="url(#linearGradient-4)" mask="url(#mask-3)"></path>
+                    <circle id="椭圆形" fill="url(#linearGradient-5)" mask="url(#mask-3)" cx="566" cy="91" r="65"></circle>
+                    <circle id="椭圆形备份" fill="url(#linearGradient-6)" mask="url(#mask-3)" cx="478.5" cy="187.5" r="120.5"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
