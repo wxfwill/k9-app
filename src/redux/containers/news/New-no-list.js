@@ -8,10 +8,10 @@ const Item = List.Item;
 function MyBody(props) {
   return <div className="am-list-body my-body">{props.children}</div>;
 }
-import { newsListTypeData } from "./new-data.js";
+import { newsListNoTypeData } from "./new-data.js";
 
 let NUM_SECTIONS = 5;
-const dataBlobs = {};
+let dataBlobs = {};
 
 function genData(pIndex = 0) {
   for (let i = 0; i < NUM_SECTIONS; i++) {
@@ -19,6 +19,7 @@ function genData(pIndex = 0) {
     const sectionName = `Section-${ii}`;
     dataBlobs[`${sectionName}-data${ii}`] = sectionName;
   }
+  return dataBlobs;
 }
 
 class NewNoList extends Component {
@@ -35,26 +36,31 @@ class NewNoList extends Component {
 
     this.state = {
       currentPage: 0,
-      newsListTypeData,
+      newsListNoTypeData,
       dataSource,
       isLoading: true,
       height: (document.documentElement.clientHeight * 3) / 4,
     };
   }
+  componentWillUnmount() {
+    // this.setState = (state, callback) => {
+    //   return;
+    // };
+    dataBlobs = {};
+    console.log("离开了");
+  }
   componentDidMount() {
     // console.log(ReactDOM.findDOMNode(this.lv));
     const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).parentNode.offsetTop;
     // simulate initial Ajax
-    setTimeout(() => {
-      console.log("数据");
-      genData();
-      this.setState({
-        newsListTypeData,
-        dataSource: this.state.dataSource.cloneWithRows(dataBlobs),
-        isLoading: false,
-        height: hei,
-      });
-    }, 600);
+    console.log("componentDidMount数据");
+    // genData();
+    this.setState({
+      newsListNoTypeData,
+      dataSource: this.state.dataSource.cloneWithRows(genData(this.state.currentPage)),
+      isLoading: false,
+      height: hei,
+    });
     this.props.onRef && this.props.onRef("parent", this);
   }
   onEndReached = (event) => {
@@ -68,9 +74,9 @@ class NewNoList extends Component {
     setTimeout(() => {
       this.setState({ currentPage: ++this.state.currentPage });
       console.log(this.state.currentPage);
-      genData(this.state.currentPage);
+      // genData(this.state.currentPage);
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(dataBlobs),
+        dataSource: this.state.dataSource.cloneWithRows(genData(this.state.currentPage)),
         isLoading: false,
       });
     }, 1000);
@@ -110,9 +116,9 @@ class NewNoList extends Component {
     let index = 0;
     const row = (rowData, sectionID, rowID) => {
       if (index < 0) {
-        index = this.state.newsListTypeData.length - 1;
+        index = this.state.newsListNoTypeData.length - 1;
       }
-      const item = this.state.newsListTypeData[index++];
+      const item = this.state.newsListNoTypeData && this.state.newsListNoTypeData[index++];
       return (
         item && (
           <List className="new-list-type" key={rowID}>
@@ -152,26 +158,30 @@ class NewNoList extends Component {
         )
       );
     };
+    console.log("state");
+    console.log(this.state.dataSource.rowIdentities);
     return (
-      <ListView
-        ref={(el) => (this.lv = el)}
-        dataSource={this.state.dataSource}
-        renderFooter={() => <div style={{ padding: 30, textAlign: "center" }}>{this.state.isLoading ? "Loading..." : "无更多数据了"}</div>}
-        renderBodyComponent={() => <MyBody />}
-        renderRow={row}
-        renderSeparator={separator}
-        style={{
-          height: this.state.height,
-          overflow: "auto",
-        }}
-        pageSize={1}
-        onScroll={() => {
-          console.log("scroll");
-        }}
-        scrollRenderAheadDistance={500}
-        onEndReached={this.onEndReached}
-        onEndReachedThreshold={10}
-      />
+      this.state.dataSource && (
+        <ListView
+          ref={(el) => (this.lv = el)}
+          dataSource={this.state.dataSource}
+          renderFooter={() => <div style={{ padding: 30, textAlign: "center" }}>{this.state.isLoading ? "Loading..." : "无更多数据了"}</div>}
+          renderBodyComponent={() => <MyBody />}
+          renderRow={row}
+          renderSeparator={separator}
+          style={{
+            height: this.state.height,
+            overflow: "auto",
+          }}
+          pageSize={1}
+          onScroll={() => {
+            console.log("scroll");
+          }}
+          scrollRenderAheadDistance={500}
+          onEndReached={this.onEndReached}
+          onEndReachedThreshold={10}
+        />
+      )
     );
   }
 }

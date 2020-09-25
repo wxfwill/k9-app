@@ -42,7 +42,7 @@ export const newsTypeData = [
     num: 1,
   },
 ];
-export const newsListTypeData = [
+export const newsListNoTypeData = [
   {
     icon: require("images/news/new-w.svg"),
     title: "塘朗山网格化搜谱",
@@ -105,6 +105,33 @@ export const newsListTypeData = [
     content: "在塘朗山附近组织山地野…",
     startTime: "2020-01-24 10:00",
     pusher: "王海青8",
+    status: 1,
+  },
+];
+
+export const newsListYesTypeData = [
+  {
+    icon: require("images/news/new-w.svg"),
+    title: "塘朗山网格化搜谱",
+    content: "在塘朗山附近组织山地野…",
+    startTime: "2020-01-24 10:00",
+    pusher: "王海青1",
+    status: 1,
+  },
+  {
+    icon: require("images/news/new-w.svg"),
+    title: "塘朗山网格化搜谱",
+    content: "在塘朗山附近组织山地野…",
+    startTime: "2020-01-24 10:00",
+    pusher: "王海青2",
+    status: 1,
+  },
+  {
+    icon: require("images/news/new-w.svg"),
+    title: "塘朗山网格化搜谱",
+    content: "在塘朗山附近组织山地野…",
+    startTime: "2020-01-24 10:00",
+    pusher: "王海青3",
     status: 1,
   },
 ];

@@ -23,6 +23,11 @@ class NewList extends Component {
     //   this.parent = e;
     // };
   }
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
   componentDidMount() {
     console.log(666);
   }
@@ -44,24 +49,27 @@ class NewList extends Component {
   };
   render() {
     return (
-      <div className="new-list-wrap Own">
-        <Header pointer title={this.state.title} isSet="+" handleShow={this.addTask.bind(this)} />
-        <Tabs
-          tabs={tabs}
-          initialPage={0}
-          swipeable={false}
-          onTabClick={(tab, index) => {
-            this.handleClickTab(tab, index);
-          }}
-        >
-          <div style={{ boxSizing: "border-box" }}>
-            <NewNoList onRef={this.onRef.bind(this)}></NewNoList>
-          </div>
-          <div style={{ boxSizing: "border-box" }}>
-            <NewYesList></NewYesList>
-          </div>
-        </Tabs>
-      </div>
+      this.state.title && (
+        <div className="new-list-wrap Own">
+          <Header pointer title={this.state.title} isSet="+" handleShow={this.addTask.bind(this)} />
+          <Tabs
+            tabs={tabs}
+            initialPage={0}
+            prerenderingSiblingsNumber={0}
+            swipeable={false}
+            onTabClick={(tab, index) => {
+              this.handleClickTab(tab, index);
+            }}
+          >
+            <div style={{ boxSizing: "border-box" }}>
+              <NewNoList onRef={this.onRef.bind(this)}></NewNoList>
+            </div>
+            <div style={{ boxSizing: "border-box" }}>
+              <NewYesList></NewYesList>
+            </div>
+          </Tabs>
+        </div>
+      )
     );
   }
 }

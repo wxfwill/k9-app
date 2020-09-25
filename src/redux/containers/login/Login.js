@@ -67,15 +67,15 @@ class Login extends Component {
                 })
               );
           } else {
-            window.webkit.messageHandlers.showInfoFromJs.postMessage(
-              JSON.stringify({
-                token,
-                id: user.id,
-                gpsInterval: res.data.cfgs.gpsInterval,
-                braceletInterval: res.data.cfgs.braceletInterval,
-                account: user.account,
-              })
-            );
+            // window.webkit.messageHandlers.showInfoFromJs.postMessage(
+            //   JSON.stringify({
+            //     token,
+            //     id: user.id,
+            //     gpsInterval: res.data.cfgs.gpsInterval,
+            //     braceletInterval: res.data.cfgs.braceletInterval,
+            //     account: user.account,
+            //   })
+            // );
           }
         }
       }

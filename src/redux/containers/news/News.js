@@ -66,6 +66,7 @@ class News extends Component {
       rowHasChanged: (row1, row2) => row1 !== row2,
       sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
     });
+    console.log("====dataSource=======");
     console.log(dataSource);
     this.state = {
       newList: newsTypeData,

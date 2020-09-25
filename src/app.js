@@ -3,7 +3,6 @@ import { render } from "react-dom";
 import { Provider } from "react-redux";
 import Routes from "router/router";
 import { AppContainer } from "react-hot-loader";
-import { hot } from "react-hot-loader/root";
 process.env.NODE_ENV == "development" && require("mock/mockData.js");
 import "lib-flexible/flexible.js";
 import Ajax from "libs/ajax";
@@ -26,9 +25,9 @@ const App = {
     );
   },
 };
-hot(App).run();
+App.run();
 if (module.hot) {
   module.hot.accept("router/router", () => {
-    hot(App).run();
+    App.run();
   });
 }

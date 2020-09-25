@@ -65,7 +65,7 @@ const commonSet = {
   resolve: {
     extensions: [".js", ".json", ".jsx"],
     alias: {
-      "react-dom": "@hot-loader/react-dom",
+      // "react-dom": "@hot-loader/react-dom",
       //配置路径常量
       components: `${srcPath}/components`,
       actions: `${srcPath}/redux/actions`,
