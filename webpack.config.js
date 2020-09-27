@@ -32,8 +32,8 @@ const config = {
   },
   module: commonSet.module,
   plugins: [
-    //new webpack.optimize.UglifyJsPlugin(),//压缩打包后文件
-    new webpack.NamedModulesPlugin(),
+    // new webpack.optimize.UglifyJsPlugin(), //压缩打包后文件
+    // new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new ConsoleLogWebpackStart(), //自定义插件
     // new OpenBrowserPlugin({ url: "http://localhost:8081" }),

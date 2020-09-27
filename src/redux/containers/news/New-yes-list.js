@@ -1,7 +1,8 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import ReactDOM from "react-dom";
 import { withRouter } from "react-router-dom";
 import { ListView, List } from "antd-mobile";
+import NoData from "components/common/No-data";
 // require("style/own/own.less");
 const Item = List.Item;
 // moke
@@ -10,7 +11,7 @@ function MyBody(props) {
 }
 import { newsListYesTypeData } from "./new-data.js";
 
-let NUM_SECTIONS = 3;
+let NUM_SECTIONS = 2;
 let dataBlobsYes = {};
 
 function genData(pIndex = 0) {
@@ -51,12 +52,10 @@ class NewYesList extends Component {
   }
   componentDidMount() {
     // console.log(ReactDOM.findDOMNode(this.lv));
-    const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).parentNode.offsetTop;
-    // simulate initial Ajax
-    // setTimeout(() => {
-    console.log("数据===========123");
+    const hei = document.documentElement.clientHeight - this.props.tabHeight - this.props.headerH;
+    console.log("height===123");
+    console.log(hei);
     this.setState({
-      newsListYesTypeData,
       dataSource: this.state.dataSource.cloneWithRows(genData(this.state.currentPage)),
       isLoading: false,
       height: hei,
@@ -159,10 +158,8 @@ class NewYesList extends Component {
         )
       );
     };
-    console.log("已办");
-    console.log(this.state.dataSource);
-    return (
-      this.state.dataSource && (
+    if (this.state.newsListYesTypeData.length > 0) {
+      return (
         <ListView
           ref={(el) => (this.lv = el)}
           dataSource={this.state.dataSource}
@@ -182,8 +179,11 @@ class NewYesList extends Component {
           onEndReached={this.onEndReached}
           onEndReachedThreshold={10}
         />
-      )
-    );
+      );
+    }
+    if (this.state.newsListYesTypeData.length == 0) {
+      return <NoData></NoData>;
+    }
   }
 }
 

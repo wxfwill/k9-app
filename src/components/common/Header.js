@@ -116,7 +116,7 @@ class Header extends Component {
     const { user, title, pointer, history, isSet, isSearch, noColor } = this.props;
     let className = noColor ? "header nobgcolor" : "header";
     return (
-      <div className={className}>
+      <div className={className} ref={this.props.myRef}>
         {typeof pointer !== "undefined" ? <Icon className="header-pointer" size="md" type="left" onClick={this.jump.bind(this)}></Icon> : null}
         {typeof user !== "undefined" ? (
           <div className="user-container">

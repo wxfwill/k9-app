@@ -14,8 +14,12 @@ const tabs = [
 class NewList extends Component {
   constructor(props) {
     super(props);
+    this.headerHeight = React.createRef();
+    this.tabHeight = React.createRef();
     this.state = {
       title: "",
+      tabH: 0,
+      herderH: 0,
       tabType: "no-done",
     };
     // this.parent = null;
@@ -36,7 +40,15 @@ class NewList extends Component {
     let obj = util.urlParse(this.props.location.search);
     this.setState({ title: obj.title });
   }
-
+  componentDidMount() {
+    console.log("height===");
+    console.log(ReactDOM.findDOMNode(this.headerHeight.current));
+    console.log(ReactDOM.findDOMNode(this.tabHeight.current));
+    this.setState({
+      tabH: ReactDOM.findDOMNode(this.tabHeight.current).querySelector(".am-tabs-tab-bar-wrap").clientHeight,
+      herderH: ReactDOM.findDOMNode(this.headerHeight.current).querySelector(".header-title").clientHeight,
+    });
+  }
   onRef = (name, ref) => {
     if (name == "parent") {
       this.parent = ref;
@@ -51,8 +63,10 @@ class NewList extends Component {
     return (
       this.state.title && (
         <div className="new-list-wrap Own">
-          <Header pointer title={this.state.title} isSet="+" handleShow={this.addTask.bind(this)} />
+          {/* <Header pointer title={this.state.title} isSet="+" ref={(el) => (this.headerHeight = el)} handleShow={this.addTask.bind(this)} /> */}
+          <Header pointer title={this.state.title} myRef={this.headerHeight} isSet="+" handleShow={this.addTask.bind(this)} />
           <Tabs
+            ref={this.tabHeight}
             tabs={tabs}
             initialPage={0}
             prerenderingSiblingsNumber={0}
@@ -62,10 +76,10 @@ class NewList extends Component {
             }}
           >
             <div style={{ boxSizing: "border-box" }}>
-              <NewNoList onRef={this.onRef.bind(this)}></NewNoList>
+              <NewNoList onRef={this.onRef.bind(this)} tabHeight={this.state.tabH} headerH={this.state.herderH}></NewNoList>
             </div>
-            <div style={{ boxSizing: "border-box" }}>
-              <NewYesList></NewYesList>
+            <div style={{ boxSizing: "border-box", height: "100%" }}>
+              <NewYesList tabHeight={this.state.tabH} headerH={this.state.herderH}></NewYesList>
             </div>
           </Tabs>
         </div>

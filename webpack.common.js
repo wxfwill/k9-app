@@ -11,12 +11,21 @@ const commonSet = {
     filename: "assets/js/[name].js",
     path: path.resolve(__dirname, "./dist"),
   },
-  devtool: "source-map",
+  devtool: "cheap-module-eval-source-map",
   module: {
     rules: [
       {
         test: /\.bundle\.js$/,
-        use: "bundle-loader",
+        use: [
+          {
+            loader: "bundle-loader",
+            options: {
+              lazy: true,
+              name: "[name]",
+            },
+          },
+        ],
+        include: path.join(__dirname, "src"), // 源码目录
       },
       {
         test: /\.(js|jsx)$/,
@@ -65,7 +74,7 @@ const commonSet = {
   resolve: {
     extensions: [".js", ".json", ".jsx"],
     alias: {
-      // "react-dom": "@hot-loader/react-dom",
+      "react-dom": "@hot-loader/react-dom",
       //配置路径常量
       components: `${srcPath}/components`,
       actions: `${srcPath}/redux/actions`,

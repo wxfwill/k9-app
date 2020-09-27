@@ -1,6 +1,20 @@
 import React, { Component } from "react";
 import { toast } from "libs/util";
 import Config from "./const";
+import store from "../store/index";
+
+console.log("store=======");
+console.log(store.getState().loginReducer.isPass);
+
+store.subscribe(() => {
+  console.log("subscribe");
+  console.log(store.getState().loginReducer.isPass);
+});
+
+// @connect(
+//     (state)=>({ispass1:state}),   //第一个参数，state里的属性放到props里面
+//     {saveAccount,savePassword,saveUserInfo,savePasswordData}    //方法放到props里
+// )
 
 let Storage = {};
 if (localStorage) {

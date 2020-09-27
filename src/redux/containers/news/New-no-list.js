@@ -50,16 +50,16 @@ class NewNoList extends Component {
     console.log("离开了");
   }
   componentDidMount() {
+    // console.log("height===000");
+    // console.log(this.props.tabHeight);
     // console.log(ReactDOM.findDOMNode(this.lv));
-    const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).parentNode.offsetTop;
+    // const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).parentNode.offsetTop;
     // simulate initial Ajax
     console.log("componentDidMount数据");
     // genData();
     this.setState({
-      newsListNoTypeData,
       dataSource: this.state.dataSource.cloneWithRows(genData(this.state.currentPage)),
       isLoading: false,
-      height: hei,
     });
     this.props.onRef && this.props.onRef("parent", this);
   }
@@ -90,9 +90,13 @@ class NewNoList extends Component {
   addTask = () => {};
   componentWillReceiveProps(nextProps) {
     console.log("nextProps====");
-    // if (this.props.tabType !== nextProps.noType) {
-    //   console.log(nextProps.tabType);
-    // }
+    console.log(nextProps);
+    if (this.props.tabHeight !== nextProps.tabHeight) {
+      console.log(nextProps.tabHeight);
+      console.log(nextProps.headerH);
+      const hei = document.documentElement.clientHeight - nextProps.tabHeight - nextProps.headerH;
+      this.setState({ height: hei });
+    }
   }
   componentWillMount() {
     // console.log("type======" + this.props.noType);
@@ -158,8 +162,6 @@ class NewNoList extends Component {
         )
       );
     };
-    console.log("state");
-    console.log(this.state.dataSource.rowIdentities);
     return (
       this.state.dataSource && (
         <ListView

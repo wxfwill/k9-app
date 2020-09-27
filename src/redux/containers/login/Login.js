@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Checkbox, Flex, InputItem } from "antd-mobile";
+import { Button, Toast, Checkbox, Flex, InputItem } from "antd-mobile";
 import { createForm } from "rc-form";
 import { connect } from "react-redux";
 import { saveAccount, savePassword, saveUserInfo, savePasswordData } from "../../../store/actions/loginAction";
@@ -25,7 +25,7 @@ const logoPic = require("images/icon_logo.png");
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.isLogin();
+    // this.isLogin();
     this.state = {
       isRemeberAccount: true, // 是否记住账户
       isRemeberAccVal: "",
@@ -81,63 +81,49 @@ class Login extends Component {
       }
     );
   }
-  showClear = (msg) => {
-    console.log("清除用户定位信息！");
-  };
+  showClear = (msg) => {};
   handleSubmit() {
     let { policy } = this.state;
     if (policy) {
-      util.loading.show("正在登录...");
       // 获取表单的值
       this.props.form.validateFields((err, values) => {
         // 保存密码
         this.props.passwordAction(values.password);
         this._login({ account: values.account, password: values.password });
-        // Actions.toLogin({ account: values.account, password: values.password });
       });
     } else {
-      util.toast("请先同意隐私政策!");
+      Toast.info("请先同意隐私政策", 2);
     }
   }
   _login = (data) => {
-    React.$ajax.post("/api/userCenter/loginApp", data, (res) => {
-      util.loading.hide();
-      let { history } = this.props;
-      if (res.code == 0) {
-        util.toast("登录成功！", () => {
-          let user = res.data.user;
-          // 是否记住账户
-          if (this.state.isRemeberAccount) {
-            localStorage.setItem("remeberAccount", data.account);
-          } else {
-            localStorage.removeItem("remeberAccount");
-          }
-          // 是否记住密码
-          if (this.state.isRemeberPass) {
-            localStorage.setItem("remeberPass", data.password);
-          } else {
-            localStorage.removeItem("remeberPass");
-          }
-          // 用户信息
-          this.props.userInfoAction(res.data);
-          sessionStorage.setItem("user", JSON.stringify(user));
-          sessionStorage.setItem("appMenu", JSON.stringify(res.data.appMenu));
-          history.push({ pathname: "/own", state: user });
-          const token = util.cookieUtil.get("token");
-          Storage.setItem("token", res.data.token);
-          if (isAndroid) {
-            window.AndroidWebView &&
-              window.AndroidWebView.showInfoFromJs(
-                JSON.stringify({
-                  token,
-                  id: user.id,
-                  gpsInterval: res.data.cfgs.gpsInterval,
-                  braceletInterval: res.data.cfgs.braceletInterval,
-                  account: user.account,
-                })
-              );
-          } else {
-            window.webkit.messageHandlers.showInfoFromJs.postMessage(
+    React.$ajax.login.postLogin(data).then((res) => {
+      if (res && res.code == 0) {
+        let { history } = this.props;
+        Toast.info("登录成功", 1.5);
+        let user = res.data.user;
+        // 是否记住账户
+        if (this.state.isRemeberAccount) {
+          localStorage.setItem("remeberAccount", data.account);
+        } else {
+          localStorage.removeItem("remeberAccount");
+        }
+        // 是否记住密码
+        if (this.state.isRemeberPass) {
+          localStorage.setItem("remeberPass", data.password);
+        } else {
+          localStorage.removeItem("remeberPass");
+        }
+        // 用户信息
+        this.props.userInfoAction(res.data);
+        // this.props.remeberPassword();
+        sessionStorage.setItem("user", JSON.stringify(user));
+        sessionStorage.setItem("appMenu", JSON.stringify(res.data.appMenu));
+        history.push({ pathname: "/own", state: user });
+        const token = util.cookieUtil.get("token");
+        localStorage.setItem("token", res.data.token);
+        if (isAndroid) {
+          window.AndroidWebView &&
+            window.AndroidWebView.showInfoFromJs(
               JSON.stringify({
                 token,
                 id: user.id,
@@ -146,11 +132,18 @@ class Login extends Component {
                 account: user.account,
               })
             );
-          }
-          // CallApp({callAppName: 'showInfoFromJs', param: {token}})
-        });
-      } else {
-        util.toast(res.msg);
+        } else {
+          window.webkit.messageHandlers.showInfoFromJs.postMessage(
+            JSON.stringify({
+              token,
+              id: user.id,
+              gpsInterval: res.data.cfgs.gpsInterval,
+              braceletInterval: res.data.cfgs.braceletInterval,
+              account: user.account,
+            })
+          );
+        }
+        // CallApp({callAppName: 'showInfoFromJs', param: {token}})
       }
     });
   };
