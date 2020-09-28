@@ -1,12 +1,19 @@
 /** @format */
 
-import axios from "axios";
-import config from "./config";
-import { Toast } from "antd-mobile";
+import axios from 'axios';
+import config from './config';
+import { Toast } from 'antd-mobile';
 // 请求次数
 let repeat_count = 0;
 
-import store from "../store/index";
+import store from '../store/index';
+// console.log('===ajax===123');
+// console.log(store.getState().loginReducer.isPass);
+
+// store.subscribe(() => {
+//   console.log('subscribe');
+//   console.log(store.getState().loginReducer.isPass);
+// });
 
 export default function $axios(options) {
   return new Promise((resolve, reject) => {
@@ -20,8 +27,8 @@ export default function $axios(options) {
     // request 拦截器
     instance.interceptors.request.use(
       (config) => {
-        console.log("加载中");
-        Toast.loading("加载中...", 0);
+        console.log('加载中');
+        Toast.loading('加载中...', 0);
         // 设置accessToken
         // if (!config.headers["Authorization"]) {
         // store.subscribe(() => {
@@ -29,8 +36,8 @@ export default function $axios(options) {
         //   console.log(store.getState().loginReducer.isPass);
         //   config.headers["Authorization"] = store.state.accessToken ? store.state.accessToken : null;
         // });
-        console.log("token====111");
-        config.headers["Authorization"] = localStorage.getItem("token") ? localStorage.getItem("token") : null;
+        console.log('token====111');
+        config.headers['Authorization'] = localStorage.getItem('token') ? localStorage.getItem('token') : null;
         // }
         return config;
       },
@@ -39,7 +46,7 @@ export default function $axios(options) {
         // 请求错误时
         console.log(error);
         // 1. 判断请求超时
-        if (error.code === "ECONNABORTED" && error.message.indexOf("timeout") !== -1) {
+        if (error.code === 'ECONNABORTED' && error.message.indexOf('timeout') !== -1) {
           // return instance.request(originalRequest);// 再重复请求一次
         }
         return Promise.reject(error); // 在调用的那边可以拿到(catch)你想返回的错误信息
@@ -59,21 +66,21 @@ export default function $axios(options) {
         }
         const headers = response.headers;
         // 文件下载响应的文件流
-        if (headers["content-type"] && headers["content-type"].indexOf("application/octet-stream") > -1) {
+        if (headers['content-type'] && headers['content-type'].indexOf('application/octet-stream') > -1) {
           return response.data;
         }
         // 根据返回的code值来做不同的处理
         if (data.code == 0) {
           return data;
         } else {
-          console.log("error78");
+          console.log('error78');
           console.log(data);
           data && Toast.info(data.msg);
         }
       },
       (err) => {
         var error = JSON.parse(JSON.stringify(err));
-        if (error.code === "ECONNABORTED" && error.message.indexOf("timeout") !== -1) {
+        if (error.code === 'ECONNABORTED' && error.message.indexOf('timeout') !== -1) {
           // return instance.request(originalRequest); // 再重复请求一次
           // 请求处理
           repeat_count++;

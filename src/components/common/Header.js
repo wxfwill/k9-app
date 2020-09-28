@@ -1,18 +1,20 @@
-import React, { Component } from "react";
-import { withRouter, Link } from "react-router-dom";
-import { Icon, Modal } from "antd-mobile";
-import { connect } from "react-redux";
-import Immutable from "immutable";
-import { bindActionCreators } from "redux";
-import * as systomStatus from "actions/systomStatus";
-require("style/common/header.less");
+import React, { Component } from 'react';
+import { withRouter, Link } from 'react-router-dom';
+import { Icon, Modal, Popover } from 'antd-mobile';
+import { connect } from 'react-redux';
+import Immutable from 'immutable';
+import { bindActionCreators } from 'redux';
+import * as systomStatus from 'actions/systomStatus';
+const Item = Popover.Item;
+require('style/common/header.less');
 class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
       modal1: false,
-      info: "",
-      taskType: "",
+      info: '',
+      taskType: '',
+      poverVisibe: false,
     };
     this.timer = null;
   }
@@ -37,7 +39,7 @@ class Header extends Component {
     if (systomStatus.reWebsocket().readyState == 2 || systomStatus.reWebsocket().readyState == 3) {
       this.props.sysActions.newSocket();
     } else {
-      systomStatus.reWebsocket().send(JSON.stringify({ msgType: "HeartBeat" }));
+      systomStatus.reWebsocket().send(JSON.stringify({ msgType: 'HeartBeat' }));
     }
   };
   handleShow() {
@@ -46,7 +48,7 @@ class Header extends Component {
   componentWillUnmount() {
     clearInterval(this.timer);
     if (systomStatus && systomStatus.reWebsocket() && systomStatus.reWebsocket().readyState == 1) {
-      systomStatus.reWebsocket().send(JSON.stringify({ msgType: "HeartBeat" }));
+      systomStatus.reWebsocket().send(JSON.stringify({ msgType: 'HeartBeat' }));
     }
     //		systomStatus.closeSocket();
   }
@@ -56,36 +58,49 @@ class Header extends Component {
     }
     const socketMsg = nextProps.socketMsg;
     let url = this.props.history.location.pathname;
-    if (socketMsg && socketMsg.msgType == "stopTask") {
+    if (socketMsg && socketMsg.msgType == 'stopTask') {
       this.setState({
         modal1: true,
-        info: socketMsg.data.msg + "!",
+        info: socketMsg.data.msg + '!',
         taskType: socketMsg.data.taskType,
       });
-    } else if (socketMsg && socketMsg.msgType == "msgTipsApp") {
-      sessionStorage.setItem("unReadMsgNum", socketMsg.unReadMsgNum);
-      if (url == "/own/OwnTask") {
+    } else if (socketMsg && socketMsg.msgType == 'msgTipsApp') {
+      sessionStorage.setItem('unReadMsgNum', socketMsg.unReadMsgNum);
+      if (url == '/own/OwnTask') {
         this.props.refresh();
       }
-    } else if (socketMsg && socketMsg.msgType == "taskStatus") {
+    } else if (socketMsg && socketMsg.msgType == 'taskStatus') {
       //定点集合(url=='/aggpoint/map'&&taskType==5)
       let id = socketMsg.data.id;
       let status = socketMsg.data.status;
       if (
-        (url == "/ownround/map" && socketMsg.data.type == 2) ||
-        (url == "/gridsearch/map" && socketMsg.data.type == 4) ||
-        (url == "/emdep/map" && socketMsg.data.type == 3) ||
-        (url == "/itinerancy/detail" && socketMsg.data.type == 6)
+        (url == '/ownround/map' && socketMsg.data.type == 2) ||
+        (url == '/gridsearch/map' && socketMsg.data.type == 4) ||
+        (url == '/emdep/map' && socketMsg.data.type == 3) ||
+        (url == '/itinerancy/detail' && socketMsg.data.type == 6)
       ) {
         this.props.updateTaskStatus(id, status);
       }
       //在任务列表时刷新
-      if (url == "/own/OwnTask") {
+      if (url == '/own/OwnTask') {
         this.props.refresh();
       }
     }
   }
-
+  onSelect = (opt) => {
+    console.log(opt.props.value);
+    this.setState({
+      poverVisibe: false,
+      selected: opt.props.value,
+    });
+  };
+  handleVisibleChange = (visible) => {
+    console.log('visible');
+    console.log(visible);
+    this.setState({
+      poverVisibe: visible,
+    });
+  };
   showModal = (key) => (e) => {
     e.preventDefault(); // 修复 Android 上点击穿透
     this.setState({
@@ -97,14 +112,14 @@ class Header extends Component {
     let url = this.props.history.location.pathname;
     //定点集合(url=='/aggpoint/map'&&taskType==5)
     if (
-      (url == "/ownround/map" && taskType == 2) ||
-      (url == "/gridsearch/map" && taskType == 4) ||
-      (url == "/emdep/map" && taskType == 3) ||
-      (url == "/itinerancy/detail" && taskType == 6)
+      (url == '/ownround/map' && taskType == 2) ||
+      (url == '/gridsearch/map' && taskType == 4) ||
+      (url == '/emdep/map' && taskType == 3) ||
+      (url == '/itinerancy/detail' && taskType == 6)
     ) {
       this.props.closeTask();
     }
-    if (url == "/own/OwnTask") {
+    if (url == '/own/OwnTask') {
       this.props.refresh();
     }
     this.setState({
@@ -113,41 +128,84 @@ class Header extends Component {
   };
 
   render() {
-    const { user, title, pointer, history, isSet, isSearch, noColor } = this.props;
-    let className = noColor ? "header nobgcolor" : "header";
+    const { user, title, pointer, history, customSet, isSet, isSearch, noColor } = this.props;
+    let className = noColor ? 'header nobgcolor' : 'header';
     return (
       <div className={className} ref={this.props.myRef}>
-        {typeof pointer !== "undefined" ? <Icon className="header-pointer" size="md" type="left" onClick={this.jump.bind(this)}></Icon> : null}
-        {typeof user !== "undefined" ? (
+        {typeof pointer !== 'undefined' ? (
+          <Icon className="header-pointer" size="md" type="left" onClick={this.jump.bind(this)}></Icon>
+        ) : null}
+        {typeof user !== 'undefined' ? (
           <div className="user-container">
             <em className="user-img"></em>
             <span>{user.name}</span>
           </div>
         ) : null}
-        {typeof user !== "undefined" ? <Link to="/drill/detail" className="header-menu"></Link> : null}
-        {typeof title !== "undefined" ? <span className="header-title">{title}</span> : null}
-        {typeof isSet !== "undefined" ? (
+        {typeof user !== 'undefined' ? <Link to="/drill/detail" className="header-menu"></Link> : null}
+        {typeof title !== 'undefined' ? <span className="header-title">{title}</span> : null}
+        {typeof isSet !== 'undefined' ? (
+          <Popover
+            mask={false}
+            visible={this.state.poverVisibe}
+            overlay={[
+              <Item
+                key="1"
+                value="name"
+                icon={<img src={require('images/own/jq.svg')} className="am-icon am-icon-xs" alt="" />}
+                data-seed="logId"
+              >
+                点名
+              </Item>,
+              <Item
+                key="2"
+                value="dogReport"
+                icon={<img src={require('images/own/jq.svg')} className="am-icon am-icon-xs" alt="" />}
+              >
+                犬病上报
+              </Item>,
+              <Item
+                key="3"
+                value="leaveApply"
+                icon={<img src={require('images/own/jq.svg')} className="am-icon am-icon-xs" alt="" />}
+              >
+                请假申请
+              </Item>,
+              <Item
+                key="4"
+                value="track"
+                icon={<img src={require('images/own/jq.svg')} className="am-icon am-icon-xs" alt="" />}
+              >
+                网格化搜捕
+              </Item>,
+            ]}
+            onSelect={this.onSelect}
+            onVisibleChange={this.handleVisibleChange}
+          >
+            <span className="header-set">{''}</span>
+          </Popover>
+        ) : null}
+        {typeof customSet !== 'undefined' ? (
           <span className="header-set" onClick={this.handleShow.bind(this)}>
-            {""}
+            {''}
           </span>
         ) : null}
-        {typeof isSearch !== "undefined" ? <Icon className="header-search" type="search" size="md" /> : null}
+        {typeof isSearch !== 'undefined' ? <Icon className="header-search" type="search" size="md" /> : null}
         <Modal
           visible={this.state.modal1}
           transparent
           maskClosable={false}
-          onClose={this.onClose("modal1")}
+          onClose={this.onClose('modal1')}
           title="提示信息"
           footer={[
             {
-              text: "知道了",
+              text: '知道了',
               onPress: () => {
-                this.onClose("modal1")();
+                this.onClose('modal1')();
               },
             },
           ]}
         >
-          <div style={{ marginBottom: 15, marginTop: 15, height: "auto" }}>{this.state.info}</div>
+          <div style={{ marginBottom: 15, marginTop: 15, height: 'auto' }}>{this.state.info}</div>
         </Modal>
       </div>
     );

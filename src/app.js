@@ -1,34 +1,36 @@
-import React from "react";
-import { render } from "react-dom";
-import { Provider } from "react-redux";
-import Routes from "router/router";
-import { hot } from "react-hot-loader/root";
-process.env.NODE_ENV == "development" && require("mock/mockData.js");
-import "lib-flexible/flexible.js";
-// import Ajax from "libs/ajax";
-import api from "./http/index";
-import store from "./store/index";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Routes from 'router/router';
+process.env.NODE_ENV == 'development' && require('mock/mockData.js');
+import 'lib-flexible/flexible.js';
 
+// redux
+import { Provider } from 'react-redux';
+import store from './store/index';
+
+// redux持久化
+import { persistor } from './store/index';
+import { PersistGate } from 'redux-persist/lib/integration/react';
+
+// ajax请求
+import api from './http/index';
 React.$ajax = api;
-require("normalize.css");
-require("style/app.less");
-import "antd-mobile/dist/antd-mobile.less";
 
-const App = {
-  run: function () {
-    render(
-      // <AppContainer>
-      <Provider store={store}>
-        <Routes />
-      </Provider>,
-      // </AppContainer>,
-      document.getElementById("root")
+// 全局样式
+require('normalize.css');
+require('style/app.less');
+import 'antd-mobile/dist/antd-mobile.less';
+
+class App extends React.Component {
+  render() {
+    return (
+      <PersistGate loading={null} persistor={persistor}>
+        <Provider store={store}>
+          <Routes />
+        </Provider>
+      </PersistGate>
     );
-  },
-};
-hot(App).run();
-if (module.hot) {
-  module.hot.accept("router/router", () => {
-    hot(App).run();
-  });
+  }
 }
+
+ReactDOM.render(<App />, document.getElementById('root'));
