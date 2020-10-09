@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
-import { withRouter } from "react-router-dom";
-import { ListView, List } from "antd-mobile";
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import { withRouter } from 'react-router-dom';
+import { ListView, List } from 'antd-mobile';
 // require("style/own/own.less");
 const Item = List.Item;
 // moke
 function MyBody(props) {
   return <div className="am-list-body my-body">{props.children}</div>;
 }
-import { newsListNoTypeData } from "./new-data.js";
+import { newsListNoTypeData } from './new-data.js';
 
 let NUM_SECTIONS = 5;
 let dataBlobs = {};
@@ -47,7 +47,7 @@ class NewNoList extends Component {
     //   return;
     // };
     dataBlobs = {};
-    console.log("离开了");
+    console.log('离开了');
   }
   componentDidMount() {
     // console.log("height===000");
@@ -55,13 +55,13 @@ class NewNoList extends Component {
     // console.log(ReactDOM.findDOMNode(this.lv));
     // const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).parentNode.offsetTop;
     // simulate initial Ajax
-    console.log("componentDidMount数据");
+    console.log('componentDidMount数据');
     // genData();
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(genData(this.state.currentPage)),
       isLoading: false,
     });
-    this.props.onRef && this.props.onRef("parent", this);
+    this.props.onRef && this.props.onRef('parent', this);
   }
   onEndReached = (event) => {
     // load new data
@@ -69,7 +69,7 @@ class NewNoList extends Component {
     if (this.state.isLoading && !this.state.hasMore) {
       return;
     }
-    console.log("reach end", event);
+    console.log('reach end', event);
     this.setState({ isLoading: true });
     setTimeout(() => {
       this.setState({ currentPage: ++this.state.currentPage });
@@ -82,14 +82,14 @@ class NewNoList extends Component {
     }, 1000);
   };
   noData = () => {
-    console.log("未处理");
+    console.log('未处理');
   };
   yesData = () => {
-    console.log("已处理");
+    console.log('已处理');
   };
   addTask = () => {};
   componentWillReceiveProps(nextProps) {
-    console.log("nextProps====");
+    console.log('nextProps====');
     console.log(nextProps);
     if (this.props.tabHeight !== nextProps.tabHeight) {
       console.log(nextProps.tabHeight);
@@ -111,8 +111,8 @@ class NewNoList extends Component {
         <div
           key={`${sectionID}-${rowID}`}
           style={{
-            width: "9.36rem",
-            height: "0.32rem",
+            width: '9.36rem',
+            height: '0.32rem',
           }}
         />
       );
@@ -127,18 +127,18 @@ class NewNoList extends Component {
         item && (
           <List className="new-list-type" key={rowID}>
             <Item
-              extra={<div className="finsh">{""}</div>}
+              extra={<div className="finsh">{''}</div>}
               align="top"
               thumb={
                 <span
                   style={{
-                    width: "1.333333rem",
-                    height: "1.333333rem",
-                    borderRadius: "0.213333rem",
-                    overflow: "hidden",
+                    width: '1.333333rem',
+                    height: '1.333333rem',
+                    borderRadius: '0.213333rem',
+                    overflow: 'hidden',
                     background: `url(${item.icon}) left top no-repeat`,
-                    backgroundSize: "100% 100%",
-                    display: "inline-block",
+                    backgroundSize: '100% 100%',
+                    display: 'inline-block',
                   }}
                 />
               }
@@ -167,17 +167,21 @@ class NewNoList extends Component {
         <ListView
           ref={(el) => (this.lv = el)}
           dataSource={this.state.dataSource}
-          renderFooter={() => <div style={{ padding: 30, textAlign: "center" }}>{this.state.isLoading ? "Loading..." : "无更多数据了"}</div>}
+          renderFooter={() => (
+            <div style={{ padding: 30, textAlign: 'center' }}>
+              {this.state.isLoading ? 'Loading...' : '无更多数据了'}
+            </div>
+          )}
           renderBodyComponent={() => <MyBody />}
           renderRow={row}
           renderSeparator={separator}
           style={{
             height: this.state.height,
-            overflow: "auto",
+            overflow: 'auto',
           }}
           pageSize={1}
           onScroll={() => {
-            console.log("scroll");
+            console.log('scroll');
           }}
           scrollRenderAheadDistance={500}
           onEndReached={this.onEndReached}

@@ -55,27 +55,27 @@ let user = '';
 let appMenu = [
   {
     text: '网格化搜捕',
-    icon: require('images/own/track.png'),
+    icon: require('images/own/own-search.svg'),
   },
   {
     text: '轨迹查看',
-    icon: require('images/own/track.png'),
+    icon: require('images/own/own-trail.svg'),
   },
   {
     text: '点名',
-    icon: require('images/own/jq.svg'),
+    icon: require('images/own/own-roll-call.svg'),
   },
   {
     text: '审批管理',
-    icon: require('images/own/watch.png'),
+    icon: require('images/own/own-approval.svg'),
   },
   {
     text: '请假申请',
-    icon: require('images/own/approval.png'),
+    icon: require('images/own/own-vacation.svg'),
   },
   {
     text: '犬病上报',
-    icon: require('images/own/jia.svg'),
+    icon: require('images/own/own-dog-report.svg'),
   },
   {
     text: '修改密码',
