@@ -1,15 +1,15 @@
 //开发环境配置
-const path = require("path");
-const webpack = require("webpack");
-const commonSet = require("./webpack.common.js");
+const path = require('path');
+const webpack = require('webpack');
+const commonSet = require('./webpack.common.js');
 // var OpenBrowserPlugin = require("open-browser-webpack-plugin");
-const { address } = require("./config.js");
+const { address } = require('./config.js');
 const config = {
-  entry: ["babel-polyfill", "react-hot-loader/patch", "./src/app.js"],
+  entry: ['babel-polyfill', 'react-hot-loader/patch', './src/app.js'],
   output: {
-    filename: "assets/js/[name].js",
-    path: path.resolve(__dirname, "./dist"),
-    publicPath: "/",
+    filename: 'assets/js/[name].js',
+    path: path.resolve(__dirname, './dist'),
+    publicPath: '/',
   },
   devtool: commonSet.devtool, //定位错位位置
   devServer: {
@@ -20,11 +20,11 @@ const config = {
     hot: true, //开启热更新
     // stats: "errors-only",
     open: true,
-    host: "172.20.5.198",
+    host: '127.0.0.1',
     // historyApiFallback: true,  // 默认404页面跳转index.html
     proxy: {
-      "/api/*": {
-        target: address.domains + "/",
+      '/api/*': {
+        target: address.domains + '/',
         changeOrigin: true,
         secure: true,
       },
@@ -38,7 +38,7 @@ const config = {
     new ConsoleLogWebpackStart(), //自定义插件
     // new OpenBrowserPlugin({ url: "http://localhost:8081" }),
     new webpack.DefinePlugin({
-      "process.env": {
+      'process.env': {
         NODE_ENV: '"development"', //node提供的常量api
       },
     }),
@@ -47,8 +47,8 @@ const config = {
 };
 function ConsoleLogWebpackStart() {}
 ConsoleLogWebpackStart.prototype.apply = function (compiler) {
-  compiler.plugin("run", function (compiler, callback) {
-    console.log("package start!");
+  compiler.plugin('run', function (compiler, callback) {
+    console.log('package start!');
     callback();
   });
 };

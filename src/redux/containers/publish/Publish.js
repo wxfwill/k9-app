@@ -91,7 +91,7 @@ class PublishComponent extends Component {
         <div className="own-task midder-content">
           <div className="inner-content">
             <Card full className="work-con mtp-24">
-              <Card.Header title="我的任务"></Card.Header>
+              <Card.Header title="发布任务"></Card.Header>
               <Card.Body>
                 <Grid data={this.state.taskData} columnNum={3} className="work-item" />
               </Card.Body>

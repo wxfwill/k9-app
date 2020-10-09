@@ -151,7 +151,7 @@ class Header extends Component {
               <Item
                 key="1"
                 value="name"
-                icon={<img src={require('images/own/jq.svg')} className="am-icon am-icon-xs" alt="" />}
+                icon={<img src={require('images/own/own-name.svg')} className="am-icon am-icon-xs" alt="" />}
                 data-seed="logId"
               >
                 点名
@@ -159,21 +159,21 @@ class Header extends Component {
               <Item
                 key="2"
                 value="dogReport"
-                icon={<img src={require('images/own/jq.svg')} className="am-icon am-icon-xs" alt="" />}
+                icon={<img src={require('images/own/own-dog.svg')} className="am-icon am-icon-xs" alt="" />}
               >
                 犬病上报
               </Item>,
               <Item
                 key="3"
                 value="leaveApply"
-                icon={<img src={require('images/own/jq.svg')} className="am-icon am-icon-xs" alt="" />}
+                icon={<img src={require('images/own/own-jia.svg')} className="am-icon am-icon-xs" alt="" />}
               >
                 请假申请
               </Item>,
               <Item
                 key="4"
                 value="track"
-                icon={<img src={require('images/own/jq.svg')} className="am-icon am-icon-xs" alt="" />}
+                icon={<img src={require('images/own/own-sou.svg')} className="am-icon am-icon-xs" alt="" />}
               >
                 网格化搜捕
               </Item>,

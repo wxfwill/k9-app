@@ -54,6 +54,10 @@ require('style/own/own.less');
 let user = '';
 let appMenu = [
   {
+    text: '网格化搜捕',
+    icon: require('images/own/track.png'),
+  },
+  {
     text: '轨迹查看',
     icon: require('images/own/track.png'),
   },
@@ -206,7 +210,7 @@ class Own extends Component {
               </Item>
             </List>
             <div className="list-wrap">
-              <Accordion accordion openAnimation={{}} className="my-accordion" onChange={this.onChange}>
+              {/* <Accordion accordion openAnimation={{}} className="my-accordion" onChange={this.onChange}>
                 <Accordion.Panel
                   header={
                     <p className="accord-header">
@@ -224,7 +228,7 @@ class Own extends Component {
                       );
                     })}
                 </Accordion.Panel>
-              </Accordion>
+              </Accordion> */}
               {this.state.data.map((item, index) => {
                 return (
                   <List className="list-item" key={index} onClick={this.handleLink.bind(this, item)}>

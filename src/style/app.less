@@ -107,3 +107,47 @@ textarea:-ms-input-placeholder {
   }
 }
 
+// 添加任务less
+.am-popover {
+  .am-popover-content {
+    width: 3.893333rem;
+    .am-popover-item {
+      height: 1.333333rem;
+      line-height: 1.333333rem;
+      .am-popover-item-container {
+        height: 100%;
+        // padding: 0 0.106667rem;
+        display: flex;
+        // flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .am-popover-item-icon {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 0.586667rem;
+          height: 0.586667rem;
+          // margin-right: 0.213333rem;
+          >img {
+            width: 100%;
+            height: inherit;
+          }
+        }
+        .am-popover-item-content {
+          height: 100%;
+          flex: 1;
+          color: #4B4C4F;
+        }
+      }
+      &:not(:first-child) {
+        .am-popover-item-container {
+          border-top: none;
+          .am-popover-item-content {
+            border-top: 1px solid #E5E5E5;
+          }
+        }
+      }
+    }
+  }
+}
+
