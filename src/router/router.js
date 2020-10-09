@@ -9,9 +9,41 @@ const LoginPolicy = (props) => (
   <Bundle load={() => import('containers/login/Policy')}>{(LoginPolicy) => <LoginPolicy {...props} />}</Bundle>
 );
 
+// ===工作台相关===
 const Publish = (props) => (
   <Bundle load={() => import('containers/publish/Publish')}>{(Publish) => <Publish {...props} />}</Bundle>
 );
+// 网格化搜索
+const PublishGridSearch = (props) => (
+  <Bundle load={() => import('containers/publish/GridSeach')}>
+    {(PublishGridSearch) => <PublishGridSearch {...props} />}
+  </Bundle>
+);
+// 点名
+const PublishRollCall = (props) => (
+  <Bundle load={() => import('containers/publish/RollCall')}>
+    {(PublishRollCall) => <PublishRollCall {...props} />}
+  </Bundle>
+);
+// 审批管理
+const PublishApproval = (props) => (
+  <Bundle load={() => import('containers/publish/ApprovalMangement')}>
+    {(PublishApproval) => <PublishApproval {...props} />}
+  </Bundle>
+);
+// 请假申请
+const PublishVacation = (props) => (
+  <Bundle load={() => import('containers/publish/VacationMangement')}>
+    {(PublishVacation) => <PublishVacation {...props} />}
+  </Bundle>
+);
+// 犬病上报
+const PublishDogReport = (props) => (
+  <Bundle load={() => import('containers/publish/DogReport')}>
+    {(PublishDogReport) => <PublishDogReport {...props} />}
+  </Bundle>
+);
+
 const AddPubTraining = (props) => (
   <Bundle load={() => import('containers/publish/PubTraining/AddPubTraining')}>
     {(AddPubTraining) => <AddPubTraining {...props} />}
@@ -250,6 +282,12 @@ class routes extends Component {
             <Route exact path="/login/policy" component={LoginPolicy} />
             <Route exact path="/drill" component={Drill} />
             <Route exact path="/publish" component={Publish} />
+            <Route exact path="/publish/gridSearch" component={PublishGridSearch} />
+            <Route exact path="/publish/dogReport" component={PublishDogReport} />
+            <Route exact path="/publish/rollCall" component={PublishRollCall} />
+            <Route exact path="/publish/approval" component={PublishApproval} />
+            <Route exact path="/publish/vacation" component={PublishVacation} />
+
             <Route exact path="/publish/training" component={AddPubTraining} />
             <Route exact path="/publish/round" component={AddPubRound} />
             <Route exact path="/publish/roundDetails" component={PubRoundDetails} />

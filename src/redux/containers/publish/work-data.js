@@ -1,8 +1,8 @@
 export const myTask = [
   {
-    icon: require('images/own/jq.svg'),
+    icon: require('images/publish/search.svg'),
     text: '网格化搜捕',
-    link: '',
+    link: '/publish/gridSearch',
   },
   // {
   //   icon: require('images/own/jq.svg'),
@@ -33,27 +33,27 @@ export const myTask = [
 
 export const dogMange = [
   {
-    icon: require('images/own/jq.svg'),
+    icon: require('images/publish/dogReport.svg'),
     text: ' 犬病上报',
-    link: '',
+    link: '/publish/dogReport',
   },
 ];
 
 export const mertisMange = [
   {
-    icon: require('images/own/jq.svg'),
+    icon: require('images/publish/rollcall.svg'),
     text: '点名',
-    link: '',
+    link: '/publish/rollCall',
   },
   {
-    icon: require('images/own/jq.svg'),
+    icon: require('images/publish/approval.svg'),
     text: '审批管理',
-    link: '',
+    link: '/publish/approval',
   },
   {
-    icon: require('images/own/jq.svg'),
+    icon: require('images/publish/vacation.svg'),
     text: '请假申请',
-    link: '',
+    link: '/publish/vacation',
   },
 ];
 

@@ -25,11 +25,11 @@ const tabs = [
   { title: '外勤任务' },
 ];
 const pathObj = {
-  training: '/publish/training',
-  round: '/publish/round',
-  aggregate: '/publish/addAggregate',
-  emedep: '/publish/addEmedep',
-  itinerancy: '/publish/addItinerancy',
+  gridSearch: 'publish/gridSearch',
+  round: 'publish/gridSearch',
+  aggregate: 'publish/gridSearch',
+  emedep: 'publish/gridSearch',
+  itinerancy: 'publish/gridSearch',
 };
 
 class PublishComponent extends Component {
@@ -71,6 +71,13 @@ class PublishComponent extends Component {
       listModal: true,
     });
   }
+  handleGridItem = (obj, index) => {
+    console.log('obj');
+    console.log(obj);
+    console.log(index);
+    const { history } = this.props;
+    history.push({ pathname: obj.link, query: { titleType: obj.text } });
+  };
   setCurrTab = (tab, index) => {
     sessionStorage.setItem('currTabs', index);
   };
@@ -93,19 +100,34 @@ class PublishComponent extends Component {
             <Card full className="work-con mtp-24">
               <Card.Header title="发布任务"></Card.Header>
               <Card.Body>
-                <Grid data={this.state.taskData} columnNum={3} className="work-item" />
+                <Grid
+                  data={this.state.taskData}
+                  columnNum={3}
+                  onClick={(el, index) => this.handleGridItem(el, index)}
+                  className="work-item"
+                />
               </Card.Body>
             </Card>
             <Card full className="work-con mtp-24">
               <Card.Header title="事务管理"></Card.Header>
               <Card.Body>
-                <Grid data={this.state.jsData} columnNum={3} className="work-item" />
+                <Grid
+                  data={this.state.jsData}
+                  columnNum={3}
+                  className="work-item"
+                  onClick={(el, index) => this.handleGridItem(el, index)}
+                />
               </Card.Body>
             </Card>
             <Card full className="work-con mtp-24 mtb-30">
               <Card.Header title="警犬管理"></Card.Header>
               <Card.Body>
-                <Grid data={this.state.dogData} columnNum={3} className="work-item" />
+                <Grid
+                  data={this.state.dogData}
+                  columnNum={3}
+                  className="work-item"
+                  onClick={(el, index) => this.handleGridItem(el, index)}
+                />
               </Card.Body>
             </Card>
 
