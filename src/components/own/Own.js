@@ -66,6 +66,7 @@ let appMenu = [
   {
     text: '点名',
     icon: require('images/own/own-roll-call.svg'),
+    link: '/publish/rollCallList',
   },
   {
     text: '审批管理',
