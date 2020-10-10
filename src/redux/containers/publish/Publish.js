@@ -77,7 +77,7 @@ class PublishComponent extends Component {
     console.log(index);
     const { history } = this.props;
     // history.push({ pathname: obj.link, query: { titleType: obj.text} });
-    history.push(obj.link + '/' + obj.text);
+    history.push(`${obj.link}?titleType=${obj.text}`);
   };
   setCurrTab = (tab, index) => {
     sessionStorage.setItem('currTabs', index);

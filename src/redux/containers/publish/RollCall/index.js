@@ -66,7 +66,7 @@ class RollCall extends Component {
   };
   onAddImageClick() {}
   render() {
-    const titleType = this.props.match.params.titleType;
+    const titleType = util.urlParse(this.props.location.search).titleType;
     const { getFieldProps } = this.props.form;
     let { files, value } = this.state;
     return (
@@ -113,4 +113,5 @@ class RollCall extends Component {
 }
 
 const RollCallForm = createForm()(RollCall);
+
 export default withRouter(RollCallForm);
