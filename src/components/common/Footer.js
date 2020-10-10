@@ -1,49 +1,51 @@
-import React, { Component } from "react";
-import { Menu, TabBar } from "antd-mobile";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import Immutable from "immutable";
-import { withRouter, Link } from "react-router-dom";
-import * as systomStatus from "actions/systomStatus";
+import React, { Component } from 'react';
+import { Menu, TabBar } from 'antd-mobile';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import Immutable from 'immutable';
+import { withRouter, Link } from 'react-router-dom';
+import * as systomStatus from 'actions/systomStatus';
 
-const newsPic = require("images/nav/info-icon.svg");
-const newsActivePic = require("images/nav/info-icon-active.svg");
-const mapPic = require("images/nav/map-icon.svg");
-const mapActivePic = require("images/nav/map-icon-active.svg");
-const releasePic = require("images/nav/work-icon.svg");
-const releaseActivePic = require("images/nav/work-icon-active.svg");
-const ownPic = require("images/nav/self-icon.svg");
-const ownActivePic = require("images/nav/self-icon-active.svg");
+import { saveAccount, savePassword, saveUserInfo, savePasswordData, saveToken } from '../../store/actions/loginAction';
 
-require("style/common/footer.less");
+const newsPic = require('images/nav/info-icon.svg');
+const newsActivePic = require('images/nav/info-icon-active.svg');
+const mapPic = require('images/nav/map-icon.svg');
+const mapActivePic = require('images/nav/map-icon-active.svg');
+const releasePic = require('images/nav/work-icon.svg');
+const releaseActivePic = require('images/nav/work-icon-active.svg');
+const ownPic = require('images/nav/self-icon.svg');
+const ownActivePic = require('images/nav/self-icon-active.svg');
+
+require('style/common/footer.less');
 const newMsgObj = {
-  1: { text: "请假审批", link: "/app/monitoring/leaveCheck" },
-  2: { text: "犬病治疗", link: "/app/dog/cure" },
-  3: { text: "训练任务", link: "/app/drill/pdogdrill" },
-  4: { text: "日常巡逻", link: "/app/monitoring/duty" },
-  5: { link: "/app/monitoring/deploy" },
-  6: { text: "网格搜捕", link: "/app/monitoring/grid" },
-  7: { text: "外出执勤", link: "/app/monitoring/duty" },
-  8: { text: "集合点", link: "" },
-  9: { text: "", link: "" },
+  1: { text: '请假审批', link: '/app/monitoring/leaveCheck' },
+  2: { text: '犬病治疗', link: '/app/dog/cure' },
+  3: { text: '训练任务', link: '/app/drill/pdogdrill' },
+  4: { text: '日常巡逻', link: '/app/monitoring/duty' },
+  5: { link: '/app/monitoring/deploy' },
+  6: { text: '网格搜捕', link: '/app/monitoring/grid' },
+  7: { text: '外出执勤', link: '/app/monitoring/duty' },
+  8: { text: '集合点', link: '' },
+  9: { text: '', link: '' },
 };
 class Footer extends Component {
   constructor(props) {
     super(props);
-    this.msgList = "";
+    this.msgList = '';
     this.totalMsgNum = 0;
-    let flag = "yellowTab";
-    if (this.props.history.location.pathname == "/news") {
-      flag = "blueTab";
-    } else if (this.props.history.location.pathname == "/check") {
-      flag = "redTab";
-    } else if (this.props.history.location.pathname == "/publish") {
-      flag = "greenTab";
+    let flag = 'yellowTab';
+    if (this.props.history.location.pathname == '/news') {
+      flag = 'blueTab';
+    } else if (this.props.history.location.pathname == '/check') {
+      flag = 'redTab';
+    } else if (this.props.history.location.pathname == '/publish') {
+      flag = 'greenTab';
     }
-    let user = JSON.parse(sessionStorage.getItem("user"));
-    console.log(user);
+
+    let user = this.props.userInfo.user;
     this.state = {
-      unReadMsgNum: "",
+      unReadMsgNum: '',
       selectedTab: flag,
       hidden: false,
       fullScreen: false,
@@ -57,24 +59,24 @@ class Footer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (Immutable.is(Immutable.Map(this.props.socketMsg), Immutable.Map(nextProps.socketMsg))) {
-      return;
-    }
-    const socketMsg = nextProps.socketMsg;
-    if (socketMsg && socketMsg.msgType == "newMsg") {
-      const data = socketMsg.data;
-      this.totalMsgNum = 0;
-      this.state.unReadMsgNum = socketMsg.unReadMsgNum;
-      sessionStorage.setItem("unReadMsgNum", socketMsg.unReadMsgNum);
-    } else if (socketMsg && socketMsg.msgType == "msgTipsApp") {
-      this.state.unReadMsgNum = socketMsg.unReadMsgNum;
-      sessionStorage.setItem("unReadMsgNum", socketMsg.unReadMsgNum);
-    }
+    // if (Immutable.is(Immutable.Map(this.props.socketMsg), Immutable.Map(nextProps.socketMsg))) {
+    //   return;
+    // }
+    // const socketMsg = nextProps.socketMsg;
+    // if (socketMsg && socketMsg.msgType == "newMsg") {
+    //   const data = socketMsg.data;
+    //   this.totalMsgNum = 0;
+    //   this.state.unReadMsgNum = socketMsg.unReadMsgNum;
+    //   sessionStorage.setItem("unReadMsgNum", socketMsg.unReadMsgNum);
+    // } else if (socketMsg && socketMsg.msgType == "msgTipsApp") {
+    //   this.state.unReadMsgNum = socketMsg.unReadMsgNum;
+    //   sessionStorage.setItem("unReadMsgNum", socketMsg.unReadMsgNum);
+    // }
   }
 
   renderContent(pageText) {
     return (
-      <div style={{ backgroundColor: "white", height: "100%", textAlign: "center" }}>
+      <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
         <div style={{ paddingTop: 60 }}>
           Clicked “{pageText}” tab， show “{pageText}” information
         </div>
@@ -84,7 +86,7 @@ class Footer extends Component {
 
   render() {
     let { pathname } = this.props.location;
-    let unReadMsgNum = sessionStorage.getItem("unReadMsgNum");
+    let unReadMsgNum = sessionStorage.getItem('unReadMsgNum');
     return (
       <div className="footer">
         {/*	<Link to="/news">
@@ -113,107 +115,107 @@ class Footer extends Component {
 						<span>我的</span>
 					</span>
 				</Link>*/}
-        <div style={{ display: this.state.role <= 3 ? "" : "none" }} className="foorter-inner">
+        <div style={{ display: this.state.role <= 3 ? '' : 'none' }} className="foorter-inner">
           <TabBar unselectedTintColor="#C9CCD4" tintColor="#3D5EBD" barTintColor="white" hidden={this.state.hidden}>
             <TabBar.Item
               title="消息"
               key="news"
               icon={{ uri: newsPic }}
               selectedIcon={{ uri: newsActivePic }}
-              selected={this.state.selectedTab === "blueTab"}
-              badge={unReadMsgNum > 0 ? unReadMsgNum : ""}
+              selected={this.state.selectedTab === 'blueTab'}
+              badge={unReadMsgNum > 0 ? unReadMsgNum : ''}
               onPress={() => {
                 this.setState({
-                  selectedTab: "blueTab",
+                  selectedTab: 'blueTab',
                 });
-                this.props.history.push("/news");
+                this.props.history.push('/news');
               }}
               data-seed="logId"
             >
-              {this.renderContent("消息")}
+              {this.renderContent('消息')}
             </TabBar.Item>
             <TabBar.Item
               icon={{ uri: mapPic }}
               selectedIcon={{ uri: mapActivePic }}
               title="地图"
               key="check"
-              selected={this.state.selectedTab === "redTab"}
+              selected={this.state.selectedTab === 'redTab'}
               onPress={() => {
                 this.setState({
-                  selectedTab: "redTab",
+                  selectedTab: 'redTab',
                 });
-                this.props.history.push("/check");
+                this.props.history.push('/check');
               }}
               data-seed="logId1"
             >
-              {this.renderContent("地图")}
+              {this.renderContent('地图')}
             </TabBar.Item>
             <TabBar.Item
               icon={{ uri: releasePic }}
               selectedIcon={{ uri: releaseActivePic }}
               title="工作台"
               key="publish"
-              selected={this.state.selectedTab === "greenTab"}
+              selected={this.state.selectedTab === 'greenTab'}
               onPress={() => {
                 this.setState({
-                  selectedTab: "greenTab",
+                  selectedTab: 'greenTab',
                 });
-                this.props.history.push("/publish");
+                this.props.history.push('/publish');
               }}
             >
-              {this.renderContent("工作台")}
+              {this.renderContent('工作台')}
             </TabBar.Item>
             <TabBar.Item
               icon={{ uri: ownPic }}
               selectedIcon={{ uri: ownActivePic }}
               title="我"
               key="own"
-              selected={this.state.selectedTab === "yellowTab"}
+              selected={this.state.selectedTab === 'yellowTab'}
               onPress={() => {
                 this.setState({
-                  selectedTab: "yellowTab",
+                  selectedTab: 'yellowTab',
                 });
-                this.props.history.push("/own");
+                this.props.history.push('/own');
               }}
             >
-              {this.renderContent("我")}
+              {this.renderContent('我')}
             </TabBar.Item>
           </TabBar>
         </div>
-        <div style={{ display: this.state.role > 3 ? "" : "none" }}>
+        <div style={{ display: this.state.role > 3 ? '' : 'none' }}>
           <TabBar unselectedTintColor="#949494" tintColor="#15c619" barTintColor="white" hidden={this.state.hidden}>
             <TabBar.Item
               title="消息"
               key="news"
               icon={{ uri: newsPic }}
               selectedIcon={{ uri: newsActivePic }}
-              selected={this.state.selectedTab === "blueTab"}
+              selected={this.state.selectedTab === 'blueTab'}
               badge={this.state.unReadMsgNum}
               onPress={() => {
                 this.setState({
-                  selectedTab: "blueTab",
+                  selectedTab: 'blueTab',
                 });
-                this.props.history.push("/news");
+                this.props.history.push('/news');
               }}
               data-seed="logId"
             >
-              {this.renderContent("消息")}
+              {this.renderContent('消息')}
             </TabBar.Item>
             <TabBar.Item
               icon={{ uri: mapPic }}
               selectedIcon={{ uri: mapActivePic }}
               title="考核"
               key="check"
-              selected={this.state.selectedTab === "redTab"}
+              selected={this.state.selectedTab === 'redTab'}
               onPress={() => {
                 this.setState({
-                  selectedTab: "redTab",
+                  selectedTab: 'redTab',
                 });
-                this.props.history.push("/check");
+                this.props.history.push('/check');
               }}
               data-seed="logId1"
             >
-              {this.renderContent("考核")}
+              {this.renderContent('考核')}
             </TabBar.Item>
 
             <TabBar.Item
@@ -221,15 +223,15 @@ class Footer extends Component {
               selectedIcon={{ uri: ownActivePic }}
               title="我的"
               key="own"
-              selected={this.state.selectedTab === "yellowTab"}
+              selected={this.state.selectedTab === 'yellowTab'}
               onPress={() => {
                 this.setState({
-                  selectedTab: "yellowTab",
+                  selectedTab: 'yellowTab',
                 });
-                this.props.history.push("/own");
+                this.props.history.push('/own');
               }}
             >
-              {this.renderContent("我的")}
+              {this.renderContent('我的')}
             </TabBar.Item>
           </TabBar>
         </div>
@@ -237,14 +239,32 @@ class Footer extends Component {
     );
   }
 }
-const mapStateToProps = (state) => ({
-  socketMsg: state.system && state.system.socketMsg,
-});
-const mapDispatchToProps = (dispatch) => ({
-  sysActions: bindActionCreators(systomStatus, dispatch),
+// const mapStateToProps = (state) => ({
+//   socketMsg: state.system && state.system.socketMsg,
+// });
+// const mapDispatchToProps = (dispatch) => ({
+//   sysActions: bindActionCreators(systomStatus, dispatch),
+// });
+
+function loginStateToProps(state) {
+  return {
+    loginAccount: state.loginReducer.isRemeber,
+    loginPass: state.loginReducer.isPass,
+    userInfo: state.loginReducer.userInfo,
+    password: state.loginReducer.password,
+    token: state.loginReducer.token,
+  };
+}
+
+const loginActionToProps = (dispatch) => ({
+  remeberAccount: () => dispatch(saveAccount()),
+  remeberPassword: () => dispatch(savePassword()),
+  userInfoAction: (data) => dispatch(saveUserInfo(data)),
+  passwordAction: (data) => dispatch(savePasswordData(data)),
+  tokenAction: (token) => dispatch(saveToken(token)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Footer));
+export default connect(loginStateToProps, loginActionToProps)(withRouter(Footer));
 
 // WEBPACK FOOTER //
 // ./src/components/common/Footer.js

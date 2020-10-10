@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Bundle from './Bundle';
+import { AuthRouter } from 'components/AuthRouter';
 
 const Login = (props) => (
   <Bundle load={() => import('containers/login/Login')}>{(Login) => <Login {...props} />}</Bundle>

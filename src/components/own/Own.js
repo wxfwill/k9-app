@@ -4,8 +4,10 @@ import Reflux from 'reflux';
 import ReactMixin from 'react-mixin';
 import Header from 'components/common/Header';
 import Footer from 'components/common/Footer';
+import { connect } from 'react-redux';
 import Store from './store';
 import Actions from './actions';
+import { saveAccount, savePassword, saveUserInfo, savePasswordData, saveToken } from '../../store/actions/loginAction';
 import { CallApp } from 'libs/util';
 import Ajax from 'libs/ajax';
 import { withRouter, Link } from 'react-router-dom';
@@ -51,7 +53,7 @@ const call = require('images/own/call.png');
 let adminData = [];
 require('style/own/own.less');
 
-let user = '';
+// let user = '';
 let appMenu = [
   {
     text: '网格化搜捕',
@@ -112,7 +114,7 @@ let myTask = [
 class Own extends Component {
   constructor(props) {
     super(props);
-    user = JSON.parse(sessionStorage.getItem('user'));
+    // user = JSON.parse(sessionStorage.getItem('user'));
     // let appMenu = JSON.parse(sessionStorage.getItem("appMenu"));
     console.log(appMenu);
     // appMenu.map((item) => {
@@ -146,7 +148,8 @@ class Own extends Component {
                   });
                   //   systomStatus.closeSocket();
                   alertInstance.close();
-                  sessionStorage.removeItem('user');
+                  // sessionStorage.removeItem('user');
+                  this.props.tokenAction(null);
                   Toast.info('退出成功');
                   history.push('/login');
                 } else {
@@ -191,6 +194,9 @@ class Own extends Component {
     console.log(key);
   };
   render() {
+    let user = this.props.userInfo;
+    console.log('user456====');
+    console.log(user);
     return (
       <div className="Own">
         <Header title="我" noColor="own" />
@@ -203,7 +209,7 @@ class Own extends Component {
                 multipleLine
                 //   onClick={this.handleJump.bind(this)}
               >
-                <p className="user-name">{user.name}</p>
+                <p className="user-name">{user.user && user.user.name}</p>
                 <Brief>职务：中队长</Brief>
                 <Brief>部门：{'警犬大队三中队'}</Brief>
                 <Brief>电话：{1333333333}</Brief>
@@ -250,7 +256,27 @@ class Own extends Component {
   }
 }
 
-export default withRouter(Own);
+function loginStateToProps(state) {
+  return {
+    loginAccount: state.loginReducer.isRemeber,
+    loginPass: state.loginReducer.isPass,
+    userInfo: state.loginReducer.userInfo,
+    password: state.loginReducer.password,
+    token: state.loginReducer.token,
+  };
+}
+
+const loginActionToProps = (dispatch) => ({
+  remeberAccount: () => dispatch(saveAccount()),
+  remeberPassword: () => dispatch(savePassword()),
+  userInfoAction: (data) => dispatch(saveUserInfo(data)),
+  passwordAction: (data) => dispatch(savePasswordData(data)),
+  tokenAction: (token) => dispatch(saveToken(token)),
+});
+
+export default connect(loginStateToProps, loginActionToProps)(withRouter(Own));
+
+// export default withRouter(Own);
 
 // WEBPACK FOOTER //
 // ./src/components/own/Own.js

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-// import { menusAll } from '@/router/menusAll';
 
 // 白名单权限
 const myAuth = ['/newHome'];
@@ -14,8 +13,10 @@ function redirectTo(props) {
   } else {
     if (myAuth.indexOf(props.path) != -1) {
       return <Route {...props} />;
-    } else if (props.path == '/') {
+    } else if (props.path === '/') {
+      // debugger;
       return <Redirect to="/login" />;
+      // return <Route {...props} />;
     } else {
       return <Route {...props} />;
     }
@@ -24,7 +25,8 @@ function redirectTo(props) {
 
 // 是否有权限
 const AuthRouter = (props) => {
-  // console.log(props);
+  console.log('prop===123');
+  console.log(props);
   return redirectTo(props);
 };
 

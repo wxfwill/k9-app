@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Routes from 'router/router';
+import Router from 'router/index';
 process.env.NODE_ENV == 'development' && require('mock/mockData.js');
 import 'lib-flexible/flexible.js';
 
@@ -26,7 +26,7 @@ class App extends React.Component {
     return (
       <PersistGate loading={null} persistor={persistor}>
         <Provider store={store}>
-          <Routes />
+          <Router />
         </Provider>
       </PersistGate>
     );

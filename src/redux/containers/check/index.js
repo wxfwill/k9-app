@@ -1,14 +1,33 @@
-import React, { Component } from "react";
-import { WhiteSpace, WingBlank, Button, Toast, Accordion, List, DatePicker, Flex, Modal, TextareaItem } from "antd-mobile";
-import Reflux from "reflux";
-import { createForm } from "rc-form";
-import ReactMixin from "react-mixin";
-import Header from "components/common/Header";
-import { withRouter, Link } from "react-router-dom";
-import moment from "moment";
-import Ajax from "libs/ajax";
-import { CallApp } from "libs/util";
-import Footer from "components/common/Footer";
+import React, { Component } from 'react';
+import {
+  WhiteSpace,
+  WingBlank,
+  Button,
+  Toast,
+  Accordion,
+  List,
+  DatePicker,
+  Flex,
+  Modal,
+  TextareaItem,
+} from 'antd-mobile';
+import Reflux from 'reflux';
+import { createForm } from 'rc-form';
+import ReactMixin from 'react-mixin';
+import {
+  saveAccount,
+  savePassword,
+  saveUserInfo,
+  savePasswordData,
+  saveToken,
+} from '../../../store/actions/loginAction';
+import { connect } from 'react-redux';
+import Header from 'components/common/Header';
+import { withRouter, Link } from 'react-router-dom';
+import moment from 'moment';
+import Ajax from 'libs/ajax';
+import { CallApp } from 'libs/util';
+import Footer from 'components/common/Footer';
 const Item = List.Item;
 const Brief = Item.Brief;
 class CheckComponent extends Component {
@@ -20,21 +39,21 @@ class CheckComponent extends Component {
       automaticData: {},
       autonomyData: {},
       allScore: 0,
-      checkDate: moment(new Date()).format("YYYY-MM"),
+      checkDate: moment(new Date()).format('YYYY-MM'),
       modal1: false,
       typeId: 1,
-      specificInfo: "暂无数据！",
+      specificInfo: '暂无数据！',
       allData: [],
     };
   }
 
   componentDidMount() {
-    this.initDate(moment(new Date()).format("YYYY-MM"));
+    this.initDate(moment(new Date()).format('YYYY-MM'));
   }
   initDate(checkDate) {
-    const user = JSON.parse(sessionStorage.getItem("user"));
+    const user = this.props.userInfo.user;
     Ajax.post(
-      "/api/performanceCheck/performanceCheckInfo",
+      '/api/performanceCheck/performanceCheckInfo',
       {
         userId: user.id,
         checkDate: checkDate,
@@ -80,7 +99,13 @@ class CheckComponent extends Component {
             allScore = Number(allScore) + Number(autonomyData.dailyManage[0].totalScore);
           }
 
-          this.setState({ autonomyData: autonomyData, automaticData: automaticData, allData: res.data, allScore: allScore, checkDate: checkDate });
+          this.setState({
+            autonomyData: autonomyData,
+            automaticData: automaticData,
+            allData: res.data,
+            allScore: allScore,
+            checkDate: checkDate,
+          });
         } else {
           Toast.info(res.msg);
           return;
@@ -91,20 +116,20 @@ class CheckComponent extends Component {
 
   handleChange(data) {
     this.setState({
-      checkDate: moment(new Date(data)).format("YYYY-MM"),
+      checkDate: moment(new Date(data)).format('YYYY-MM'),
     });
-    this.initDate(moment(new Date(data)).format("YYYY-MM"));
+    this.initDate(moment(new Date(data)).format('YYYY-MM'));
   }
   showModal = (message) => (e) => {
-    console.log(message, "message");
-    let action = "getDogTrainInfoById";
+    console.log(message, 'message');
+    let action = 'getDogTrainInfoById';
     if (message.typeId == 2) {
-      action = "getDogUseInfoById";
+      action = 'getDogUseInfoById';
     } else if (message.action == 5) {
-      action = "getDutyInfoById";
+      action = 'getDutyInfoById';
     }
     Ajax.post(
-      "/api/performanceCheck/" + action,
+      '/api/performanceCheck/' + action,
       {
         id: message.id,
       },
@@ -136,7 +161,7 @@ class CheckComponent extends Component {
     if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
       return;
     }
-    const pNode = closest(e.target, ".am-modal-content");
+    const pNode = closest(e.target, '.am-modal-content');
     if (!pNode) {
       e.preventDefault();
     }
@@ -149,8 +174,13 @@ class CheckComponent extends Component {
         <Header title="地图" />
         <div className="midder-content">
           <div className="inner-content">
-            <List style={{ backgroundColor: "white" }} className="date-picker-list">
-              <DatePicker mode="month" title="选择月份" value={new Date(this.state.checkDate)} onChange={(date) => this.handleChange(date)}>
+            <List style={{ backgroundColor: 'white' }} className="date-picker-list">
+              <DatePicker
+                mode="month"
+                title="选择月份"
+                value={new Date(this.state.checkDate)}
+                onChange={(date) => this.handleChange(date)}
+              >
                 <Item arrow="horizontal">月份</Item>
               </DatePicker>
             </List>
@@ -174,7 +204,10 @@ class CheckComponent extends Component {
                 <Accordion.Panel
                   header={
                     <span>
-                      警犬训练{automaticData.dogTrain && automaticData.dogTrain.length > 0 ? "(" + automaticData.dogTrain[0].totalScore + ")" : "(0)"}
+                      警犬训练
+                      {automaticData.dogTrain && automaticData.dogTrain.length > 0
+                        ? '(' + automaticData.dogTrain[0].totalScore + ')'
+                        : '(0)'}
                     </span>
                   }
                   className="pad"
@@ -183,17 +216,17 @@ class CheckComponent extends Component {
                   <List className="my-list">
                     {automaticData.dogTrain && automaticData.dogTrain.length > 0 ? (
                       <div>
-                        {" "}
+                        {' '}
                         <WhiteSpace size="lg" />
                         <Flex>
                           <Flex.Item>
-                            <div style={{ textAlign: "center" }}>科目名称</div>
+                            <div style={{ textAlign: 'center' }}>科目名称</div>
                           </Flex.Item>
                           <Flex.Item>
-                            <div style={{ textAlign: "center" }}>项目名称</div>
+                            <div style={{ textAlign: 'center' }}>项目名称</div>
                           </Flex.Item>
                           <Flex.Item>
-                            <div style={{ textAlign: "center" }}>得分</div>
+                            <div style={{ textAlign: 'center' }}>得分</div>
                           </Flex.Item>
                           {/*   <Flex.Item><div style={{textAlign:'center'}}>操作</div></Flex.Item>*/}
                         </Flex>
@@ -205,20 +238,22 @@ class CheckComponent extends Component {
                           <WhiteSpace size="lg" />
                           <Flex>
                             <Flex.Item>
-                              <div style={{ textAlign: "center" }}>{message.subjectName ? message.subjectName : "--"}</div>
+                              <div style={{ textAlign: 'center' }}>
+                                {message.subjectName ? message.subjectName : '--'}
+                              </div>
                             </Flex.Item>
                             <Flex.Item>
-                              <div style={{ textAlign: "center" }}>{message.item ? message.item : "--"}</div>
+                              <div style={{ textAlign: 'center' }}>{message.item ? message.item : '--'}</div>
                             </Flex.Item>
                             <Flex.Item>
-                              <div style={{ textAlign: "center" }}>{message.score ? message.score : "--"}</div>
+                              <div style={{ textAlign: 'center' }}>{message.score ? message.score : '--'}</div>
                             </Flex.Item>
                             {/*    <Flex.Item><div style={{textAlign:'center'}}>{<span style={{ color: 'blue'}} onClick={this.showModal(message)}>详情</span>}</div></Flex.Item>*/}
                           </Flex>
                         </div>
                       ))
                     ) : (
-                      <div style={{ textAlign: "center", paddingTop: "12px", paddingBottom: "12px" }}>暂无数据</div>
+                      <div style={{ textAlign: 'center', paddingTop: '12px', paddingBottom: '12px' }}>暂无数据</div>
                     )}
                     {automaticData.dogTrain && automaticData.dogTrain.length > 0 ? <WhiteSpace size="lg" /> : null}
                   </List>
@@ -227,7 +262,9 @@ class CheckComponent extends Component {
                   header={
                     <span>
                       警犬使用及执勤值班
-                      {automaticData.dogUse && automaticData.dogUse.length > 0 ? "(" + automaticData.dogUse[0].totalScore + ")" : "(0)"}
+                      {automaticData.dogUse && automaticData.dogUse.length > 0
+                        ? '(' + automaticData.dogUse[0].totalScore + ')'
+                        : '(0)'}
                     </span>
                   }
                   className="pad"
@@ -236,17 +273,17 @@ class CheckComponent extends Component {
                   <List className="my-list">
                     {automaticData.dogUse && automaticData.dogUse.length > 0 ? (
                       <div>
-                        {" "}
+                        {' '}
                         <WhiteSpace size="lg" />
                         <Flex>
                           <Flex.Item>
-                            <div style={{ textAlign: "center" }}>科目名称</div>
+                            <div style={{ textAlign: 'center' }}>科目名称</div>
                           </Flex.Item>
                           <Flex.Item>
-                            <div style={{ textAlign: "center" }}>项目名称</div>
+                            <div style={{ textAlign: 'center' }}>项目名称</div>
                           </Flex.Item>
                           <Flex.Item>
-                            <div style={{ textAlign: "center" }}>得分</div>
+                            <div style={{ textAlign: 'center' }}>得分</div>
                           </Flex.Item>
                           {/*   <Flex.Item><div style={{textAlign:'center'}}>操作</div></Flex.Item>*/}
                         </Flex>
@@ -258,20 +295,22 @@ class CheckComponent extends Component {
                           <WhiteSpace size="lg" />
                           <Flex>
                             <Flex.Item>
-                              <div style={{ textAlign: "center" }}>{message.subjectName ? message.subjectName : "--"}</div>
+                              <div style={{ textAlign: 'center' }}>
+                                {message.subjectName ? message.subjectName : '--'}
+                              </div>
                             </Flex.Item>
                             <Flex.Item>
-                              <div style={{ textAlign: "center" }}>{message.item ? message.item : "--"}</div>
+                              <div style={{ textAlign: 'center' }}>{message.item ? message.item : '--'}</div>
                             </Flex.Item>
                             <Flex.Item>
-                              <div style={{ textAlign: "center" }}>{message.score ? message.score : "--"}</div>
+                              <div style={{ textAlign: 'center' }}>{message.score ? message.score : '--'}</div>
                             </Flex.Item>
                             {/*    <Flex.Item><div style={{textAlign:'center'}}>{<span onClick={this.showModal(message)} style={{ color: 'blue'}}>详情</span>}</div></Flex.Item>*/}
                           </Flex>
                         </div>
                       ))
                     ) : (
-                      <div style={{ textAlign: "center", paddingTop: "12px", paddingBottom: "12px" }}>暂无数据</div>
+                      <div style={{ textAlign: 'center', paddingTop: '12px', paddingBottom: '12px' }}>暂无数据</div>
                     )}
                     {automaticData.dogUse && automaticData.dogUse.length > 0 ? <WhiteSpace size="lg" /> : null}
                   </List>
@@ -279,7 +318,10 @@ class CheckComponent extends Component {
                 <Accordion.Panel
                   header={
                     <span>
-                      出勤考勤{automaticData.outdoor && automaticData.outdoor.length > 0 ? "(" + automaticData.outdoor[0].totalScore + ")" : "(0)"}
+                      出勤考勤
+                      {automaticData.outdoor && automaticData.outdoor.length > 0
+                        ? '(' + automaticData.outdoor[0].totalScore + ')'
+                        : '(0)'}
                     </span>
                   }
                   className="pad"
@@ -288,17 +330,17 @@ class CheckComponent extends Component {
                   <List className="my-list">
                     {automaticData.outdoor && automaticData.outdoor.length > 0 ? (
                       <div>
-                        {" "}
+                        {' '}
                         <WhiteSpace size="lg" />
                         <Flex>
                           <Flex.Item>
-                            <div style={{ textAlign: "center" }}>科目名称</div>
+                            <div style={{ textAlign: 'center' }}>科目名称</div>
                           </Flex.Item>
                           <Flex.Item>
-                            <div style={{ textAlign: "center" }}>项目名称</div>
+                            <div style={{ textAlign: 'center' }}>项目名称</div>
                           </Flex.Item>
                           <Flex.Item>
-                            <div style={{ textAlign: "center" }}>得分</div>
+                            <div style={{ textAlign: 'center' }}>得分</div>
                           </Flex.Item>
                           {/*    <Flex.Item><div style={{textAlign:'center'}}>操作</div></Flex.Item>*/}
                         </Flex>
@@ -310,20 +352,22 @@ class CheckComponent extends Component {
                           <WhiteSpace size="lg" />
                           <Flex>
                             <Flex.Item>
-                              <div style={{ textAlign: "center" }}>{message.subjectName ? message.subjectName : "--"}</div>
+                              <div style={{ textAlign: 'center' }}>
+                                {message.subjectName ? message.subjectName : '--'}
+                              </div>
                             </Flex.Item>
                             <Flex.Item>
-                              <div style={{ textAlign: "center" }}>{message.item ? message.item : "--"}</div>
+                              <div style={{ textAlign: 'center' }}>{message.item ? message.item : '--'}</div>
                             </Flex.Item>
                             <Flex.Item>
-                              <div style={{ textAlign: "center" }}>{message.score ? message.score : "--"}</div>
+                              <div style={{ textAlign: 'center' }}>{message.score ? message.score : '--'}</div>
                             </Flex.Item>
                             {/*    <Flex.Item><div style={{textAlign:'center'}}>{<span style={{ color: 'blue'}} onClick={this.showModal(message)} >详情</span>}</div></Flex.Item>*/}
                           </Flex>
                         </div>
                       ))
                     ) : (
-                      <div style={{ textAlign: "center", paddingTop: "12px", paddingBottom: "12px" }}>暂无数据</div>
+                      <div style={{ textAlign: 'center', paddingTop: '12px', paddingBottom: '12px' }}>暂无数据</div>
                     )}
                     {automaticData.outdoor && automaticData.outdoor.length > 0 ? <WhiteSpace size="lg" /> : null}
                   </List>
@@ -332,7 +376,9 @@ class CheckComponent extends Component {
                   header={
                     <span>
                       训练考核
-                      {autonomyData.trainCheck && autonomyData.trainCheck.length > 0 ? "(" + autonomyData.trainCheck[0].totalScore + ")" : "(0)"}
+                      {autonomyData.trainCheck && autonomyData.trainCheck.length > 0
+                        ? '(' + autonomyData.trainCheck[0].totalScore + ')'
+                        : '(0)'}
                     </span>
                   }
                   className="pad"
@@ -341,17 +387,17 @@ class CheckComponent extends Component {
                   <List className="my-list">
                     {autonomyData.trainCheck && autonomyData.trainCheck.length > 0 ? (
                       <div>
-                        {" "}
+                        {' '}
                         <WhiteSpace size="lg" />
                         <Flex>
                           <Flex.Item>
-                            <div style={{ textAlign: "center" }}>科目名称</div>
+                            <div style={{ textAlign: 'center' }}>科目名称</div>
                           </Flex.Item>
                           <Flex.Item>
-                            <div style={{ textAlign: "center" }}>项目名称</div>
+                            <div style={{ textAlign: 'center' }}>项目名称</div>
                           </Flex.Item>
                           <Flex.Item>
-                            <div style={{ textAlign: "center" }}>得分</div>
+                            <div style={{ textAlign: 'center' }}>得分</div>
                           </Flex.Item>
                           {/*     <Flex.Item><div style={{textAlign:'center'}}>操作</div></Flex.Item>*/}
                         </Flex>
@@ -363,20 +409,22 @@ class CheckComponent extends Component {
                           <WhiteSpace size="lg" />
                           <Flex>
                             <Flex.Item>
-                              <div style={{ textAlign: "center" }}>{message.subjectName ? message.subjectName : "--"}</div>
+                              <div style={{ textAlign: 'center' }}>
+                                {message.subjectName ? message.subjectName : '--'}
+                              </div>
                             </Flex.Item>
                             <Flex.Item>
-                              <div style={{ textAlign: "center" }}>{message.item ? message.item : "--"}</div>
+                              <div style={{ textAlign: 'center' }}>{message.item ? message.item : '--'}</div>
                             </Flex.Item>
                             <Flex.Item>
-                              <div style={{ textAlign: "center" }}>{message.score ? message.score : "--"}</div>
+                              <div style={{ textAlign: 'center' }}>{message.score ? message.score : '--'}</div>
                             </Flex.Item>
                             {/*   <Flex.Item><div style={{textAlign:'center'}}>{<span style={{ color: 'blue'}}>详情</span>}</div></Flex.Item>*/}
                           </Flex>
                         </div>
                       ))
                     ) : (
-                      <div style={{ textAlign: "center", paddingTop: "12px", paddingBottom: "12px" }}>暂无数据</div>
+                      <div style={{ textAlign: 'center', paddingTop: '12px', paddingBottom: '12px' }}>暂无数据</div>
                     )}
                     {autonomyData.trainCheck && autonomyData.trainCheck.length > 0 ? <WhiteSpace size="lg" /> : null}
                   </List>
@@ -385,7 +433,9 @@ class CheckComponent extends Component {
                   header={
                     <span>
                       理化管理
-                      {autonomyData.dailyManage && autonomyData.dailyManage.length > 0 ? "(" + autonomyData.dailyManage[0].totalScore + ")" : "(0)"}
+                      {autonomyData.dailyManage && autonomyData.dailyManage.length > 0
+                        ? '(' + autonomyData.dailyManage[0].totalScore + ')'
+                        : '(0)'}
                     </span>
                   }
                   className="pad"
@@ -394,17 +444,17 @@ class CheckComponent extends Component {
                   <List className="my-list">
                     {autonomyData.dailyManage && autonomyData.dailyManage.length > 0 ? (
                       <div>
-                        {" "}
+                        {' '}
                         <WhiteSpace size="lg" />
                         <Flex>
                           <Flex.Item>
-                            <div style={{ textAlign: "center" }}>科目名称</div>
+                            <div style={{ textAlign: 'center' }}>科目名称</div>
                           </Flex.Item>
                           <Flex.Item>
-                            <div style={{ textAlign: "center" }}>项目名称</div>
+                            <div style={{ textAlign: 'center' }}>项目名称</div>
                           </Flex.Item>
                           <Flex.Item>
-                            <div style={{ textAlign: "center" }}>得分</div>
+                            <div style={{ textAlign: 'center' }}>得分</div>
                           </Flex.Item>
                           {/*  <Flex.Item><div style={{textAlign:'center'}}>操作</div></Flex.Item>*/}
                         </Flex>
@@ -416,20 +466,22 @@ class CheckComponent extends Component {
                           <WhiteSpace size="lg" />
                           <Flex>
                             <Flex.Item>
-                              <div style={{ textAlign: "center" }}>{message.subjectName ? message.subjectName : "--"}</div>
+                              <div style={{ textAlign: 'center' }}>
+                                {message.subjectName ? message.subjectName : '--'}
+                              </div>
                             </Flex.Item>
                             <Flex.Item>
-                              <div style={{ textAlign: "center" }}>{message.item ? message.item : "--"}</div>
+                              <div style={{ textAlign: 'center' }}>{message.item ? message.item : '--'}</div>
                             </Flex.Item>
                             <Flex.Item>
-                              <div style={{ textAlign: "center" }}>{message.score ? message.score : "--"}</div>
+                              <div style={{ textAlign: 'center' }}>{message.score ? message.score : '--'}</div>
                             </Flex.Item>
                             {/*  <Flex.Item><div style={{textAlign:'center'}}>{<span style={{ color: 'blue'}}>详情</span>}</div></Flex.Item>*/}
                           </Flex>
                         </div>
                       ))
                     ) : (
-                      <div style={{ textAlign: "center", paddingTop: "12px", paddingBottom: "12px" }}>暂无数据</div>
+                      <div style={{ textAlign: 'center', paddingTop: '12px', paddingBottom: '12px' }}>暂无数据</div>
                     )}
                     {autonomyData.dailyManage && autonomyData.dailyManage.length > 0 ? <WhiteSpace size="lg" /> : null}
                   </List>
@@ -447,35 +499,35 @@ class CheckComponent extends Component {
           transparent
           //  className="check-info-modal"
           maskClosable={false}
-          onClose={this.onClose("modal1")}
+          onClose={this.onClose('modal1')}
           title="详细情况"
           footer={[
             {
-              text: "返回",
+              text: '返回',
               onPress: () => {
-                console.log("ok");
-                this.onClose("modal1")();
+                console.log('ok');
+                this.onClose('modal1')();
               },
             },
           ]}
           wrapProps={{ onTouchStart: this.onWrapTouchStart }}
         >
-          <div style={{ height: 300, overflow: "scroll" }}>
-            <List style={{ backgroundColor: "white" }} className="">
-              <TextareaItem title="姓  名:" placeholder="" value={specificInfo.name || "--"}></TextareaItem>
-              <TextareaItem title="指标名称:" placeholder="" value={specificInfo.item || "--"}></TextareaItem>
+          <div style={{ height: 300, overflow: 'scroll' }}>
+            <List style={{ backgroundColor: 'white' }} className="">
+              <TextareaItem title="姓  名:" placeholder="" value={specificInfo.name || '--'}></TextareaItem>
+              <TextareaItem title="指标名称:" placeholder="" value={specificInfo.item || '--'}></TextareaItem>
               <TextareaItem
                 title="开始时间:"
                 placeholder=""
-                value={specificInfo.startTime ? moment(specificInfo.startTime).format("YYYY-MM-DD h:mm:ss") : "--"}
+                value={specificInfo.startTime ? moment(specificInfo.startTime).format('YYYY-MM-DD h:mm:ss') : '--'}
               ></TextareaItem>
               <TextareaItem
                 title="结束时间:"
                 placeholder=""
-                value={specificInfo.endTime ? moment(specificInfo.endTime).format("YYYY-MM-DD h:mm:ss") : "--"}
+                value={specificInfo.endTime ? moment(specificInfo.endTime).format('YYYY-MM-DD h:mm:ss') : '--'}
               ></TextareaItem>
-              <TextareaItem title="地  点:" placeholder="" value={specificInfo.location || "--"}></TextareaItem>
-              {typeId == 1 ? <TextareaItem title="警  犬:" value={specificInfo || "--"}></TextareaItem> : null}
+              <TextareaItem title="地  点:" placeholder="" value={specificInfo.location || '--'}></TextareaItem>
+              {typeId == 1 ? <TextareaItem title="警  犬:" value={specificInfo || '--'}></TextareaItem> : null}
             </List>
           </div>
         </Modal>
@@ -483,9 +535,29 @@ class CheckComponent extends Component {
     );
   }
 }
+function loginStateToProps(state) {
+  return {
+    loginAccount: state.loginReducer.isRemeber,
+    loginPass: state.loginReducer.isPass,
+    userInfo: state.loginReducer.userInfo,
+    password: state.loginReducer.password,
+    token: state.loginReducer.token,
+  };
+}
+
+const loginActionToProps = (dispatch) => ({
+  remeberAccount: () => dispatch(saveAccount()),
+  remeberPassword: () => dispatch(savePassword()),
+  userInfoAction: (data) => dispatch(saveUserInfo(data)),
+  passwordAction: (data) => dispatch(savePasswordData(data)),
+  tokenAction: (token) => dispatch(saveToken(token)),
+});
 
 const Check = createForm()(CheckComponent);
-export default withRouter(Check);
+
+export default connect(loginStateToProps, loginActionToProps)(withRouter(Check));
+
+// export default withRouter(Check);
 
 // WEBPACK FOOTER //
 // ./src/redux/containers/check/index.js

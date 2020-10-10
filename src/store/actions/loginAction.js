@@ -1,4 +1,4 @@
-import { LOGIN_ACCOUNT, LOGIN_PASSWORD, USER_INFO, PASSWORD_DATA } from "../actionTypes";
+import { LOGIN_ACCOUNT, LOGIN_PASSWORD, USER_INFO, PASSWORD_DATA, USER_TOKEN } from '../actionTypes';
 
 export function saveAccount() {
   return {
@@ -23,5 +23,12 @@ export function saveUserInfo(userInfo) {
   return {
     type: USER_INFO,
     userInfo,
+  };
+}
+
+export function saveToken(token) {
+  return {
+    type: USER_TOKEN,
+    token,
   };
 }

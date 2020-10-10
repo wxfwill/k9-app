@@ -2,7 +2,13 @@ import React, { Component } from 'react';
 import { Button, Toast, Checkbox, Flex, InputItem } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import { connect } from 'react-redux';
-import { saveAccount, savePassword, saveUserInfo, savePasswordData } from '../../../store/actions/loginAction';
+import {
+  saveAccount,
+  savePassword,
+  saveUserInfo,
+  savePasswordData,
+  saveToken,
+} from '../../../store/actions/loginAction';
 
 const AgreeItem = Checkbox.AgreeItem;
 
@@ -115,12 +121,14 @@ class Login extends Component {
         }
         // 用户信息
         this.props.userInfoAction(res.data);
+        this.props.tokenAction(res.data.token);
         this.props.remeberPassword();
         sessionStorage.setItem('user', JSON.stringify(user));
         sessionStorage.setItem('appMenu', JSON.stringify(res.data.appMenu));
         history.push({ pathname: '/own', state: user });
         const token = util.cookieUtil.get('token');
         localStorage.setItem('token', res.data.token);
+
         if (isAndroid) {
           window.AndroidWebView &&
             window.AndroidWebView.showInfoFromJs(
@@ -277,6 +285,7 @@ function loginStateToProps(state) {
     loginPass: state.loginReducer.isPass,
     userInfo: state.loginReducer.userInfo,
     password: state.loginReducer.password,
+    token: state.loginReducer.token,
   };
 }
 
@@ -285,6 +294,7 @@ const loginActionToProps = (dispatch) => ({
   remeberPassword: () => dispatch(savePassword()),
   userInfoAction: (data) => dispatch(saveUserInfo(data)),
   passwordAction: (data) => dispatch(savePasswordData(data)),
+  tokenAction: (token) => dispatch(saveToken(token)),
 });
 
 const loginForm = createForm()(Login);
