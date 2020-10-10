@@ -25,6 +25,18 @@ const PublishRollCall = (props) => (
     {(PublishRollCall) => <PublishRollCall {...props} />}
   </Bundle>
 );
+// 点名列表
+const PublishRollCallList = (props) => (
+  <Bundle load={() => import('containers/publish/RollCall/RollCallList')}>
+    {(PublishRollCallList) => <PublishRollCallList {...props} />}
+  </Bundle>
+);
+// 点名详情
+const PublishRollCallDetails = (props) => (
+  <Bundle load={() => import('containers/publish/RollCall/RollCallDetails')}>
+    {(PublishRollCallDetails) => <PublishRollCallDetails {...props} />}
+  </Bundle>
+);
 // 审批管理
 const PublishApproval = (props) => (
   <Bundle load={() => import('containers/publish/ApprovalMangement')}>
@@ -284,7 +296,9 @@ class routes extends Component {
             <Route exact path="/publish" component={Publish} />
             <Route exact path="/publish/gridSearch" component={PublishGridSearch} />
             <Route exact path="/publish/dogReport" component={PublishDogReport} />
-            <Route exact path="/publish/rollCall" component={PublishRollCall} />
+            <Route exact path="/publish/rollCall/:titleType" component={PublishRollCall} />
+            <Route exact path="/publish/rollCallList" component={PublishRollCallList} />
+            <Route exact path="/publish/rollCallDetails/:id" component={PublishRollCallDetails} />
             <Route exact path="/publish/approval" component={PublishApproval} />
             <Route exact path="/publish/vacation" component={PublishVacation} />
 
