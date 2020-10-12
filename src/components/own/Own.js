@@ -71,10 +71,12 @@ let appMenu = [
   {
     text: '审批管理',
     icon: require('images/own/own-approval.svg'),
+    link: '/publish/approval?titleType=审批管理'
   },
   {
     text: '请假申请',
     icon: require('images/own/own-vacation.svg'),
+    link: '/publish/leaveList'
   },
   {
     text: '犬病上报',

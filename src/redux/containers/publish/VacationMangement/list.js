@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { List, DatePicker, Button, ListView, Toast, Modal } from 'antd-mobile';
+import { withRouter, Link } from 'react-router-dom';
 import { createForm } from 'rc-form';
 import Header from 'components/common/Header';
-import { withRouter, Link } from 'react-router-dom';
+import { List, DatePicker, Button, ListView, Toast, Modal } from 'antd-mobile';
 import moment from 'moment';
-require('style/common/common.less');
+require('style/own/own.less');
 
 const Item = List.Item;
 const Brief = Item.Brief;
@@ -25,7 +25,7 @@ let listData = [];
 const stateArr = [
   {
     className: 'going',
-    name: '待审批',
+    name: '未审批',
   },
   {
     className: 'nostart',
@@ -37,7 +37,7 @@ const stateArr = [
   },
   {
     className: 'end',
-    name: '销假已完成',
+    name: '已销假',
   },
 ];
 
@@ -54,13 +54,12 @@ function genData(len = 0, oldlen = 0) {
   return dataBlob;
 }
 
-class ApprovalMangement extends Component {
+class LeaveList extends Component {
   constructor(props) {
     super(props);
     const dataSource = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
-
     this.state = {
       startDate: now,
       dataSource,
@@ -79,7 +78,9 @@ class ApprovalMangement extends Component {
       startDate: data ? data : now,
       currPage: 1,
     });
-    const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).parentNode.offsetTop;
+    const hei =
+      document.documentElement.clientHeight -
+      ReactDOM.findDOMNode(this.lv).parentNode.querySelector('.header').clientHeight;
 
     _this.getContent(moment(data).format('YYYY-MM-DD'), function (result) {
       listData = result.data.list;
@@ -135,8 +136,7 @@ class ApprovalMangement extends Component {
   handleOk() {}
   goDetail = (item) => {
     const { history } = this.props;
-    //history.push({ pathname: '/own/approvalDetails', query: item.id });
-    history.push(`/publish/approvalDetails?id=${item.id}`);
+    history.push(`/publish/leaveDetails?id=${item.id}`);
   };
   handleLink = (address, id) => {
     let { history } = this.props;
@@ -149,9 +149,8 @@ class ApprovalMangement extends Component {
   }
   getContent(data, callback) {
     const dataObj = { qryDate: data, currPage: this.state.currPage, pageSize: 5 };
-    React.$ajax.publish.approvalList(dataObj).then((res) => {
+    React.$ajax.publish.getLeaveList(dataObj).then((res) => {
       if (res && res.code == 0) {
-        console.log(res);
         callback && callback(res);
       }
     });
@@ -166,70 +165,33 @@ class ApprovalMangement extends Component {
 
   //删除草稿
   delTask = (id) => {
-    React.$ajax.publish.deleteApproval({ id: id }).then((res) => {
-      if (res && res.code == 0) {
-        this.initDate(this.state.startDate);
-      } else {
-        Toast.info(res.msg);
-        return;
+    commonJs.ajaxPost(
+      '/api/dailyPatrols/delTaskById',
+      {
+        id: id,
+      },
+      (res) => {
+        if (res.code == 0) {
+          this.initDate(this.state.startDate);
+        } else {
+          Toast.info(res.msg);
+          return;
+        }
       }
-    });
+    );
   };
   addShow(data) {
     const { history } = this.props;
-    history.push('/publish/vacation?titleType=请假申请');
+    history.push('/own/leave/attend');
   }
   render() {
-    const titleType = util.urlParse(this.props.location.search).titleType;
     const separator = (sectionID, rowID) => <div key={`${sectionID}-${rowID}`} />;
     const row = (rowData, sectionID, rowID) => {
       if (!listData[rowID]) {
         return null;
       }
       let obj = listData[rowID];
-      let st = stateArr[obj.headerApproveState];
-      // return (
-      //   <div key={rowID} className="list-item">
-      //     <div className="cont">
-      //       <div className="list-title">
-      //         {obj.name + '的请假'}
-      //         <i className={st.className}>{st.name}</i>
-      //       </div>
-      //       <div>
-      //         <span>请假类型：</span>
-      //         <span>{obj.typeName ? obj.typeName : '--'}</span>
-      //       </div>
-      //       <div>
-      //         <span>开始时间：</span>
-      //         <span>{obj.leaveStartTime ? moment(obj.leaveStartTime).format('YYYY-MM-DD h:mm:ss') : '--'}</span>
-      //       </div>
-      //       <div>
-      //         <span>结束时间：</span>
-      //         <span>{obj.leaveEndTime ? moment(obj.leaveEndTime).format('YYYY-MM-DD h:mm:ss') : '--'}</span>
-      //       </div>
-      //       <div>
-      //         <span>请假时长：</span>
-      //         <span>{obj.duration ? obj.duration : '--'}</span>
-      //       </div>
-      //       <div>
-      //         <span>请假事由：</span>
-      //         <span>{obj.remark ? obj.remark : '--'}</span>
-      //       </div>
-      //       <div className="btn-box">
-      //         <Button inline size="small" className="detail-btn" onClick={() => this.goDetail(obj)}>
-      //           查看详情
-      //         </Button>
-      //         {/*obj.saveStatus==0 ?
-      //                 <Button
-      //                   inline
-      //                   size="small"
-      //                   className="del-btn"
-      //                   onClick={()=>this.showAlert(obj.id)}
-      //                 >删除</Button>:null*/}
-      //       </div>
-      //     </div>
-      //   </div>
-      // );
+      let st = stateArr[obj.status];
       return (
         obj && (
           <List className="new-list-type" key={rowID}>
@@ -254,49 +216,28 @@ class ApprovalMangement extends Component {
                 <span className="content">请假事由：</span>
                 {obj.remark ? obj.remark : '--'}
               </div>
-              <div className="new-desc">
-                {obj.saveStatus == 0 ? (
-                  <Button inline size="small" className="del-btn" onClick={() => this.showAlert(obj.id)}>
-                    删除
-                  </Button>
-                ) : null}
-              </div>
             </Item>
           </List>
         )
       );
     };
     return (
-      <div className="own-listbox">
-        <Header title={titleType} pointer />
-        <List style={{ backgroundColor: 'white' }} className="date-picker-list">
-          <DatePicker
-            mode="date"
-            title="选择日期"
-            value={this.state.startDate}
-            onOk={this.handleOk.bind(this)}
-            onChange={this.handleChange.bind(this)}
-          >
-            <Item arrow="horizontal">时间</Item>
-          </DatePicker>
-        </List>
+      <div>
+        <Header title="请假申请列表" pointer="pointer"></Header>
         <ListView
-          //     className="own-info-list own-info-top"
-          className="own-info-list"
           ref={(el) => (this.lv = el)}
           dataSource={this.state.dataSource}
-          renderFooter={() => {
-            return <div className="foot-tip">{this.state.isLoading ? '加载中...' : '没有更多数据了'}</div>;
-          }}
+          renderFooter={() => (
+            <div style={{ padding: 30, textAlign: 'center' }}>
+              {this.state.isLoading ? 'Loading...' : '无更多数据了'}
+            </div>
+          )}
           style={{
-            //       height: this.state.height,
+            height: this.state.height,
             overflow: 'auto',
-            bottom: '0.1rem',
           }}
           renderBodyComponent={() => <MyBody />}
           renderRow={row}
-          pageSize={5}
-          initialListSize={5}
           renderSeparator={separator}
           onScroll={() => {
             console.log('scroll');
@@ -309,8 +250,6 @@ class ApprovalMangement extends Component {
     );
   }
 }
-const ApprovalMangementForm = createForm()(ApprovalMangement);
-export default withRouter(ApprovalMangementForm);
 
-// WEBPACK FOOTER //
-// ./src/components/own/Approval/index.js
+const LeaveListForm = createForm()(LeaveList);
+export default withRouter(LeaveListForm);

@@ -27,3 +27,75 @@ export const rollCallInfo = (data) => {
     data,
   });
 };
+
+// 添加请假申请
+export const leaveSaveInfo = (data) => {
+  return axios({
+    url: '/api/leaveRecord/saveInfo',
+    method: 'post',
+    data,
+  });
+};
+
+// 获取请假类型列表
+export const getLeaveTypeList = (data) => {
+  return axios({
+    url: '/api/leaveRecord/getLeaveTypeList',
+    method: 'post',
+    data,
+  });
+};
+
+//请假申请列表
+export const getLeaveList = (data) => {
+  return axios({
+    url: '/api/leaveRecord/myLeaveList',
+    method: 'post',
+    data,
+  });
+};
+
+//请假申请详情
+export const getLeaveInfo = (data) => {
+  return axios({
+    url: '/api/leaveRecord/leaveInfo',
+    method: 'post',
+    data,
+  });
+};
+
+// 销假
+export const leaveAfterApply = (data) => {
+  return axios({
+    url: '/api/leaveRecord/leaveAfterApply',
+    method: 'post',
+    data,
+  });
+};
+
+// 审批管理列表
+export const approvalList = (data) => {
+  return axios({
+    url: '/api/leaveRecord/leaveListPage',
+    method: 'post',
+    data,
+  });
+};
+
+// 删除审批管理草稿状态
+export const deleteApproval = (data) => {
+  return axios({
+    url: '/api/dailyPatrols/delTaskById',
+    method: 'post',
+    data,
+  });
+};
+
+//审批信息
+export const verifyLeaveApply = (data) => {
+  return axios({
+    url: '/api/leaveRecord/verifyLeaveApply',
+    method: 'post',
+    data,
+  });
+};

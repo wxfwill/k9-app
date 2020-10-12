@@ -103,8 +103,7 @@ class RollCallList extends Component {
     );
   }
   getContent(data, callback, flag) {
-    let _this = this;
-    const dataObj = { qryDateStr: data, currPage: flag ? 1 : _this.state.currPage, pageSize: 6 };
+    const dataObj = { qryDateStr: data, currPage: flag ? 1 : this.state.currPage, pageSize: 6 };
     React.$ajax.publish.rollCallListPage(dataObj).then((res) => {
       if (res && res.code == 0) {
         console.log(res);
@@ -157,7 +156,7 @@ class RollCallList extends Component {
   goDetail = (item) => {
     const { history } = this.props;
     console.log(history);
-    history.push(`/publish/rollCallDetails/${item.id}`);
+    history.push(`/publish/rollCallDetails?id=${item.id}`);
     console.log(history);
   };
   handleLink = (address, id) => {

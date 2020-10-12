@@ -43,10 +43,28 @@ const PublishApproval = (props) => (
     {(PublishApproval) => <PublishApproval {...props} />}
   </Bundle>
 );
+// 审批管理详情
+const PublishApprovalDetails = (props) => (
+  <Bundle load={() => import('containers/publish/ApprovalMangement/details')}>
+    {(PublishApprovalDetails) => <PublishApprovalDetails {...props} />}
+  </Bundle>
+);
 // 请假申请
 const PublishVacation = (props) => (
   <Bundle load={() => import('containers/publish/VacationMangement')}>
     {(PublishVacation) => <PublishVacation {...props} />}
+  </Bundle>
+);
+// 请假申请列表
+const PublishLeaveList = (props) => (
+  <Bundle load={() => import('containers/publish/VacationMangement/list')}>
+    {(PublishLeaveList) => <PublishLeaveList {...props} />}
+  </Bundle>
+);
+// 请假申请详情
+const PublishLeaveDetails = (props) => (
+  <Bundle load={() => import('containers/publish/VacationMangement/details')}>
+    {(PublishLeaveDetails) => <PublishLeaveDetails {...props} />}
   </Bundle>
 );
 // 犬病上报
@@ -315,7 +333,7 @@ export const routes = [
     component: PublishRollCallList,
   },
   {
-    path: '/publish/rollCallDetails/:id',
+    path: '/publish/rollCallDetails',
     component: PublishRollCallDetails,
   },
   {
@@ -323,8 +341,20 @@ export const routes = [
     component: PublishApproval,
   },
   {
+    path: '/publish/approvalDetails',
+    component: PublishApprovalDetails,
+  },
+  {
     path: '/publish/vacation',
     component: PublishVacation,
+  },
+  {
+    path: '/publish/leaveList',
+    component: PublishLeaveList,
+  },
+  {
+    path: '/publish/leaveDetails',
+    component: PublishLeaveDetails,
   },
   {
     path: '/own',

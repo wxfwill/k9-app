@@ -24,7 +24,7 @@ class RollCallDetails extends Component {
     this.timer = null;
   }
   componentDidMount() {
-    const currentId = this.props.match.params.id;
+    const currentId = util.urlParse(this.props.location.search).id;
     if (currentId) {
       React.$ajax.publish.rollCallInfo({ id: currentId }).then((res) => {
         if (res && res.code == 0) {
@@ -115,8 +115,8 @@ class RollCallDetails extends Component {
           <WingBlank>
             <Carousel autoplay={false} infinite>
               {callInfo &&
-                callInfo.photoNames.map((file) => (
-                  <a key={file.id} style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}>
+                callInfo.photoNames.map((file, index) => (
+                  <a key={index} style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}>
                     <img
                       src={`${config.apiUrl}/api/attendance/img?fileName=${file}`}
                       alt=""
