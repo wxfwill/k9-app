@@ -1,8 +1,8 @@
-require("./util.less");
+require('./util.less');
 //mask
 export const mask = {
-  maskClass: "mui-off-canvas-backdrop",
-  activeClass: "mui-active",
+  maskClass: 'mui-off-canvas-backdrop',
+  activeClass: 'mui-active',
   show: function ($container, options) {
     //兼容没有options的情况
     if ($.isPlainObject($container)) {
@@ -10,64 +10,64 @@ export const mask = {
       $container = null;
     }
 
-    $container = $container || $("body");
+    $container = $container || $('body');
     var activeClass = this.activeClass;
     var maskClass = (options && options.maskClass) || this.maskClass;
 
     if ($container.length > 0) {
-      var $mask = $container.find("." + maskClass);
+      var $mask = $container.find('.' + maskClass);
       if ($mask.length > 0) {
-        $container.find("." + maskClass).addClass(activeClass);
+        $container.find('.' + maskClass).addClass(activeClass);
       } else {
-        $container.append('<div class="' + maskClass + " " + activeClass + '"></div>');
+        $container.append('<div class="' + maskClass + ' ' + activeClass + '"></div>');
       }
     }
 
     if (options && options.clickHide) {
       var _this = this;
-      $container.on("click", function () {
+      $container.on('click', function () {
         _this.hide();
       });
     }
   },
 
   hide: function ($container) {
-    $container = $container || $("body");
+    $container = $container || $('body');
     $container
-      .find("." + this.maskClass)
+      .find('.' + this.maskClass)
       .removeClass(this.activeClass)
-      .off("click");
+      .off('click');
   },
 };
 
 export const dialog = {
   show: function (content, options, ele) {
-    ele = ele ? ele : $("body");
+    ele = ele ? ele : $('body');
     util.mask.show();
     var $dialog = $(
       [
         '<div class="global-dialog">',
         '<div class="dialog-title"><span>X</span></div>',
-        '<div class="dialog-content">' + content + "</div>",
-        "</div>",
-      ].join("")
+        '<div class="dialog-content">' + content + '</div>',
+        '</div>',
+      ].join('')
     ).appendTo(ele);
 
     var newStyle = {
-      marginTop: "-" + Math.round($dialog.height() / 2) + "px", //垂直居中
+      marginTop: '-' + Math.round($dialog.height() / 2) + 'px', //垂直居中
     };
     //设置宽度，水平居中
     if (options && options.width) {
-      newStyle.width = options.width + "px";
-      newStyle.marginLeft = "-" + Math.round(options.width / 2) + "px";
+      newStyle.width = options.width + 'px';
+      newStyle.marginLeft = '-' + Math.round(options.width / 2) + 'px';
     }
     $dialog.css(newStyle);
     var remove = function () {
-      ele.find(".global-dialog").remove();
+      ele.find('.global-dialog').remove();
       util.mask.hide();
     };
-    $dialog.find(".dialog-title").on("click", remove);
-    $(".mui-off-canvas-backdrop").on("click", remove);
+    $dialog.find('.dialog-title').on('click', remove);
+    $('.mui-off-canvas-backdrop').on('click', remove);
     $dialog.hide = remove;
     return $dialog;
   },
@@ -75,9 +75,9 @@ export const dialog = {
 
 //toast
 export const toast = function (message, callback) {
-  var share = document.createElement("div");
-  share.classList.add("mui-toast-container");
-  share.innerHTML = '<div class="mui-toast-message">' + message + "</div>";
+  var share = document.createElement('div');
+  share.classList.add('mui-toast-container');
+  share.innerHTML = '<div class="mui-toast-message">' + message + '</div>';
   document.body.appendChild(share);
   setTimeout(function () {
     document.body.removeChild(share);
@@ -87,9 +87,9 @@ export const toast = function (message, callback) {
 
 //loading
 export const loading = {
-  show: function (text = "正在加载...") {
-    var $body = $("body");
-    var $loading = $body.find(".weui_loading_toast");
+  show: function (text = '正在加载...') {
+    var $body = $('body');
+    var $loading = $body.find('.weui_loading_toast');
     // if ($loading.length > 0) {
     //     $loading.show();
     // } else {
@@ -97,26 +97,26 @@ export const loading = {
     for (var i = 0; i < 12; i++) {
       html += '<div class="weui_loading_leaf weui_loading_leaf_' + i + '"></div>';
     }
-    html += '</div><p class="weui_toast_content">' + text + "</p></div></div>";
+    html += '</div><p class="weui_toast_content">' + text + '</p></div></div>';
     $body.append(html);
     // }
   },
   hide: function () {
-    var $body = $("body");
-    $body.find(".weui_loading_toast").hide();
+    var $body = $('body');
+    $body.find('.weui_loading_toast').hide();
   },
 };
 
 //加载地图
 export const loadMap = function () {
   /* jshint camelcase:false */
-  if (typeof window.BMap_loadScriptTime === "undefined") {
+  if (typeof window.BMap_loadScriptTime === 'undefined') {
     window.BMap_loadScriptTime = new Date().getTime();
 
-    var ak = "oe9aBdr0eKpuXX9nsXTsdTFe";
-    var src = "http://api.map.baidu.com/getscript?v=2.0&ak=" + ak + "&services=&t=20150901171226";
+    var ak = 'oe9aBdr0eKpuXX9nsXTsdTFe';
+    var src = 'http://api.map.baidu.com/getscript?v=2.0&ak=' + ak + '&services=&t=20150901171226';
 
-    var script = document.createElement("script");
+    var script = document.createElement('script');
     script.src = src;
     document.body.appendChild(script);
   }
@@ -124,25 +124,25 @@ export const loadMap = function () {
 
 export const getImgUrl = function (url, width, height, cpos) {
   //return url+'?ss=1&w='+width+'&h='+height;
-  cpos = cpos || "center";
-  return url + "?crop=1&cpx=0&cpy=0&cpos=" + cpos + "&w=" + width + "&h=" + height;
+  cpos = cpos || 'center';
+  return url + '?crop=1&cpx=0&cpy=0&cpos=' + cpos + '&w=' + width + '&h=' + height;
 };
 
 //加载地图
 export const shares = function () {
-  var share = document.createElement("div");
-  share.classList.add("share-container");
+  var share = document.createElement('div');
+  share.classList.add('share-container');
   share.innerHTML = '<div class="share-bg"></div>';
   document.body.appendChild(share);
-  $(share).on("click", function () {
+  $(share).on('click', function () {
     document.body.removeChild(share);
   });
 };
 
 //去除空格
 export const trims = function (value) {
-  value = value.replace("/(^s*)|(s*$)/g", "");
-  value = value.replace("^:[a-z0-9_]+:$", "");
+  value = value.replace('/(^s*)|(s*$)/g', '');
+  value = value.replace('^:[a-z0-9_]+:$', '');
   return value;
 };
 
@@ -161,13 +161,14 @@ export const checkMobile = function (tel) {
  * @return Object {id:123, a=b}
  */
 const percent2percent25 = (URI) => {
-  if (URI.indexOf("%") > -1) {
-    return URI.replace(/%/g, "%25");
+  if (URI.indexOf('%') > -1) {
+    return URI.replace(/%/g, '%25');
   } else {
     return URI;
   }
 };
 
+// 获取url参数
 export const urlParse = (src) => {
   let url = decodeURIComponent(src) || null;
   let obj = {};
@@ -175,7 +176,7 @@ export const urlParse = (src) => {
   let arr = url.match(reg);
   if (arr) {
     arr.forEach((item) => {
-      let temArr = item.substring(1).split("=");
+      let temArr = item.substring(1).split('=');
       let key = temArr[0];
       let val = temArr[1];
       obj[key] = val;
@@ -184,9 +185,46 @@ export const urlParse = (src) => {
   return obj;
 };
 
+// 时间展示 刚刚 几分钟前 日期
+export const getShowTime = (time) => {
+  let now = new Date();
+  let date = new Date(time);
+  // 间隔
+  let interval = parseInt((now.getTime() - date.getTime()) / 1000 / 60);
+  if (interval == 0) {
+    return '刚刚';
+  } else if (interval < 60) {
+    return interval.toString() + '分钟前';
+  } else if (interval < 60 * 24) {
+    return parseInt(interval / 60).toString() + '小时前';
+  } else if (now.getFullYear() == date.getFullYear()) {
+    return (
+      (date.getMonth() + 1).toString() +
+      '-' +
+      date.getDate().toString() +
+      ' ' +
+      date.getHours() +
+      ':' +
+      date.getMinutes()
+    );
+  } else {
+    return (
+      date.getFullYear().toString().substring(2, 4) +
+      '-' +
+      (date.getMonth() + 1).toString() +
+      '-' +
+      date.getDate().toString() +
+      ' ' +
+      date.getHours() +
+      ':' +
+      date.getMinutes()
+    );
+  }
+};
+
 //加载更多
 export const scrollLoad = function (element, callback) {
-  $("#" + element).on("scroll", function () {
+  $('#' + element).on('scroll', function () {
     var a = this.scrollTop == 0 ? document.body.clientHeight : this.clientHeight;
     var b = this.scrollTop == 0 ? document.body.scrollTop : this.scrollTop;
     var c = this.scrollTop == 0 ? document.body.scrollHeight : this.scrollHeight;
@@ -227,7 +265,7 @@ export const scroll = {
   //浏览器视口的高度
   getWindowHeight: function () {
     var windowHeight = 0;
-    if (document.compatMode == "CSS1Compat") {
+    if (document.compatMode == 'CSS1Compat') {
       windowHeight = document.documentElement.clientHeight;
     } else {
       windowHeight = document.body.clientHeight;
@@ -242,23 +280,23 @@ export const scroll = {
 };
 
 export const date = {
-  format: function (timestamp, timeFormat = "h:i:s") {
-    var timeType = timeFormat.split(":");
+  format: function (timestamp, timeFormat = 'h:i:s') {
+    var timeType = timeFormat.split(':');
     var d = new Date(timestamp * 1000); //根据时间戳生成的时间对象
-    var date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+    var date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
 
-    var time = "";
+    var time = '';
     var _this = this;
     timeType.map(function (data) {
       switch (data) {
-        case "h":
-          time += " " + _this.checkTime(d.getHours());
+        case 'h':
+          time += ' ' + _this.checkTime(d.getHours());
           break;
-        case "i":
-          time += ":" + _this.checkTime(d.getMinutes());
+        case 'i':
+          time += ':' + _this.checkTime(d.getMinutes());
           break;
-        case "s":
-          time += ":" + _this.checkTime(d.getSeconds());
+        case 's':
+          time += ':' + _this.checkTime(d.getSeconds());
           break;
       }
     });
@@ -269,7 +307,7 @@ export const date = {
   },
   checkTime: function (i) {
     if (i < 10) {
-      i = "0" + i;
+      i = '0' + i;
     }
     return i;
   },
@@ -277,7 +315,7 @@ export const date = {
 
 //倒计时
 export const countDown = function (deadTime) {
-  deadTime = deadTime.replace(/\-/g, "/");
+  deadTime = deadTime.replace(/\-/g, '/');
   var EndTime = new Date(deadTime); //截止时间
   var NowTime = new Date();
   var t = EndTime.getTime() - NowTime.getTime();
@@ -317,29 +355,29 @@ export const countDown = function (deadTime) {
   }
 
   return (
-    "<span>" +
+    '<span>' +
     h_h +
-    "</span><span>" +
+    '</span><span>' +
     h_l +
-    "</span>:<span>" +
+    '</span>:<span>' +
     m_h +
-    "</span><span>" +
+    '</span><span>' +
     m_l +
-    "</span>:<span>" +
+    '</span>:<span>' +
     s_h +
-    "</span><span>" +
+    '</span><span>' +
     s_l +
-    "</span>"
+    '</span>'
   );
 };
 
 export const cookieUtil = {
   get: function (name) {
-    let cookieName = encodeURIComponent(name) + "=",
+    let cookieName = encodeURIComponent(name) + '=',
       cookieStart = document.cookie.indexOf(cookieName),
       cookieValue = null;
     if (cookieStart > -1) {
-      let cookieEnd = document.cookie.indexOf(";", cookieStart);
+      let cookieEnd = document.cookie.indexOf(';', cookieStart);
       if (cookieEnd == -1) {
         cookieEnd = document.cookie.length;
       }
@@ -348,23 +386,23 @@ export const cookieUtil = {
     return cookieValue;
   },
   set: function (name, value, expires, path, domain, secure) {
-    let cookieText = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+    let cookieText = encodeURIComponent(name) + '=' + encodeURIComponent(value);
     if (expires instanceof Date) {
-      cookieText += ";expires=" + expires.toGMTString();
+      cookieText += ';expires=' + expires.toGMTString();
     }
     if (path) {
-      cookieText += ";path=" + path;
+      cookieText += ';path=' + path;
     }
     if (domain) {
-      cookieText += ";domain=" + domain;
+      cookieText += ';domain=' + domain;
     }
     if (secure) {
-      cookieText += ";secure";
+      cookieText += ';secure';
     }
     document.cookie = cookieText;
   },
   unset: function (name, path, domain, secure) {
-    this.set(name, "", new Date(0), path, domain, secure);
+    this.set(name, '', new Date(0), path, domain, secure);
   },
 };
 
@@ -372,7 +410,7 @@ export const cookieUtil = {
 export const CallApp = function ({ callAppName, param, callbackName, callbackFun }) {
   // todo 增加判断param是否为空 JSON.stringify(param)
   var u = navigator.userAgent;
-  var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Linux") > -1; //android终端或者uc浏览器
+  var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
 
   // IOS 获取UUID
   if (!isAndroid) {
@@ -380,10 +418,10 @@ export const CallApp = function ({ callAppName, param, callbackName, callbackFun
       if (param) {
         window.webkit.messageHandlers[callAppName].postMessage(JSON.stringify(param));
       } else {
-        window.webkit.messageHandlers[callAppName].postMessage(JSON.stringify({ id: "" }));
+        window.webkit.messageHandlers[callAppName].postMessage(JSON.stringify({ id: '' }));
       }
     } else {
-      console.log("is no in app");
+      console.log('is no in app');
     }
     // 安卓获取UUID
   } else {
@@ -403,7 +441,7 @@ export const CallApp = function ({ callAppName, param, callbackName, callbackFun
         callbackFun(msg);
       };
     } else {
-      console.log("is no in app");
+      console.log('is no in app');
     }
   }
 };

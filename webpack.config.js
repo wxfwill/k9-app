@@ -9,7 +9,7 @@ const config = {
   output: {
     filename: 'assets/js/[name].js',
     path: path.resolve(__dirname, './dist'),
-    publicPath: '/',
+    // publicPath: '/k9-app/',
   },
   devtool: commonSet.devtool, //定位错位位置
   devServer: {
