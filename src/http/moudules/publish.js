@@ -99,3 +99,21 @@ export const verifyLeaveApply = (data) => {
     data,
   });
 };
+
+// 搜索警犬
+export const getByNameOrNumber = (data) => {
+  return axios({
+    url: '/api/dog/getByNameOrNumber',
+    method: 'post',
+    data,
+  });
+};
+
+// 犬病上报
+export const reportDisease = (data) => {
+  return axios({
+    url: '/api/treatmentRecord/reportDisease',
+    method: 'post',
+    data,
+  });
+};

@@ -37,3 +37,21 @@ export const downDocFile = (params) => {
     params,
   });
 };
+
+// 修改密码-获取详情信息
+export const getTodayOnDuty = (data) => {
+  return axios({
+    url: "/api/onDuty/getTodayOnDuty",
+    method: "post",
+    data,
+  });
+};
+
+// 修改密码
+export const updatePassword = (data) => {
+  return axios({
+    url: "/api/userCenter/updatePassword",
+    method: "post",
+    data,
+  });
+};

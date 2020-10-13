@@ -165,20 +165,15 @@ class LeaveList extends Component {
 
   //删除草稿
   delTask = (id) => {
-    commonJs.ajaxPost(
-      '/api/dailyPatrols/delTaskById',
-      {
-        id: id,
-      },
-      (res) => {
-        if (res.code == 0) {
-          this.initDate(this.state.startDate);
-        } else {
-          Toast.info(res.msg);
-          return;
-        }
+    const dataObj = { id: id };
+    React.$ajax.publish.deleteApproval(dataObj).then((res) => {
+      if (res && res.code == 0) {
+        this.initDate(this.state.startDate);
+      } else {
+        Toast.info(res.msg);
+        return;
       }
-    );
+    });
   };
   addShow(data) {
     const { history } = this.props;

@@ -85,6 +85,7 @@ let appMenu = [
   {
     text: '修改密码',
     icon: require('images/own/accent.svg'),
+    link: '/updatePwd'
   },
 ];
 let myTask = [

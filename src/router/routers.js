@@ -73,6 +73,10 @@ const PublishDogReport = (props) => (
     {(PublishDogReport) => <PublishDogReport {...props} />}
   </Bundle>
 );
+/**密码修改 */
+const UpdatePwd = (props) => (
+  <Bundle load={() => import('containers/updatePwd/index')}>{(UpdatePwd) => <UpdatePwd {...props} />}</Bundle>
+);
 
 const AddPubTraining = (props) => (
   <Bundle load={() => import('containers/publish/PubTraining/AddPubTraining')}>
@@ -268,9 +272,9 @@ const CallDetails = (props) => (
 );
 
 /**密码修改 */
-const UpdatePwd = (props) => (
-  <Bundle load={() => import('components/own/Account/UpdatePwd')}>{(UpdatePwd) => <UpdatePwd {...props} />}</Bundle>
-);
+// const UpdatePwd = (props) => (
+//   <Bundle load={() => import('components/own/Account/UpdatePwd')}>{(UpdatePwd) => <UpdatePwd {...props} />}</Bundle>
+// );
 /**假期管理 */
 const Holiday = (props) => (
   <Bundle load={() => import('components/own/Holiday')}>{(Holiday) => <Holiday {...props} />}</Bundle>
@@ -373,6 +377,11 @@ export const routes = [
   {
     path: '/check',
     component: Check,
+    auth: true,
+  },
+  {
+    path: '/updatePwd',
+    component: UpdatePwd,
     auth: true,
   },
 ];
