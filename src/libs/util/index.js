@@ -173,7 +173,7 @@ export const urlParse = (src) => {
   let url = decodeURIComponent(src) || null;
   let obj = {};
   let reg = /[?&][^?&]+=[^?&]+/g;
-  let arr = url.match(reg);
+  let arr = url && url.match(reg);
   if (arr) {
     arr.forEach((item) => {
       let temArr = item.substring(1).split('=');

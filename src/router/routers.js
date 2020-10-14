@@ -298,7 +298,7 @@ const ReportDetail = (props) => (
     {(ReportDetail) => <ReportDetail {...props} />}
   </Bundle>
 );
-
+import NotFound from 'components/NotFound';
 export const routes = [
   {
     path: '/',
@@ -383,5 +383,9 @@ export const routes = [
     path: '/updatePwd',
     component: UpdatePwd,
     auth: true,
+  },
+  {
+    path: '*',
+    component: NotFound,
   },
 ];

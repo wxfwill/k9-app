@@ -2,17 +2,20 @@ import React, { Component } from 'react';
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { routes } from './routers';
 import { connect } from 'react-redux';
-// 404
-import NotFound from 'components/NotFound';
 // 路由配置
 class Router extends Component {
   constructor(props) {
     super(props);
   }
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
   render() {
     let token = this.props.token;
     return (
-      <HashRouter>
+      <HashRouter basename="/k9-app">
         <div className="app">
           <Switch>
             {routes.map((item, index) => {
@@ -31,7 +34,6 @@ class Router extends Component {
                 />
               );
             })}
-            <Route component={NotFound} />
           </Switch>
         </div>
       </HashRouter>

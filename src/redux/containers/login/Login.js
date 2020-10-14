@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Toast, Checkbox, Flex, InputItem } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import {
   saveAccount,
   savePassword,
@@ -121,19 +122,20 @@ class Login extends Component {
         }
         // 用户信息
         this.props.userInfoAction(res.data);
+        console.log('token====' + res.data.token);
         this.props.tokenAction(res.data.token);
-        this.props.remeberPassword();
-        sessionStorage.setItem('user', JSON.stringify(user));
-        sessionStorage.setItem('appMenu', JSON.stringify(res.data.appMenu));
+        // this.props.remeberPassword();
+        // console.log('dispatch');
+        // console.log(this.props.dispatch(saveToken(res.data.token)));
         history.push({ pathname: '/own', state: user });
-        const token = util.cookieUtil.get('token');
-        localStorage.setItem('token', res.data.token);
+
+        // const token = util.cookieUtil.get('token');
 
         if (isAndroid) {
           window.AndroidWebView &&
             window.AndroidWebView.showInfoFromJs(
               JSON.stringify({
-                token,
+                // token,
                 id: user.id,
                 gpsInterval: res.data.cfgs.gpsInterval,
                 braceletInterval: res.data.cfgs.braceletInterval,
@@ -296,6 +298,11 @@ const loginActionToProps = (dispatch) => ({
   passwordAction: (data) => dispatch(savePasswordData(data)),
   tokenAction: (token) => dispatch(saveToken(token)),
 });
+
+// const mapDispatchToProps = (dispatch) => {
+//   let actions = bindActionCreators({ saveToken });
+//   return { ...actions, dispatch };
+// };
 
 const loginForm = createForm()(Login);
 

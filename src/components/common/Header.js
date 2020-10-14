@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import { bindActionCreators } from 'redux';
 import * as systomStatus from 'actions/systomStatus';
+// import { createSocket } from '../../store/actions/socketStatus';
+// import WebsocketClass from 'components/common/websocket';
 const Item = Popover.Item;
 require('style/common/header.less');
 class Header extends Component {
@@ -23,6 +25,8 @@ class Header extends Component {
     history.goBack();
   }
   componentWillMount() {
+    console.log('this');
+    console.log(this);
     // if (typeof this.props.socketMsg == "undefined") {
     //   this.props.sysActions.newSocket();
     // } else {
@@ -216,6 +220,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
   sysActions: bindActionCreators(systomStatus, dispatch),
+  // createSocket: () => dispatch(createSocket()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));

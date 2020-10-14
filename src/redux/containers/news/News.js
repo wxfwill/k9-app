@@ -71,6 +71,7 @@ class News extends Component {
     console.log(dataSource);
     this.state = {
       newList: newsTypeData,
+      newsNum: 100,
       hasMore: false,
       totalPage: -1, //消息列表总页数
       //newsList:[], //消息列表
@@ -200,7 +201,9 @@ class News extends Component {
   };
   handleNewLIst = (item) => {
     const { history } = this.props;
-    history.push({ pathname: `/news/list?title=${item.title}` });
+    // history.push(`${obj.link}?titleType=${obj.text}`); title: item.title
+    history.push({ pathname: `/news/list`, search: `?title=${item.title}` });
+    // history.push({ pathname: `/news/list?title=${item.title}` });
   };
   render() {
     const separator = (sectionID, rowID) => (
@@ -249,7 +252,7 @@ class News extends Component {
     };
     return (
       <div className="Own">
-        <Header title="消息" isSet="+" handleShow={this.addTask.bind(this)} />
+        <Header title={`消息(${this.state.newsNum})`} isSet="+" handleShow={this.addTask.bind(this)} />
         <div className="midder-content">
           <div className="inner-content">
             {this.state.newList.length > 0 &&

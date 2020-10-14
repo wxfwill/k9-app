@@ -7,15 +7,8 @@ import { Toast } from 'antd-mobile';
 let repeat_count = 0;
 
 import store from '../store/index';
-// console.log('===ajax===123');
-// console.log(store.getState().loginReducer.isPass);
 
-// store.subscribe(() => {
-//   console.log('subscribe');
-//   console.log(store.getState().loginReducer.isPass);
-// });
-
-export default function $axios(options) {
+let ajax = function $axios(options) {
   return new Promise((resolve, reject) => {
     const instance = axios.create({
       baseURL: config.baseUrl,
@@ -27,18 +20,20 @@ export default function $axios(options) {
     // request 拦截器
     instance.interceptors.request.use(
       (config) => {
-        console.log('加载中');
         Toast.loading('加载中...', 0);
         // 设置accessToken
-        // if (!config.headers["Authorization"]) {
         // store.subscribe(() => {
-        //   console.log("subscribe");
-        //   console.log(store.getState().loginReducer.isPass);
-        //   config.headers["Authorization"] = store.state.accessToken ? store.state.accessToken : null;
+        //   console.log('subscribe');
+        //   console.log(store.getState().loginReducer.token);
+        //   config.headers['Authorization'] = store.getState().loginReducer.token
+        //     ? store.getState().loginReducer.token
+        //     : null;
         // });
-        console.log('token====111');
-        config.headers['Authorization'] = localStorage.getItem('token') ? localStorage.getItem('token') : null;
-        // }
+        console.log('token123');
+        console.log(store.getState().loginReducer.token);
+        config.headers['Authorization'] = store.getState().loginReducer.token
+          ? store.getState().loginReducer.token
+          : null;
         return config;
       },
 
@@ -112,4 +107,6 @@ export default function $axios(options) {
         reject(error);
       });
   });
-}
+};
+
+export default ajax;

@@ -86,7 +86,7 @@ class Footer extends Component {
 
   render() {
     let { pathname } = this.props.location;
-    let unReadMsgNum = sessionStorage.getItem('unReadMsgNum');
+    let unReadMsgNum = sessionStorage.getItem('unReadMsgNum') || 100;
     return (
       <div className="footer">
         {/*	<Link to="/news">

@@ -48,7 +48,7 @@ class CheckComponent extends Component {
   }
 
   componentDidMount() {
-    this.initDate(moment(new Date()).format('YYYY-MM'));
+    // this.initDate(moment(new Date()).format('YYYY-MM'));
   }
   initDate(checkDate) {
     const user = this.props.userInfo.user;

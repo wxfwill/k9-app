@@ -71,12 +71,12 @@ let appMenu = [
   {
     text: '审批管理',
     icon: require('images/own/own-approval.svg'),
-    link: '/publish/approval?titleType=审批管理'
+    link: '/publish/approval?titleType=审批管理',
   },
   {
     text: '请假申请',
     icon: require('images/own/own-vacation.svg'),
-    link: '/publish/leaveList'
+    link: '/publish/leaveList',
   },
   {
     text: '犬病上报',
@@ -85,7 +85,7 @@ let appMenu = [
   {
     text: '修改密码',
     icon: require('images/own/accent.svg'),
-    link: '/updatePwd'
+    link: '/updatePwd',
   },
 ];
 let myTask = [
@@ -193,6 +193,11 @@ class Own extends Component {
   componentWillMount() {
     console.log('use');
     console.log(this.props.location);
+  }
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return;
+    };
   }
   onChange = (key) => {
     console.log(key);

@@ -8,3 +8,6 @@ export const PASSWORD_DATA = 'PASSWORD_DATA';
 export const USER_INFO = 'USER_INFO';
 // token
 export const USER_TOKEN = 'USER_TOKEN';
+
+// new websocket
+export const NEW_SOCKET = 'NEW_SOCKET';
