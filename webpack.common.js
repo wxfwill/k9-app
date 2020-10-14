@@ -88,6 +88,7 @@ const commonSet = {
       libs: `${srcPath}/libs`,
       util: `${srcPath}/libs/util`,
       ezuikit: `${srcPath}/hkplayer/ezuikit.js`,
+      websocket:`${srcPath}/websocket`,
       config: path.resolve(__dirname, './config'),
       mock: path.resolve(__dirname, './mock'),
     },
