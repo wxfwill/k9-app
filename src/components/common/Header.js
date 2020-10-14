@@ -5,8 +5,12 @@ import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import { bindActionCreators } from 'redux';
 import * as systomStatus from 'actions/systomStatus';
+<<<<<<< HEAD
 // import { createSocket } from '../../store/actions/socketStatus';
 // import WebsocketClass from 'components/common/websocket';
+=======
+import store from 'websocket/store';
+>>>>>>> plh
 const Item = Popover.Item;
 require('style/common/header.less');
 class Header extends Component {
@@ -25,8 +29,13 @@ class Header extends Component {
     history.goBack();
   }
   componentWillMount() {
+<<<<<<< HEAD
     console.log('this');
     console.log(this);
+=======
+    //初始化socket连接
+    store.dispatch({ type: true });
+>>>>>>> plh
     // if (typeof this.props.socketMsg == "undefined") {
     //   this.props.sysActions.newSocket();
     // } else {
@@ -37,14 +46,24 @@ class Header extends Component {
     //   }
     // }
     // this.timer = setInterval(this.openWebsocket, 30000);
+    // setTimeout(() => {
+    //   const ws = store.getState();
+    //   ws.$soctket_emit(JSON.stringify({ msgType: 'HeartBeat' }), () => {
+    //     console.log('发送成功', 'hahahahhhhhhhhhhhhhhhhhhhhhh');
+    //   });
+    // }, 5000);
   }
 
   openWebsocket = () => {
-    if (systomStatus.reWebsocket().readyState == 2 || systomStatus.reWebsocket().readyState == 3) {
-      this.props.sysActions.newSocket();
-    } else {
-      systomStatus.reWebsocket().send(JSON.stringify({ msgType: 'HeartBeat' }));
-    }
+    // if (systomStatus.reWebsocket().readyState == 2 || systomStatus.reWebsocket().readyState == 3) {
+    //   this.props.sysActions.newSocket();
+    // } else {
+    //   systomStatus.reWebsocket().send(JSON.stringify({ msgType: 'HeartBeat' }));
+    // }
+    const ws = store.getState();
+    ws.$soctket_emit(JSON.stringify({ msgType: 'HeartBeat' }), () => {
+      console.log('发送成功');
+    });
   };
   handleShow() {
     this.props.handleShow();
