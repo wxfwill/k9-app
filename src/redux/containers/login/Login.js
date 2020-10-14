@@ -124,6 +124,8 @@ class Login extends Component {
         this.props.userInfoAction(res.data);
         console.log('token====' + res.data.token);
         this.props.tokenAction(res.data.token);
+
+        sessionStorage.setItem('user', JSON.stringify(user));
         // this.props.remeberPassword();
         // console.log('dispatch');
         // console.log(this.props.dispatch(saveToken(res.data.token)));
