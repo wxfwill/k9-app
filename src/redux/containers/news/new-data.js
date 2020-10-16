@@ -1,7 +1,7 @@
 export const newsTypeData = [
   {
     icon: require("images/news/new-w.svg"),
-    title: "网格化搜谱",
+    title: "网格化搜捕",
     desc: "网格化搜捕任务简单介绍",
     time: "8分钟前",
     num: 10,

@@ -13,6 +13,7 @@ import { withRouter, Link } from 'react-router-dom';
 import Ajax from 'libs/ajax';
 import { toast } from 'libs/util';
 import { connect } from 'react-redux';
+
 const Item = List.Item;
 const Brief = Item.Brief;
 
@@ -21,7 +22,7 @@ require('style/fontawesome/font-awesome.less');
 
 // moke
 import { newsTypeData } from './new-data.js';
-import { cookieUtil } from '../../../libs/util/index.js';
+import { cookieUtil, getShowTimeAgain } from '../../../libs/util/index.js';
 
 let currentPage = 0; //当前页码
 const isRead = (
@@ -83,7 +84,7 @@ class News extends Component {
     // }
     this.state = {
       newList: newsTypeData,
-      newsNum: this.props.socketNewList.total,
+      newsNum: 0,
       hasMore: false,
       totalPage: -1, //消息列表总页数
       //newsList:[], //消息列表
@@ -131,6 +132,14 @@ class News extends Component {
     console.log(util.getShowTime('2020-10-10 15:30'));
     this.setState({ isLoading: true });
     // this.listMyNews(); //获取我的消息列表
+    this.renewalNewList(this.props);
+  }
+
+  componentDidUpdate() {
+    // 监听消息数量变化
+    if (this.props.socketNewList.total != this.state.newsNum) {
+      this.renewalNewList(this.props);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -162,6 +171,25 @@ class News extends Component {
     //     isLoading: false,
     //   });
     // }
+  }
+
+  // 获取消息类别列表（根据返回的数据和本地json更新列表）
+  renewalNewList(props) {
+    let arrList = [];
+    this.state.newList.map((list) => {
+      props.socketNewList.items.map((item) => {
+        if (list.title == item.typeNote) {
+          list.num = item.num;
+          list.type = item.type;
+          list.time = getShowTimeAgain(item.nearlyTime, item.systemTime);
+          arrList.push(arrList);
+        }
+      });
+    });
+    this.setState({
+      newsList: arrList,
+      newsNum: props.socketNewList.total,
+    });
   }
 
   onEndReached = (event) => {
@@ -275,7 +303,7 @@ class News extends Component {
                 return (
                   <List className="new-list" key={index} onClick={() => this.handleNewLIst(item)}>
                     <Item
-                      extra="8分钟前"
+                      extra={item.time}
                       align="top"
                       thumb={
                         <Badge text={item.num} overflowCount={99}>
