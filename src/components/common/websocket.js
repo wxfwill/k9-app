@@ -71,15 +71,16 @@ let sendMessage = (val, callback) => {
     closeWebSocket();
     // 重连
     createWebsocket();
-
-    websocket.onopen = function () {
-      heartCheck.reset().start();
-      websocket.send(JSON.stringify(val));
-    };
-    websocket.onmessage = function (event) {
-      lockReconnect = true;
-      callback && callback(event.data);
-    };
+    if (websocket) {
+      websocket.onopen = function () {
+        heartCheck.reset().start();
+        websocket.send(JSON.stringify(val));
+      };
+      websocket.onmessage = function (event) {
+        lockReconnect = true;
+        callback && callback(event.data);
+      };
+    }
   }
 };
 export { websocket, createWebsocket, sendMessage, closeWebSocket };
