@@ -11,6 +11,7 @@ import { saveAccount, savePassword, saveUserInfo, savePasswordData, saveToken } 
 import { CallApp } from 'libs/util';
 import Ajax from 'libs/ajax';
 import { withRouter, Link } from 'react-router-dom';
+import { closeWebSocket } from 'components/common/websocket';
 const Item = List.Item;
 const Brief = Item.Brief;
 const alert = Modal.alert;
@@ -155,6 +156,8 @@ class Own extends Component {
                   // sessionStorage.removeItem('user');
                   this.props.tokenAction(null);
                   Toast.info('退出成功');
+                  // 关闭socket
+                  closeWebSocket();
                   history.push('/login');
                 } else {
                   Toast.info(res.msg);

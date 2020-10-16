@@ -3,6 +3,8 @@ import { Button, Toast, Checkbox, Flex, InputItem } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { createWebsocket } from 'components/common/websocket';
+import store from 'websocket/store';
 import {
   saveAccount,
   savePassword,
@@ -120,10 +122,15 @@ class Login extends Component {
         } else {
           localStorage.removeItem('remeberPass');
         }
+        sessionStorage.setItem('user', JSON.stringify(user));
         // 用户信息
         this.props.userInfoAction(res.data);
         console.log('token====' + res.data.token);
         this.props.tokenAction(res.data.token);
+
+        // 建立websocket
+        createWebsocket();
+        // store.dispatch({ type: true });
         // this.props.remeberPassword();
         // console.log('dispatch');
         // console.log(this.props.dispatch(saveToken(res.data.token)));

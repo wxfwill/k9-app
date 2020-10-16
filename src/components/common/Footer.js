@@ -123,7 +123,7 @@ class Footer extends Component {
               icon={{ uri: newsPic }}
               selectedIcon={{ uri: newsActivePic }}
               selected={this.state.selectedTab === 'blueTab'}
-              badge={unReadMsgNum > 0 ? unReadMsgNum : ''}
+              badge={this.props.socketNewList.total > 0 ? this.props.socketNewList.total : ''}
               onPress={() => {
                 this.setState({
                   selectedTab: 'blueTab',
@@ -253,6 +253,7 @@ function loginStateToProps(state) {
     userInfo: state.loginReducer.userInfo,
     password: state.loginReducer.password,
     token: state.loginReducer.token,
+    socketNewList: state.socketReducer.newLIst,
   };
 }
 

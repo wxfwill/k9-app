@@ -69,9 +69,21 @@ class News extends Component {
     });
     console.log('====dataSource=======');
     console.log(dataSource);
+    console.log('socket推送消息列表');
+    console.log(this.props.socketNewList);
+    // let { total, items } = this.props.socketMsg;
+    // if (this.props.socketMsg) {
+    //   this.setState(prevState => {
+    //     console.log('prevState');
+    //     console.log(prevState);
+    //     return {
+    //        newsNum: this.props.socketMsg.total
+    //     }
+    //   });
+    // }
     this.state = {
       newList: newsTypeData,
-      newsNum: 100,
+      newsNum: this.props.socketNewList.total,
       hasMore: false,
       totalPage: -1, //消息列表总页数
       //newsList:[], //消息列表
@@ -123,34 +135,33 @@ class News extends Component {
 
   componentWillReceiveProps(nextProps) {
     // debugger;
-    console.log(123456);
-    const socketMsg = nextProps.socketMsg;
-    console.log(socketMsg);
-    if (socketMsg && socketMsg.msgType == 'newMsg') {
-      const data = socketMsg.data;
-      let newData = data;
-      console.log(newData[0], '=======socket');
-      this.newsList.unshift(newData[0]);
-      //this.newsList = newData.concat(this.newsList)
-      //this.rows = this.newsList.length;
-
-      const getSectionData = (dataBlob, sectionID) => dataBlob[sectionID];
-      const getRowData = (dataBlob, sectionID, rowID) => dataBlob[rowID];
-      const dataSource = new ListView.DataSource({
-        getRowData,
-        getSectionHeaderData: getSectionData,
-        rowHasChanged: (row1, row2) => row1 !== row2,
-        sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-      });
-      //this.newsList[0] = this.newsList[this.newsList.length-1]
-      //this.newsList.unshift(this.newsList[this.newsList.length-1])
-      this.rows = this.newsList.length;
-      this.setState({
-        createTime: this.newsList[this.newsList.length - 1].createTime,
-        dataSource: dataSource.cloneWithRows(genData(this.newsList.length, 0)),
-        isLoading: false,
-      });
-    }
+    // console.log(123456);
+    // const socketMsg = nextProps.socketMsg;
+    // console.log(socketMsg);
+    // if (socketMsg && socketMsg.msgType == 'newMsg') {
+    //   const data = socketMsg.data;
+    //   let newData = data;
+    //   console.log(newData[0], '=======socket');
+    //   this.newsList.unshift(newData[0]);
+    //   //this.newsList = newData.concat(this.newsList)
+    //   //this.rows = this.newsList.length;
+    //   const getSectionData = (dataBlob, sectionID) => dataBlob[sectionID];
+    //   const getRowData = (dataBlob, sectionID, rowID) => dataBlob[rowID];
+    //   const dataSource = new ListView.DataSource({
+    //     getRowData,
+    //     getSectionHeaderData: getSectionData,
+    //     rowHasChanged: (row1, row2) => row1 !== row2,
+    //     sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+    //   });
+    //   //this.newsList[0] = this.newsList[this.newsList.length-1]
+    //   //this.newsList.unshift(this.newsList[this.newsList.length-1])
+    //   this.rows = this.newsList.length;
+    //   this.setState({
+    //     createTime: this.newsList[this.newsList.length - 1].createTime,
+    //     dataSource: dataSource.cloneWithRows(genData(this.newsList.length, 0)),
+    //     isLoading: false,
+    //   });
+    // }
   }
 
   onEndReached = (event) => {
@@ -250,9 +261,13 @@ class News extends Component {
         </div>
       );
     };
+    // console.log('socket推送消息列表');
+    // console.log(this.props.socketNewList);
+    // let { total, items } = this.props.socketMsg;
+
     return (
       <div className="Own">
-        <Header title={`消息(${this.state.newsNum})`} isSet="+" handleShow={this.addTask.bind(this)} />
+        <Header title={`消息(${this.props.socketNewList.total})`} isSet="+" handleShow={this.addTask.bind(this)} />
         <div className="midder-content">
           <div className="inner-content">
             {this.state.newList.length > 0 &&
@@ -321,6 +336,7 @@ class News extends Component {
 
 const mapStateToProps = (state) => ({
   socketMsg: state.system && state.system.socketMsg,
+  socketNewList: state.socketReducer.newLIst,
 });
 const mapDispatchToProps = (dispatch) => ({
   sysActions: bindActionCreators(systomStatus, dispatch),

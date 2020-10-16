@@ -5,9 +5,11 @@ const middleware = [thunk];
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 import loginReducer from './reducers/loginReducer';
+import socketReducer from './reducers/websocketReducer';
 
 const rootReducer = combineReducers({
   loginReducer,
+  socketReducer,
 });
 
 // redux持久化
@@ -16,7 +18,7 @@ import storage from 'redux-persist/lib/storage';
 const persistConfig = {
   key: 'root',
   storage: storage,
-  whitelist: ['loginReducer'], // 白名单
+  whitelist: ['loginReducer', 'socketReducer'], // 白名单
 };
 
 const myPersistReducer = persistReducer(persistConfig, rootReducer);

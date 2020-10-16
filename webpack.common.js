@@ -75,7 +75,7 @@ const commonSet = {
   resolve: {
     extensions: ['.js', '.json', '.jsx'],
     alias: {
-      'react-dom': '@hot-loader/react-dom',
+      // 'react-dom': '@hot-loader/react-dom',
       //配置路径常量
       components: `${srcPath}/components`,
       actions: `${srcPath}/redux/actions`,
@@ -88,7 +88,8 @@ const commonSet = {
       libs: `${srcPath}/libs`,
       util: `${srcPath}/libs/util`,
       ezuikit: `${srcPath}/hkplayer/ezuikit.js`,
-      websocket:`${srcPath}/websocket`,
+      websocket: `${srcPath}/websocket`,
+      store: `${srcPath}/store`,
       config: path.resolve(__dirname, './config'),
       mock: path.resolve(__dirname, './mock'),
     },

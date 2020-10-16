@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import { bindActionCreators } from 'redux';
 import * as systomStatus from 'actions/systomStatus';
-// import { createSocket } from '../../store/actions/socketStatus';
-// import WebsocketClass from 'components/common/websocket';
+import { saveSocketNewList } from 'store/actions/websocketAction';
+import { sendMessage } from 'components/common/websocket';
 import store from 'websocket/store';
 const Item = Popover.Item;
 require('style/common/header.less');
@@ -27,7 +27,7 @@ class Header extends Component {
   }
   componentWillMount() {
     //初始化socket连接
-    store.dispatch({ type: true });
+    // store.dispatch({ type: true });
     // if (typeof this.props.socketMsg == "undefined") {
     //   this.props.sysActions.newSocket();
     // } else {
@@ -43,7 +43,7 @@ class Header extends Component {
     //   ws.$soctket_emit(JSON.stringify({ msgType: 'HeartBeat' }), () => {
     //     console.log('发送成功', 'hahahahhhhhhhhhhhhhhhhhhhhhh');
     //   });
-    // }, 5000);
+    // }, 500);
   }
 
   openWebsocket = () => {
@@ -52,19 +52,37 @@ class Header extends Component {
     // } else {
     //   systomStatus.reWebsocket().send(JSON.stringify({ msgType: 'HeartBeat' }));
     // }
-    const ws = store.getState();
-    ws.$soctket_emit(JSON.stringify({ msgType: 'HeartBeat' }), () => {
-      console.log('发送成功');
-    });
+    // console.log(store);
+    // const ws = store.getState();
+    // ws.$soctket_emit(JSON.stringify({ msgType: 'HeartBeat' }), () => {
+    //   console.log('发送成功');
+    // });
   };
   handleShow() {
     this.props.handleShow();
   }
+  componentDidMount() {
+    sendMessage({ serviceCode: 'statisticsMsgTips', payload: JSON.stringify({ status: 0 }) }, (data) => {
+      console.log('发送成功statisticsMsgTips成功');
+      console.log(JSON.parse(data));
+      let res = JSON.parse(data);
+      if (res.code === 0) {
+        // 消息统计
+        if (res.serviceCode == 'statisticsMsgTips') {
+          console.log('消息统计');
+          console.log(res.data);
+          this.props.SocketNewListActions(res.data);
+        }
+      }
+    });
+    // const ws = store.getState();
+    // ws.$soctket_close();
+  }
   componentWillUnmount() {
     clearInterval(this.timer);
-    if (systomStatus && systomStatus.reWebsocket() && systomStatus.reWebsocket().readyState == 1) {
-      systomStatus.reWebsocket().send(JSON.stringify({ msgType: 'HeartBeat' }));
-    }
+    // if (systomStatus && systomStatus.reWebsocket() && systomStatus.reWebsocket().readyState == 1) {
+    //   systomStatus.reWebsocket().send(JSON.stringify({ msgType: 'HeartBeat' }));
+    // }
     //		systomStatus.closeSocket();
   }
   componentWillReceiveProps(nextProps) {
@@ -228,9 +246,11 @@ class Header extends Component {
 }
 const mapStateToProps = (state) => ({
   socketMsg: state.system && state.system.socketMsg,
+  socketNewList: state.socketReducer.newLIst,
 });
 const mapDispatchToProps = (dispatch) => ({
   sysActions: bindActionCreators(systomStatus, dispatch),
+  SocketNewListActions: (list) => dispatch(saveSocketNewList(list)),
   // createSocket: () => dispatch(createSocket()),
 });
 
