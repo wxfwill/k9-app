@@ -1,22 +1,21 @@
-import React, { Component } from "react";
-import { List, Icon, Tabs, DatePicker, Modal, InputItem, TextareaItem, Picker, Toast } from "antd-mobile";
-import Reflux from "reflux";
-import { createForm } from "rc-form";
-import { withRouter, Link } from "react-router-dom";
-import moment from "moment";
-import commonJs from "libs/CommonStore";
-import Header from "components/common/Header";
-import Choose from "components/common/CheckBox";
-import PubAggMap from "./PubAggMap";
+import React, { Component } from 'react';
+import { List, Icon, Tabs, DatePicker, Modal, InputItem, TextareaItem, Picker, Toast } from 'antd-mobile';
+import Reflux from 'reflux';
+import { createForm } from 'rc-form';
+import { withRouter, Link } from 'react-router-dom';
+import moment from 'moment';
+import Header from 'components/common/Header';
+import Choose from 'components/common/CheckBox';
+import PubAggMap from './PubAggMap';
 
-require("style/publish/pubAggregate.less");
+require('style/publish/pubAggregate.less');
 
 const Item = List.Item;
 const alert = Modal.alert;
 const titleType = {
-  detail: "定点集合详情",
-  modify: "定点集合修改",
-  add: "定点集合新增",
+  detail: '定点集合详情',
+  modify: '定点集合修改',
+  add: '定点集合新增',
 };
 
 class AddComponent extends Component {
@@ -24,15 +23,15 @@ class AddComponent extends Component {
     super(props);
 
     this.state = {
-      assembleTime: "",
+      assembleTime: '',
       reportArr: [],
       chooseMembArr: [],
       allMembers: [],
-      taskName: "",
-      members: "",
-      userIds: "",
-      location: "",
-      reportUserId: "",
+      taskName: '',
+      members: '',
+      userIds: '',
+      location: '',
+      reportUserId: '',
       pointer: null,
       disabled: false,
       isMap: false,
@@ -50,7 +49,7 @@ class AddComponent extends Component {
     });
 
     this.setState({
-      reportUserId: "",
+      reportUserId: '',
       reportArr: reportArr,
       chooseMembArr: data,
       members: valArr.join(),
@@ -63,10 +62,10 @@ class AddComponent extends Component {
     }));
   };
   requestAllMembers = (backCall) => {
-    commonJs.ajaxPost("/api/userCenter/getCombatStaff", {}, (result) => {
-      if (result.code == 0) {
+    React.$ajax.publish.getCombatStaff().then((result) => {
+      if (result && result.code == 0) {
         if (this.state.members) {
-          let members = this.state.members.split(",");
+          let members = this.state.members.split(',');
           let userIds = [];
           result.data.map((item) => {
             if (
@@ -113,16 +112,16 @@ class AddComponent extends Component {
   clearAll() {
     this.tempCombatTypeValue = [];
     this.setState({
-      location: "",
-      members: "",
-      userIds: "",
-      taskName: "",
+      location: '',
+      members: '',
+      userIds: '',
+      taskName: '',
       assembleTime: null,
       pointer: null,
     });
     this.props.form.resetFields();
     this.state.chooseMembArr.map((item) => {
-      item.remark = "";
+      item.remark = '';
     });
   }
   handleSubmit() {
@@ -130,7 +129,7 @@ class AddComponent extends Component {
       return false;
     }
     let data = {};
-    let errObj = "";
+    let errObj = '';
     this.props.form.validateFields((err, values) => {
       errObj = err;
       for (let key in values) {
@@ -139,30 +138,30 @@ class AddComponent extends Component {
     });
 
     if (errObj || !this.state.reportUserId) {
-      util.toast("有选项为空！");
+      util.toast('有选项为空！');
       return false;
     }
     this.isRequest = true;
     data.assembleTime = data.assembleTime.getTime();
-    data.userIds = this.state.userIds.split(",");
+    data.userIds = this.state.userIds.split(',');
     data.location = this.state.location;
     data.lat = this.state.pointer.lat;
     data.lng = this.state.pointer.lng;
     data.reportUserId = this.state.reportUserId;
-    commonJs.ajaxPost("/api/cmdMonitor/saveAssemblePoint", data, (result) => {
-      if (result.code == 0) {
+    React.$ajax.publish.saveAssemblePoint(data).then((result) => {
+      if (result && result.code == 0) {
         this.isRequest = false;
-        util.toast("发布成功！");
+        util.toast('发布成功！');
         const { history } = this.props;
         history.goBack();
       } else {
         this.isRequest = false;
-        util.toast("发布失败！");
+        util.toast('发布失败！');
       }
     });
   }
   sendReport(val, backCall) {
-    let user = JSON.parse(sessionStorage.getItem("user"));
+    let user = JSON.parse(sessionStorage.getItem('user'));
     let data = {
       type: 5, //任务类型1训练2巡逻3紧急调配4网格搜捕5定点集合6外勤任务
       dataId: val.id,
@@ -170,11 +169,11 @@ class AddComponent extends Component {
       userId: this.state.reportUserId,
       approveUserId: user.id,
     };
-    commonJs.ajaxPost("/api/taskReport/saveInfo", data, (result) => {
-      if (result.code == 0) {
+    React.$ajax.publish.aggregateSaveInfo(data).then((result) => {
+      if (result && result.code == 0) {
         backCall && backCall(result);
       } else {
-        util.toast("选定上报人员失败失败！");
+        util.toast('选定上报人员失败失败！');
       }
     });
   }
@@ -198,35 +197,44 @@ class AddComponent extends Component {
     this.requestAllMembers();
   }
   showStop = () => {
-    const alertInstance = alert("终止任务", "确定终止此任务吗?", [
-      { text: "取消", onPress: () => console.log("cancel"), style: "default" },
-      { text: "确定", onPress: () => this.stopTask() },
+    const alertInstance = alert('终止任务', '确定终止此任务吗?', [
+      { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+      { text: '确定', onPress: () => this.stopTask() },
     ]);
   };
 
   //终止任务
   stopTask = () => {
-    commonJs.ajaxPost(
-      "/api/cmdMonitor/stopAssembleTask",
-      {
+    React.$ajax.publish
+      .stopAssembleTask({
         id: this.props.location.query.data.id,
-      },
-      (res) => {
+      })
+      .then((res) => {
         if (res.code == 0) {
           let { history } = this.props;
-          Toast.info("任务已终止！");
-          sessionStorage.setItem("currTabs", 3);
+          Toast.info('任务已终止！');
+          sessionStorage.setItem('currTabs', 3);
           history.goBack();
         } else {
           Toast.info(res.msg);
           return;
         }
-      }
-    );
+      });
   };
   render() {
     const { getFieldProps, getFieldDecorator, getFieldError } = this.props.form;
-    const { disabled, assembleTime, taskName, location, members, allMembers, reportUserId, reportArr, reportUserName, taskStatus } = this.state;
+    const {
+      disabled,
+      assembleTime,
+      taskName,
+      location,
+      members,
+      allMembers,
+      reportUserId,
+      reportArr,
+      reportUserName,
+      taskStatus,
+    } = this.state;
     const title = titleType[this.titleType] ? titleType[this.titleType] : titleType.add;
     let errors;
     return (
@@ -235,9 +243,9 @@ class AddComponent extends Component {
         <div className="list-box">
           <List className="list">
             <DatePicker
-              {...getFieldProps("assembleTime", {
+              {...getFieldProps('assembleTime', {
                 initialValue: assembleTime,
-                rules: [{ required: true, message: "选择日期不能为空！" }],
+                rules: [{ required: true, message: '选择日期不能为空！' }],
               })}
               disabled={disabled}
               title="请选择日期"
@@ -252,9 +260,9 @@ class AddComponent extends Component {
           </List>
           <List className="list">
             <InputItem
-              {...getFieldProps("taskName", {
+              {...getFieldProps('taskName', {
                 initialValue: taskName,
-                rules: [{ required: true, message: "任务名称不能为空！" }],
+                rules: [{ required: true, message: '任务名称不能为空！' }],
               })}
               disabled={disabled}
               placeholder="请输入任务名称"
@@ -262,13 +270,13 @@ class AddComponent extends Component {
               <i className="tips">*</i>任务名称
             </InputItem>
           </List>
-          <div className={`list pointer-list ${disabled ? "list-disable" : ""}`}>
+          <div className={`list pointer-list ${disabled ? 'list-disable' : ''}`}>
             <div className="name">
               <i className="tips">*</i>选集合点
             </div>
-            <div className="cont">{location ? location : ""}</div>
+            <div className="cont">{location ? location : ''}</div>
             <div className="icon" onClick={() => this.choosePoint()}>
-              {disabled ? "查看" : "添加"}
+              {disabled ? '查看' : '添加'}
             </div>
           </div>
           <Choose
@@ -301,13 +309,13 @@ class AddComponent extends Component {
               <div className="name">
                 <i className="tips">*</i>上报人员
               </div>
-              <div className="cont">{reportUserName ? reportUserName : "----"}</div>
+              <div className="cont">{reportUserName ? reportUserName : '----'}</div>
             </div>
           )}
         </div>
         {!disabled ? (
           <div className="btn-box">
-            <button className="clear" onClick={() => this.clearAll()} style={{ display: "none" }}>
+            <button className="clear" onClick={() => this.clearAll()} style={{ display: 'none' }}>
               清空
             </button>
             <button className="publish" onClick={() => this.handleSubmit()}>

@@ -1,126 +1,125 @@
-.add-content{
-	width: 100%;
-	height: 100%;
-	background-color: #f3f4f5;
-	position: relative;
-	.list-box{
-		position: absolute;
-		top: .47rem;
-		bottom: .42rem;
-		left: 0;
-		right: 0;
+.add-content {
+  width: 100%;
+  height: 100%;
+  background-color: #f3f4f5;
+  position: relative;
+  .list-box {
+    // position: absolute;
+    // top: .47rem;
+    // bottom: .42rem;
+    // left: 0;
+    // right: 0;
 
-		.list{
-			margin-top: 2px;
+    .list {
+      margin-top: 2px;
 
-			.am-list-body{
-				border: none;
+      .am-list-body {
+        border: none;
 
-				input, textarea{
-					text-align: right !important;
-				}
-			}
-			&.pointer-list{
-				display: flex;
-				padding: 7px 15px;
-				background-color: #ffffff;
-				line-height: 30px;
-				height: auto;
-				font-size: 17px;
+        input,
+        textarea {
+          text-align: right !important;
+        }
+      }
+      &.pointer-list {
+        display: flex;
+        padding: 7px 15px;
+        background-color: #ffffff;
+        line-height: 30px;
+        height: auto;
+        font-size: 17px;
 
-				.name{
-					width: 85px;
-					margin-right: 5px;
-				}
-				.cont{
-					flex: 1;
-					margin-right: 5px;
-					text-align: right;
+        .name {
+          width: 85px;
+          margin-right: 5px;
+        }
+        .cont {
+          flex: 1;
+          margin-right: 5px;
+          text-align: right;
 
-					> span{
-						color: #bbbbbb;
-					}
-				}
-				.icon{
-					height: 20px;
-					line-height: 20px;
-					font-size: 14px;
-					text-align: center;
-					border: 1px #15c619 solid;
-					background-color: #d0f4d1;
-					border-radius: 10px;
-					color: #15c619;
-					margin-top: 4px;
-					padding: 0 8px;
-				}
-			}
-			&.list-disable{
-				color: #bbbbbb;
+          > span {
+            color: #bbbbbb;
+          }
+        }
+        .icon {
+          height: 20px;
+          line-height: 20px;
+          font-size: 14px;
+          text-align: center;
+          border: 1px #15c619 solid;
+          background-color: #d0f4d1;
+          border-radius: 10px;
+          color: #15c619;
+          margin-top: 4px;
+          padding: 0 8px;
+        }
+      }
+      &.list-disable {
+        color: #bbbbbb;
+      }
+    }
+    .tips {
+      color: #ff0000;
+      font-style: normal;
+    }
+  }
+  .btn-box {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    // background-color: #ffffff;
+    display: flex;
+    padding: 0.5rem 0;
+    justify-content: flex-end;
 
-			}
-		}
-		.tips{
-			color: #ff0000;
-			font-style: normal;
-		}
+    button {
+      border: none;
+      width: 88%;
+      height: 1.2rem;
+      border-radius: 0.36rem;
+      color: #ffffff;
+      background-color: #dcdcdc;
+      font-size: 0.6rem;
+    }
+    .publish {
+      margin-left: 6%;
+      margin-right: 6%;
+      background-color: #15c619;
+    }
+  }
+  .only-btn {
+    justify-content: flex-end;
 
-	}
-	.btn-box{
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		width: 100%;
-		background-color: #ffffff;
-		display: flex;
-		padding: 0.02rem 0;
-		justify-content: flex-end;
-
-		button{
-			border: none;
-			width: 88%;
-			height: .36rem;
-			border-radius: .36rem;
-			color: #ffffff;
-			background-color: #dcdcdc;
-
-		}
-		.publish{
-			margin-left: 6%;
-			margin-right: 6%;
-			background-color: #15c619;
-		}
-	}
-	.only-btn{
-		justify-content: flex-end;
-
-		.publish{
-			background-color: #15c619;
-		}
-	}
+    .publish {
+      background-color: #15c619;
+    }
+  }
 }
-.pick-view-btn{
-	position: relative;
-	line-height: 40px;
-	border-bottom: 1px #bfbfbf solid;
+.pick-view-btn {
+  position: relative;
+  line-height: 40px;
+  border-bottom: 1px #bfbfbf solid;
 
-	.cancel{
-		position: absolute;
-		left: 10px;
-		font-size: 14px;
-		line-height: 40px;
-		padding: 0 5px;
-	}
-	.sure{
-		position: absolute;
-		right: 10px;
-		font-size: 14px;
-		line-height: 40px;
-		padding: 0 5px;
-		color: #15c619;
-	}
-	div{
-		color: #333333;
-		padding: 0;
-		margin: 0;
-	}
+  .cancel {
+    position: absolute;
+    left: 10px;
+    font-size: 14px;
+    line-height: 40px;
+    padding: 0 5px;
+  }
+  .sure {
+    position: absolute;
+    right: 10px;
+    font-size: 14px;
+    line-height: 40px;
+    padding: 0 5px;
+    color: #15c619;
+  }
+  div {
+    color: #333333;
+    padding: 0;
+    margin: 0;
+  }
 }
