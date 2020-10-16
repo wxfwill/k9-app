@@ -18,6 +18,34 @@ const PublishGridSearch = (props) => (
     {(PublishGridSearch) => <PublishGridSearch {...props} />}
   </Bundle>
 );
+// 日常巡逻
+const AddPubRound = (props) => (
+  <Bundle load={() => import('containers/publish/PubRound/AddPubRound')}>
+    {(AddPubRound) => <AddPubRound {...props} />}
+  </Bundle>
+);
+// 训练计划
+const AddPubTraining = (props) => (
+  <Bundle load={() => import('containers/publish/PubTraining/AddPubTraining')}>
+    {(AddPubTraining) => <AddPubTraining {...props} />}
+  </Bundle>
+);
+// 紧急调配
+const AddEmedep = (props) => (
+  <Bundle load={() => import('containers/publish/PubEmedep/AddItem')}>{(AddEmedep) => <AddEmedep {...props} />}</Bundle>
+);
+// 定点集合
+const AddAggregate = (props) => (
+  <Bundle load={() => import('containers/publish/PubAggregate/AddItem')}>
+    {(AddAggregate) => <AddAggregate {...props} />}
+  </Bundle>
+);
+// 外请任务
+const AddItinerancy = (props) => (
+  <Bundle load={() => import('containers/publish/PubItinerancy/AddItem')}>
+    {(AddItinerancy) => <AddItinerancy {...props} />}
+  </Bundle>
+);
 // 点名
 const PublishRollCall = (props) => (
   <Bundle load={() => import('containers/publish/RollCall')}>
@@ -77,29 +105,15 @@ const PublishDogReport = (props) => (
 const UpdatePwd = (props) => (
   <Bundle load={() => import('containers/updatePwd/index')}>{(UpdatePwd) => <UpdatePwd {...props} />}</Bundle>
 );
+// 我的任务
+const OwnTask = (props) => (
+  <Bundle load={() => import('components/own/OwnTask')}>{(OwnTask) => <OwnTask {...props} />}</Bundle>
+);
 
-const AddPubTraining = (props) => (
-  <Bundle load={() => import('containers/publish/PubTraining/AddPubTraining')}>
-    {(AddPubTraining) => <AddPubTraining {...props} />}
-  </Bundle>
-);
-const AddPubRound = (props) => (
-  <Bundle load={() => import('containers/publish/PubRound/AddPubRound')}>
-    {(AddPubRound) => <AddPubRound {...props} />}
-  </Bundle>
-);
 const PubRoundDetails = (props) => (
   <Bundle load={() => import('containers/publish/PubRound/PubRoundDetails')}>
     {(PubRoundDetails) => <PubRoundDetails {...props} />}
   </Bundle>
-);
-const AddAggregate = (props) => (
-  <Bundle load={() => import('containers/publish/PubAggregate/AddItem')}>
-    {(AddAggregate) => <AddAggregate {...props} />}
-  </Bundle>
-);
-const AddEmedep = (props) => (
-  <Bundle load={() => import('containers/publish/PubEmedep/AddItem')}>{(AddEmedep) => <AddEmedep {...props} />}</Bundle>
 );
 
 const PubEmedepDetails = (props) => (
@@ -107,11 +121,7 @@ const PubEmedepDetails = (props) => (
     {(PubEmedepDetails) => <PubEmedepDetails {...props} />}
   </Bundle>
 );
-const AddItinerancy = (props) => (
-  <Bundle load={() => import('containers/publish/PubItinerancy/AddItem')}>
-    {(AddItinerancy) => <AddItinerancy {...props} />}
-  </Bundle>
-);
+
 const Track = (props) => (
   <Bundle load={() => import('components/track/Track')}>{(Track) => <Track {...props} />}</Bundle>
 );
@@ -151,9 +161,6 @@ const LevelDetails = (props) => (
   </Bundle>
 );
 
-const OwnTask = (props) => (
-  <Bundle load={() => import('components/own/OwnTask')}>{(OwnTask) => <OwnTask {...props} />}</Bundle>
-);
 /**值班情况 */
 const Duty = (props) => <Bundle load={() => import('components/own/Duty')}>{(Duty) => <Duty {...props} />}</Bundle>;
 /**设备管理 */
@@ -323,6 +330,26 @@ export const routes = [
     auth: true,
   },
   {
+    path: '/publish/round',
+    component: AddPubRound,
+  },
+  {
+    path: '/publish/training',
+    component: AddPubTraining,
+  },
+  {
+    path: '/publish/addEmedep',
+    component: AddEmedep,
+  },
+  {
+    path: '/publish/addAggregate',
+    component: AddAggregate,
+  },
+  {
+    path: '/publish/addItinerancy',
+    component: AddItinerancy,
+  },
+  {
     path: '/publish/dogReport',
     component: PublishDogReport,
     auth: true,
@@ -364,6 +391,10 @@ export const routes = [
     path: '/own',
     component: Own,
     auth: true,
+  },
+  {
+    path: '/own/OwnTask',
+    component: OwnTask,
   },
   {
     path: '/news',

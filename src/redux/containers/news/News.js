@@ -267,7 +267,11 @@ class News extends Component {
 
     return (
       <div className="Own">
-        <Header title={`消息(${this.props.socketNewList.total})`} isSet="+" handleShow={this.addTask.bind(this)} />
+        <Header
+          title={this.props.socketNewList.total > 0 ? `消息(${this.props.socketNewList.total})` : '消息'}
+          isSet="+"
+          handleShow={this.addTask.bind(this)}
+        />
         <div className="midder-content">
           <div className="inner-content">
             {this.state.newList.length > 0 &&

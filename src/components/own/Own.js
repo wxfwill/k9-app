@@ -57,8 +57,9 @@ require('style/own/own.less');
 // let user = '';
 let appMenu = [
   {
-    text: '网格化搜捕',
+    text: '我的任务',
     icon: require('images/own/own-search.svg'),
+    link: '/own/OwnTask',
   },
   {
     text: '轨迹查看',
@@ -92,7 +93,7 @@ let appMenu = [
 let myTask = [
   {
     text: '网格化搜捕',
-    icon: require('images/own/track.png'),
+    icon: require('images/own/own-search.svg'),
   },
   {
     text: '日常巡逻',
@@ -139,32 +140,24 @@ class Own extends Component {
           new Promise((resolve) => {
             let { history } = this.props;
             Toast.info('正在退出...');
-            Ajax.post(
-              '/api/userCenter/logout',
-              {
-                //id: this.props.location.query.id
-              },
-              (res) => {
-                if (res.code == 0) {
-                  CallApp({
-                    callAppName: 'stopLocationService',
-                    callbackName: 'sendLocationInfoToJs',
-                    callbackFun: this.showClear,
-                  });
-                  //   systomStatus.closeSocket();
-                  alertInstance.close();
-                  // sessionStorage.removeItem('user');
-                  this.props.tokenAction(null);
-                  Toast.info('退出成功');
-                  // 关闭socket
-                  closeWebSocket();
-                  history.push('/login');
-                } else {
-                  Toast.info(res.msg);
-                  return;
-                }
+            React.$ajax.login.loginOut().then((res) => {
+              if (res.code == 0) {
+                CallApp({
+                  callAppName: 'stopLocationService',
+                  callbackName: 'sendLocationInfoToJs',
+                  callbackFun: this.showClear,
+                });
+                alertInstance.close();
+                // token
+                this.props.tokenAction(null);
+                // 用户信息
+                this.props.userInfoAction('');
+                // 关闭socket
+                closeWebSocket();
+                Toast.info('退出成功');
+                history.push('/login');
               }
-            );
+            });
           }),
       },
     ]);
@@ -183,10 +176,6 @@ class Own extends Component {
   // 点击跳转
   handleLink = (item) => {
     let { history } = this.props;
-    //我的任务中设置初始化Tab的
-    if (item.link == '/own/OwnTask') {
-      sessionStorage.setItem('currTabs', 0);
-    }
     history.push(item.link);
   };
   // 退出登录

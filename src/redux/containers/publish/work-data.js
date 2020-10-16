@@ -4,31 +4,31 @@ export const myTask = [
     text: '网格化搜捕',
     link: '/publish/gridSearch',
   },
-  // {
-  //   icon: require('images/own/jq.svg'),
-  //   text: '日常巡逻',
-  //   link: '',
-  // },
-  // {
-  //   icon: require('images/own/jq.svg'),
-  //   text: '紧急调配',
-  //   link: '',
-  // },
-  // {
-  //   icon: require('images/own/jq.svg'),
-  //   text: '定点集合',
-  //   link: '',
-  // },
-  // {
-  //   icon: require('images/own/jq.svg'),
-  //   text: '外勤任务',
-  //   link: '',
-  // },
-  // {
-  //   icon: require('images/own/jq.svg'),
-  //   text: '训练计划',
-  //   link: '',
-  // },
+  {
+    icon: require('images/publish/daily-see.svg'),
+    text: '日常巡逻',
+    link: '/publish/round',
+  },
+  {
+    icon: require('images/publish/deployment.svg'),
+    text: '紧急调配',
+    link: '/publish/addEmedep',
+  },
+  {
+    icon: require('images/publish/muster.svg'),
+    text: '定点集合',
+    link: '/publish/addAggregate',
+  },
+  {
+    icon: require('images/publish/outside-task.svg'),
+    text: '外勤任务',
+    link: '/publish/addItinerancy',
+  },
+  {
+    icon: require('images/publish/train-plan.svg'),
+    text: '训练计划',
+    link: '/publish/training',
+  },
 ];
 
 export const dogMange = [

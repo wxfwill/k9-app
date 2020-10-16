@@ -68,8 +68,6 @@ let ajax = function $axios(options) {
         if (data.code == 0) {
           return data;
         } else {
-          console.log('error78');
-          console.log(data);
           data && Toast.info(data.msg);
         }
       },

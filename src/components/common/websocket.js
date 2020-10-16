@@ -1,6 +1,9 @@
 let websocket,
   lockReconnect = false;
-const user = JSON.parse(sessionStorage.getItem('user'));
+
+import store from 'store/index';
+
+const user = store.getState().loginReducer.userInfo.user;
 let url = user && `${config.host}/ws/webSocket/${user.id}`;
 
 let createWebsocket = () => {

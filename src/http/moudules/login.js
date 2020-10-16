@@ -1,39 +1,39 @@
 // 登录模块相关接口
-import axios from "../axios";
+import axios from '../axios';
 
 // 登录
 export const postLogin = (data) => {
   return axios({
-    url: "/api/userCenter/loginApp",
-    method: "post",
+    url: '/api/userCenter/loginApp',
+    method: 'post',
     data,
   });
 };
-// 测试
-export const getTest = () => {
+// 退出
+export const loginOut = () => {
   return axios({
-    url: "/hello",
-    method: "get",
+    url: 'api/userCenter/logout',
+    method: 'post',
   });
 };
 // 下载案件信息
 export const downCaseInfo = (params) => {
   return axios({
-    url: "/case/download/" + params.id + "?template=" + params.template,
+    url: '/case/download/' + params.id + '?template=' + params.template,
     headers: {
-      "Content-Type": "application/json;charset=UTF-8",
+      'Content-Type': 'application/json;charset=UTF-8',
     },
-    method: "get",
-    responseType: "blob",
+    method: 'get',
+    responseType: 'blob',
   });
 };
 
 export const downDocFile = (params) => {
   //下载post
   return axios({
-    url: "/judDoc/download",
-    method: "get",
-    responseType: "blob",
+    url: '/judDoc/download',
+    method: 'get',
+    responseType: 'blob',
     params,
   });
 };
@@ -41,8 +41,8 @@ export const downDocFile = (params) => {
 // 修改密码-获取详情信息
 export const getTodayOnDuty = (data) => {
   return axios({
-    url: "/api/onDuty/getTodayOnDuty",
-    method: "post",
+    url: '/api/onDuty/getTodayOnDuty',
+    method: 'post',
     data,
   });
 };
@@ -50,8 +50,8 @@ export const getTodayOnDuty = (data) => {
 // 修改密码
 export const updatePassword = (data) => {
   return axios({
-    url: "/api/userCenter/updatePassword",
-    method: "post",
+    url: '/api/userCenter/updatePassword',
+    method: 'post',
     data,
   });
 };
