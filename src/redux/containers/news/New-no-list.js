@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
-import { ListView, List } from 'antd-mobile';
+import { ListView, List, Modal } from 'antd-mobile';
 // require("style/own/own.less");
 const Item = List.Item;
+const alert = Modal.alert;
 // moke
 function MyBody(props) {
   return <div className="am-list-body my-body">{props.children}</div>;
@@ -88,6 +89,40 @@ class NewNoList extends Component {
     console.log('已处理');
   };
   addTask = () => {};
+  cancelTask = () => {
+    const taskInstance = alert('提示', '确认取消任务吗?', [
+      { text: '取消', onPress: () => console.log('取消') },
+      {
+        text: '确定',
+        onPress: () => {
+          console.log('确定');
+        },
+
+        // new Promise((resolve) => {
+        //   let { history } = this.props;
+        //   Toast.info('正在退出...');
+        //   React.$ajax.login.loginOut().then((res) => {
+        //     if (res.code == 0) {
+        //       CallApp({
+        //         callAppName: 'stopLocationService',
+        //         callbackName: 'sendLocationInfoToJs',
+        //         callbackFun: this.showClear,
+        //       });
+        //       taskInstance.close();
+        //       // token
+        //       this.props.tokenAction(null);
+        //       // 用户信息
+        //       this.props.userInfoAction('');
+        //       // 关闭socket
+        //       closeWebSocket();
+        //       Toast.info('退出成功');
+        //       history.push('/login');
+        //     }
+        //   });
+        // }),
+      },
+    ]);
+  };
   componentWillReceiveProps(nextProps) {
     console.log('nextProps====');
     console.log(nextProps);
@@ -127,7 +162,25 @@ class NewNoList extends Component {
         item && (
           <List className="new-list-type" key={rowID}>
             <Item
-              extra={<div className="finsh">{''}</div>}
+              extra={
+                <div
+                  className="finsh"
+                  style={{
+                    background: `url(${
+                      item.status == 1 ? require('images/news/notodo.svg') : require('images/news/running.svg')
+                    }) left top no-repeat`,
+                    backgroundSize: '100% 100%',
+                    width: '100%',
+                    height: '100%',
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    zIndex: 200,
+                  }}
+                >
+                  {''}
+                </div>
+              }
               align="top"
               thumb={
                 <span
@@ -158,6 +211,15 @@ class NewNoList extends Component {
                 {item.pusher}
               </div>
             </Item>
+            {item.status == 1 ? (
+              <div className="task-btn">
+                <span className="task-txt" onClick={() => this.cancelTask()}>
+                  取消任务
+                </span>
+              </div>
+            ) : (
+              ''
+            )}
           </List>
         )
       );

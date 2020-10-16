@@ -1,15 +1,15 @@
-import React, { Component, Fragment } from "react";
-import ReactDOM from "react-dom";
-import { withRouter } from "react-router-dom";
-import { ListView, List } from "antd-mobile";
-import NoData from "components/common/No-data";
+import React, { Component, Fragment } from 'react';
+import ReactDOM from 'react-dom';
+import { withRouter } from 'react-router-dom';
+import { ListView, List } from 'antd-mobile';
+import NoData from 'components/common/No-data';
 // require("style/own/own.less");
 const Item = List.Item;
 // moke
 function MyBody(props) {
   return <div className="am-list-body my-body">{props.children}</div>;
 }
-import { newsListYesTypeData } from "./new-data.js";
+import { newsListYesTypeData } from './new-data.js';
 
 let NUM_SECTIONS = 2;
 let dataBlobsYes = {};
@@ -48,12 +48,12 @@ class NewYesList extends Component {
       return;
     };
     dataBlobsYes = {};
-    console.log("离开了");
+    console.log('离开了');
   }
   componentDidMount() {
     // console.log(ReactDOM.findDOMNode(this.lv));
     const hei = document.documentElement.clientHeight - this.props.tabHeight - this.props.headerH;
-    console.log("height===123");
+    console.log('height===123');
     console.log(hei);
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(genData(this.state.currentPage)),
@@ -61,7 +61,7 @@ class NewYesList extends Component {
       height: hei,
     });
     // }, 600);
-    this.props.onRef && this.props.onRef("parent", this);
+    this.props.onRef && this.props.onRef('parent', this);
   }
   onEndReached = (event) => {
     // load new data
@@ -69,7 +69,7 @@ class NewYesList extends Component {
     if (this.state.isLoading && !this.state.hasMore) {
       return;
     }
-    console.log("reach end", event);
+    console.log('reach end', event);
     this.setState({ isLoading: true });
     setTimeout(() => {
       this.setState({ currentPage: ++this.state.currentPage });
@@ -82,14 +82,14 @@ class NewYesList extends Component {
     }, 1000);
   };
   noData = () => {
-    console.log("未处理");
+    console.log('未处理');
   };
   yesData = () => {
-    console.log("已处理");
+    console.log('已处理');
   };
   addTask = () => {};
   componentWillReceiveProps(nextProps) {
-    console.log("nextProps====");
+    console.log('nextProps====');
     // if (this.props.tabType !== nextProps.noType) {
     //   console.log(nextProps.tabType);
     // }
@@ -107,8 +107,8 @@ class NewYesList extends Component {
         <div
           key={`${sectionID}-${rowID}`}
           style={{
-            width: "9.36rem",
-            height: "0.32rem",
+            width: '9.36rem',
+            height: '0.32rem',
           }}
         />
       );
@@ -123,18 +123,34 @@ class NewYesList extends Component {
         item && (
           <List className="new-list-type" key={rowID}>
             <Item
-              extra={<div className="finsh">{""}</div>}
+              extra={
+                <div
+                  className="finsh"
+                  style={{
+                    background: `url(${require('images/news/complete.svg')}) left top no-repeat`,
+                    backgroundSize: '100% 100%',
+                    width: '100%',
+                    height: '100%',
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    zIndex: 200,
+                  }}
+                >
+                  {''}
+                </div>
+              }
               align="top"
               thumb={
                 <span
                   style={{
-                    width: "1.333333rem",
-                    height: "1.333333rem",
-                    borderRadius: "0.213333rem",
-                    overflow: "hidden",
+                    width: '1.333333rem',
+                    height: '1.333333rem',
+                    borderRadius: '0.213333rem',
+                    overflow: 'hidden',
                     background: `url(${item.icon}) left top no-repeat`,
-                    backgroundSize: "100% 100%",
-                    display: "inline-block",
+                    backgroundSize: '100% 100%',
+                    display: 'inline-block',
                   }}
                 />
               }
@@ -163,17 +179,21 @@ class NewYesList extends Component {
         <ListView
           ref={(el) => (this.lv = el)}
           dataSource={this.state.dataSource}
-          renderFooter={() => <div style={{ padding: 30, textAlign: "center" }}>{this.state.isLoading ? "Loading..." : "无更多数据了"}</div>}
+          renderFooter={() => (
+            <div style={{ padding: 30, textAlign: 'center' }}>
+              {this.state.isLoading ? 'Loading...' : '无更多数据了'}
+            </div>
+          )}
           renderBodyComponent={() => <MyBody />}
           renderRow={row}
           renderSeparator={separator}
           style={{
             height: this.state.height,
-            overflow: "auto",
+            overflow: 'auto',
           }}
           pageSize={1}
           onScroll={() => {
-            console.log("scroll");
+            console.log('scroll');
           }}
           scrollRenderAheadDistance={500}
           onEndReached={this.onEndReached}

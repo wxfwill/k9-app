@@ -49,6 +49,15 @@ const newTypeArr = {
   8: require('images/news/new-z.svg'),
 };
 
+const newsTypeDesc = {
+  6: '网格化搜捕描述',
+  3: '训练了一只狗',
+  4: '日常遛狗',
+  5: '紧急事件处理',
+  1: '休假描述',
+  12: '值班描述',
+};
+
 function MyBody(props) {
   return <div className="am-list-body my-body">{props.children}</div>;
 }
@@ -83,6 +92,7 @@ class News extends Component {
     //   });
     // }
     this.state = {
+      newsTypeList: this.formaterList(this.props.socketNewList.items),
       newList: newsTypeData,
       newsNum: 0,
       hasMore: false,
@@ -127,68 +137,38 @@ class News extends Component {
       }
     );
   }
+  formaterList = (list) => {
+    if (list.length == 0) {
+      return;
+    }
+    list.map((item) => {
+      item.icon = require(`images/news/new-${item.type}.svg`);
+      item.desc = newsTypeDesc[item.type];
+    });
+    return list;
+  };
   componentDidMount() {
-    console.log('showtime');
-    console.log(util.getShowTime('2020-10-10 15:30'));
     this.setState({ isLoading: true });
-    // this.listMyNews(); //获取我的消息列表
-    this.renewalNewList(this.props);
+    // this.listMyNews(); //
   }
 
   componentDidUpdate() {
+    console.log('111====componentDidUpdate===');
+    // console.log(this.props.socketNewList.items);
+    // this.setState({
+    //   newsTypeList: this.formaterList(this.props.socketNewList.items),
+    // });
     // 监听消息数量变化
-    if (this.props.socketNewList.total != this.state.newsNum) {
-      this.renewalNewList(this.props);
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    // debugger;
-    // console.log(123456);
-    // const socketMsg = nextProps.socketMsg;
-    // console.log(socketMsg);
-    // if (socketMsg && socketMsg.msgType == 'newMsg') {
-    //   const data = socketMsg.data;
-    //   let newData = data;
-    //   console.log(newData[0], '=======socket');
-    //   this.newsList.unshift(newData[0]);
-    //   //this.newsList = newData.concat(this.newsList)
-    //   //this.rows = this.newsList.length;
-    //   const getSectionData = (dataBlob, sectionID) => dataBlob[sectionID];
-    //   const getRowData = (dataBlob, sectionID, rowID) => dataBlob[rowID];
-    //   const dataSource = new ListView.DataSource({
-    //     getRowData,
-    //     getSectionHeaderData: getSectionData,
-    //     rowHasChanged: (row1, row2) => row1 !== row2,
-    //     sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-    //   });
-    //   //this.newsList[0] = this.newsList[this.newsList.length-1]
-    //   //this.newsList.unshift(this.newsList[this.newsList.length-1])
-    //   this.rows = this.newsList.length;
-    //   this.setState({
-    //     createTime: this.newsList[this.newsList.length - 1].createTime,
-    //     dataSource: dataSource.cloneWithRows(genData(this.newsList.length, 0)),
-    //     isLoading: false,
-    //   });
+    // if (this.props.socketNewList.total != this.state.newsNum) {
+    //   this.renewalNewList(this.props);
     // }
   }
 
-  // 获取消息类别列表（根据返回的数据和本地json更新列表）
-  renewalNewList(props) {
-    let arrList = [];
-    this.state.newList.map((list) => {
-      props.socketNewList.items.map((item) => {
-        if (list.title == item.typeNote) {
-          list.num = item.num;
-          list.type = item.type;
-          list.time = getShowTimeAgain(item.nearlyTime, item.systemTime);
-          arrList.push(arrList);
-        }
-      });
-    });
+  componentWillReceiveProps(nextProps) {
+    console.log('?????????????nextProps');
+    console.log(nextProps.socketNewList);
     this.setState({
-      newsList: arrList,
-      newsNum: props.socketNewList.total,
+      newsTypeList: this.formaterList(nextProps.socketNewList.items),
     });
   }
 
@@ -242,7 +222,6 @@ class News extends Component {
     const { history } = this.props;
     // history.push(`${obj.link}?titleType=${obj.text}`); title: item.title
     history.push({ pathname: `/news/list`, search: `?title=${item.title}` });
-    // history.push({ pathname: `/news/list?title=${item.title}` });
   };
   render() {
     const separator = (sectionID, rowID) => (
@@ -302,12 +281,12 @@ class News extends Component {
         />
         <div className="midder-content">
           <div className="inner-content">
-            {this.state.newList.length > 0 &&
-              this.state.newList.map((item, index) => {
+            {this.state.newsTypeList.length > 0 &&
+              this.state.newsTypeList.map((item, index) => {
                 return (
                   <List className="new-list" key={index} onClick={() => this.handleNewLIst(item)}>
                     <Item
-                      extra={item.time}
+                      extra={util.getShowTimeAgain(item.nearlyTime, item.systemTime)}
                       align="top"
                       thumb={
                         <Badge text={item.num} overflowCount={99}>
@@ -326,7 +305,7 @@ class News extends Component {
                       }
                       multipleLine
                     >
-                      <div className="new-title">{item.title}</div>
+                      <div className="new-title">{item.typeNote}</div>
                       <div className="new-desc">{item.desc}</div>
                     </Item>
                   </List>

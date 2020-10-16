@@ -59,8 +59,6 @@ let closeWebSocket = () => {
 };
 // 向后端发送数据
 let sendMessage = (val, callback) => {
-  console.log('websocket');
-  console.log(websocket);
   if (websocket && websocket.readyState == 1) {
     // 连接成功状态下发送数据
     websocket.send(JSON.stringify(val));
