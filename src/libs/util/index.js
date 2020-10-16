@@ -222,6 +222,43 @@ export const getShowTime = (time) => {
   }
 };
 
+// 时间展示 刚刚 几分钟前 日期
+export const getShowTimeAgain = (startTime,endTime) => {
+  let start = new Date(startTime);
+  let end = new Date(endTime);
+  // 间隔
+  let interval = parseInt((end.getTime() - start.getTime()) / 1000 / 60);
+  if (interval == 0) {
+    return '刚刚';
+  } else if (interval < 60) {
+    return interval.toString() + '分钟前';
+  } else if (interval < 60 * 24) {
+    return parseInt(interval / 60).toString() + '小时前';
+  } else if (end.getFullYear() == start.getFullYear()) {
+    return (
+      (start.getMonth() + 1).toString() +
+      '-' +
+      start.getDate().toString() +
+      ' ' +
+      start.getHours() +
+      ':' +
+      start.getMinutes()
+    );
+  } else {
+    return (
+      start.getFullYear().toString().substring(2, 4) +
+      '-' +
+      (start.getMonth() + 1).toString() +
+      '-' +
+      start.getDate().toString() +
+      ' ' +
+      start.getHours() +
+      ':' +
+      start.getMinutes()
+    );
+  }
+};
+
 //加载更多
 export const scrollLoad = function (element, callback) {
   $('#' + element).on('scroll', function () {
