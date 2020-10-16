@@ -221,9 +221,16 @@ export const getShowTime = (time) => {
     );
   }
 };
+const leftAddZero = (time) => {
+  let str = time.toString();
+  if (str.length == 1) {
+    return '0' + str;
+  }
+  return str;
+};
 
 // 时间展示 刚刚 几分钟前 日期
-export const getShowTimeAgain = (startTime,endTime) => {
+export const getShowTimeAgain = (startTime, endTime) => {
   let start = new Date(startTime);
   let end = new Date(endTime);
   // 间隔
@@ -236,25 +243,27 @@ export const getShowTimeAgain = (startTime,endTime) => {
     return parseInt(interval / 60).toString() + '小时前';
   } else if (end.getFullYear() == start.getFullYear()) {
     return (
-      (start.getMonth() + 1).toString() +
+      leftAddZero(start.getMonth() + 1) +
       '-' +
-      start.getDate().toString() +
+      leftAddZero(start.getDate()) +
       ' ' +
-      start.getHours() +
+      leftAddZero(start.getHours()) +
       ':' +
-      start.getMinutes()
+      leftAddZero(start.getMinutes())
     );
+  } else if (start.getFullYear().toString() == '1970') {
+    return '暂无最新消息';
   } else {
     return (
       start.getFullYear().toString().substring(2, 4) +
       '-' +
-      (start.getMonth() + 1).toString() +
+      leftAddZero(start.getMonth() + 1) +
       '-' +
-      start.getDate().toString() +
+      leftAddZero(start.getDate()) +
       ' ' +
-      start.getHours() +
+      leftAddZero(start.getHours()) +
       ':' +
-      start.getMinutes()
+      leftAddZero(start.getMinutes())
     );
   }
 };
