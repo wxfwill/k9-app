@@ -1,10 +1,10 @@
 import { createStore } from 'redux';
 import Socket from './websocket';
 
-const reducer = (state, action) => {
-  if (action.type) {
-    state = new Socket(() => {
-      console.log(action);
+const reducer = (state = {}, action) => {
+  if (action.type === 'websocket') {
+    state.ws = new Socket((data) => {
+      sessionStorage.setItem('socketData', data);
     });
   }
   return state;

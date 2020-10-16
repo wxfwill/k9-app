@@ -107,7 +107,8 @@ function socket(commit, actions) {
 
     //  _this.ws = new WebSocket(socketUrl + '?token=' + token);
     const user = JSON.parse(sessionStorage.getItem('user'));
-    _this.ws = user && new WebSocket(`${config.host}/ws/webSocketServer?userId=${user.id}`);
+    // _this.ws = user && new WebSocket(`${config.host}/ws/webSocketServer?userId=${user.id}`);
+    _this.ws =user && new WebSocket(`ws://172.16.121.137:8080/ws/webSocket/${user.id}`);
 
     _this.ws.onopen = function () {
       callback && callback();
@@ -117,7 +118,8 @@ function socket(commit, actions) {
       _this.errorDispatchOpen = true;
       _this.$soctket_subscribe();
       _this.$soctket_heartSoctket();
-      console.log('web socket has connected ');
+      // console.log('web socket has connected ');
+      console.log('websocket连接成功！');
     };
 
     _this.ws.onclose = errorDispatch(1);
@@ -185,7 +187,7 @@ function socket(commit, actions) {
 
   this.$soctket_heartSoctket = function () {
     if (this.timer) clearTimeout(this.timer);
-    console.log(this.timer);
+    console.log(this.timer,'00000000000000000000000000000');
     this.timer = setTimeout(() => {
       if (this.ws.readyState === 1 || this.ws.readyState === 0) {
         this.ws.send('heart , socket');
