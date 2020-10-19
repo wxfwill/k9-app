@@ -21,6 +21,7 @@ class NewList extends Component {
       tabH: 0,
       herderH: 0,
       tabType: 'no-done',
+      key: 0,
     };
     // this.parent = null;
     // this.listRef = (e) => {

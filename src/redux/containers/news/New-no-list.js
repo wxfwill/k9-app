@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import { ListView, List, Modal } from 'antd-mobile';
+import NoData from 'components/common/No-data';
 // require("style/own/own.less");
 const Item = List.Item;
 const alert = Modal.alert;
@@ -11,7 +12,7 @@ function MyBody(props) {
 }
 import { newsListNoTypeData } from './new-data.js';
 
-let NUM_SECTIONS = 5;
+let NUM_SECTIONS = 3;
 let dataBlobs = {};
 
 function genData(pIndex = 0) {
@@ -26,61 +27,81 @@ function genData(pIndex = 0) {
 class NewNoList extends Component {
   constructor(props) {
     super(props);
-    const getSectionData = (dataBlob, sectionID) => dataBlob[sectionID];
-    const getRowData = (dataBlob, sectionID, rowID) => dataBlob[rowID];
-    const dataSource = new ListView.DataSource({
-      getRowData,
-      getSectionHeaderData: getSectionData,
-      rowHasChanged: (row1, row2) => row1 !== row2,
-      sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+    // const getSectionData = (dataBlob, sectionID) => dataBlob[sectionID];
+    // const getRowData = (dataBlob, sectionID, rowID) => dataBlob[rowID];
+    // const dataSource = new ListView.DataSource({
+    //   getRowData,
+    //   getSectionHeaderData: getSectionData,
+    //   rowHasChanged: (row1, row2) => row1 !== row2,
+    //   sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+    // });
+    const ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2,
     });
-
     this.state = {
-      currentPage: 0,
+      currPage: 1,
+      finished: false,
+      pageSize: 10,
+      sortFieldName: '',
+      sortType: 'desc',
+      hasMore: true,
       newsListNoTypeData,
-      dataSource,
+      todoList: [],
+      dataSource: ds,
       isLoading: true,
-      height: (document.documentElement.clientHeight * 3) / 4,
+      height: 0,
+      // height: (document.documentElement.clientHeight * 3) / 4,
     };
   }
   componentWillUnmount() {
-    // this.setState = (state, callback) => {
-    //   return;
-    // };
+    this.setState = (state, callback) => {
+      return;
+    };
     dataBlobs = {};
-    console.log('离开了');
   }
-  componentDidMount() {
-    // console.log("height===000");
-    // console.log(this.props.tabHeight);
-    // console.log(ReactDOM.findDOMNode(this.lv));
-    // const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).parentNode.offsetTop;
-    // simulate initial Ajax
-    console.log('componentDidMount数据');
-    // genData();
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(genData(this.state.currentPage)),
-      isLoading: false,
+  handleSearchList = (per) => {
+    React.$ajax.news.gridSearchList(per).then((res) => {
+      if (res.code == 0) {
+        let resultData = res.data;
+        this.state.todoList = this.state.todoList.concat(resultData.list);
+
+        if (this.state.todoList.length < resultData.totalCount) {
+          // 可以滑动
+          this.state.hasMore = true;
+        } else {
+          this.state.hasMore = false;
+        }
+        // let newData = Object.assign({}, this.state.perObj, { currPage: ++1});
+        // this.setState({ perObj: newData });
+        // this.setState({
+        //   dataSource: this.state.dataSource.cloneWithRows(genData(this.state.perObj.currentPage)),
+        //   isLoading: false,
+        // })
+        this.setState(function (prevState) {
+          return {
+            dataSource: prevState.dataSource.cloneWithRows(this.state.todoList),
+            isLoading: false,
+          };
+        });
+      }
     });
+  };
+  componentDidMount() {
+    // this.setState({ isLoading: true });
+    console.log('componentDidMount===123456');
+    let { currPage, finished, pageSize, sortFieldName, sortType } = this.state;
+    this.handleSearchList({ currPage, finished, pageSize, sortFieldName, sortType });
     this.props.onRef && this.props.onRef('parent', this);
   }
   onEndReached = (event) => {
-    // load new data
-    // hasMore: from backend data, indicates whether it is the last page, here is false
-    if (this.state.isLoading && !this.state.hasMore) {
+    if (!this.state.hasMore) {
       return;
     }
-    console.log('reach end', event);
     this.setState({ isLoading: true });
-    setTimeout(() => {
-      this.setState({ currentPage: ++this.state.currentPage });
-      console.log(this.state.currentPage);
-      // genData(this.state.currentPage);
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(genData(this.state.currentPage)),
-        isLoading: false,
-      });
-    }, 1000);
+    this.setState({ currPage: ++this.state.currPage });
+
+    let { currPage, finished, pageSize, sortFieldName, sortType } = this.state;
+    this.handleSearchList({ currPage, finished, pageSize, sortFieldName, sortType });
   };
   noData = () => {
     console.log('未处理');
@@ -124,11 +145,7 @@ class NewNoList extends Component {
     ]);
   };
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps====');
-    console.log(nextProps);
     if (this.props.tabHeight !== nextProps.tabHeight) {
-      console.log(nextProps.tabHeight);
-      console.log(nextProps.headerH);
       const hei = document.documentElement.clientHeight - nextProps.tabHeight - nextProps.headerH;
       this.setState({ height: hei });
     }
@@ -138,10 +155,85 @@ class NewNoList extends Component {
     // let obj = util.urlParse(this.props.location.search);
     // this.setState({ title: obj.title });
   }
+  renderRow = (rowData) => {
+    let index = this.state.todoList.length - 1;
+    console.log('index==========' + index);
+    // if (index < 0) {
+    //   return null;
+    //   index = this.state.newsListNoTypeData.length - 1;
+    // }
+    if (!rowData) {
+      throw new Error('rowData 获取的值为空');
+    }
+    let item = rowData;
+    return (
+      item && (
+        <List className="new-list-type" key={item.taskName}>
+          <Item
+            extra={
+              <div
+                className="finsh"
+                style={{
+                  background: `url(${
+                    item.status == 1 ? require('images/news/notodo.svg') : require('images/news/running.svg')
+                  }) left top no-repeat`,
+                  backgroundSize: '100% 100%',
+                  width: '100%',
+                  height: '100%',
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  zIndex: 200,
+                }}
+              >
+                {''}
+              </div>
+            }
+            align="top"
+            thumb={
+              <span
+                style={{
+                  width: '1.333333rem',
+                  height: '1.333333rem',
+                  borderRadius: '0.213333rem',
+                  overflow: 'hidden',
+                  background: `url(${util.urlParse(this.props.location.search).icon}) left top no-repeat`,
+                  backgroundSize: '100% 100%',
+                  display: 'inline-block',
+                }}
+              />
+            }
+            multipleLine
+          >
+            <div className="new-title">{item.taskName}</div>
+            <div className="new-desc">
+              <span className="content">主要内容:</span>
+              {item.taskContent}
+            </div>
+            <div className="new-desc">
+              <span className="content">开始时间:</span>
+              {util.formatDate(new Date(item.planStartTime), 'yyyy-MM-dd hh:mm')}
+            </div>
+            <div className="new-desc">
+              <span className="content">发布人:</span>
+              {item.operatorName}
+            </div>
+          </Item>
+          {item.status == 1 ? (
+            <div className="task-btn">
+              <span className="task-txt" onClick={() => this.cancelTask()}>
+                取消任务
+              </span>
+            </div>
+          ) : (
+            ''
+          )}
+        </List>
+      )
+    );
+  };
   render() {
     const separator = (sectionID, rowID) => {
-      //   console.log("sectionID" + sectionID);
-      //   console.log("rowID" + rowID);
       return (
         <div
           key={`${sectionID}-${rowID}`}
@@ -152,78 +244,6 @@ class NewNoList extends Component {
         />
       );
     };
-    let index = 0;
-    const row = (rowData, sectionID, rowID) => {
-      if (index < 0) {
-        index = this.state.newsListNoTypeData.length - 1;
-      }
-      const item = this.state.newsListNoTypeData && this.state.newsListNoTypeData[index++];
-      return (
-        item && (
-          <List className="new-list-type" key={rowID}>
-            <Item
-              extra={
-                <div
-                  className="finsh"
-                  style={{
-                    background: `url(${
-                      item.status == 1 ? require('images/news/notodo.svg') : require('images/news/running.svg')
-                    }) left top no-repeat`,
-                    backgroundSize: '100% 100%',
-                    width: '100%',
-                    height: '100%',
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    zIndex: 200,
-                  }}
-                >
-                  {''}
-                </div>
-              }
-              align="top"
-              thumb={
-                <span
-                  style={{
-                    width: '1.333333rem',
-                    height: '1.333333rem',
-                    borderRadius: '0.213333rem',
-                    overflow: 'hidden',
-                    background: `url(${item.icon}) left top no-repeat`,
-                    backgroundSize: '100% 100%',
-                    display: 'inline-block',
-                  }}
-                />
-              }
-              multipleLine
-            >
-              <div className="new-title">{item.title}</div>
-              <div className="new-desc">
-                <span className="content">主要内容:</span>
-                {item.content}
-              </div>
-              <div className="new-desc">
-                <span className="content">发布时间:</span>
-                {item.startTime}
-              </div>
-              <div className="new-desc">
-                <span className="content">发布人:</span>
-                {item.pusher}
-              </div>
-            </Item>
-            {item.status == 1 ? (
-              <div className="task-btn">
-                <span className="task-txt" onClick={() => this.cancelTask()}>
-                  取消任务
-                </span>
-              </div>
-            ) : (
-              ''
-            )}
-          </List>
-        )
-      );
-    };
     return (
       this.state.dataSource && (
         <ListView
@@ -231,11 +251,11 @@ class NewNoList extends Component {
           dataSource={this.state.dataSource}
           renderFooter={() => (
             <div style={{ padding: 30, textAlign: 'center' }}>
-              {this.state.isLoading ? 'Loading...' : '无更多数据了'}
+              {this.state.isLoading ? 'Loading...' : this.state.todoList.length == 0 ? <NoData /> : '无更多数据了'}
             </div>
           )}
           renderBodyComponent={() => <MyBody />}
-          renderRow={row}
+          renderRow={(rowData, i) => this.renderRow(rowData, i)}
           renderSeparator={separator}
           style={{
             height: this.state.height,
@@ -247,7 +267,7 @@ class NewNoList extends Component {
           }}
           scrollRenderAheadDistance={500}
           onEndReached={this.onEndReached}
-          onEndReachedThreshold={10}
+          onEndReachedThreshold={100}
         />
       )
     );

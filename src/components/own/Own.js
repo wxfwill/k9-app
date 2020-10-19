@@ -58,7 +58,7 @@ require('style/own/own.less');
 let appMenu = [
   {
     text: '我的任务',
-    icon: require('images/own/own-search.svg'),
+    icon: require('images/own/own-task.svg'),
     link: '/own/OwnTask',
   },
   {

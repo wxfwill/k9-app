@@ -184,6 +184,14 @@ export const urlParse = (src) => {
   }
   return obj;
 };
+// 判断是否为数组
+export const isArray = (ele) => {
+  if (Object.prototype.toString.call(ele) == '[object Array]') {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 // 时间展示 刚刚 几分钟前 日期
 export const getShowTime = (time) => {
@@ -221,6 +229,31 @@ export const getShowTime = (time) => {
     );
   }
 };
+/* 格式化时间戳
+ */
+export function formatDate(date, fmt) {
+  if (/(y+)/.test(fmt)) {
+    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+  }
+  let o = {
+    'M+': date.getMonth() + 1,
+    'd+': date.getDate(),
+    'h+': date.getHours(),
+    'm+': date.getMinutes(),
+    's+': date.getSeconds(),
+  };
+  for (let k in o) {
+    if (new RegExp(`(${k})`).test(fmt)) {
+      let str = o[k] + '';
+      fmt = fmt.replace(RegExp.$1, RegExp.$1.length === 1 ? str : padLeftZero(str));
+    }
+  }
+  return fmt;
+}
+
+function padLeftZero(str) {
+  return ('00' + str).substr(str.length);
+}
 const leftAddZero = (time) => {
   let str = time.toString();
   if (str.length == 1) {

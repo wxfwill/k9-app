@@ -110,6 +110,8 @@ const OwnTask = (props) => (
   <Bundle load={() => import('components/own/OwnTask')}>{(OwnTask) => <OwnTask {...props} />}</Bundle>
 );
 
+//****我的****
+
 const PubRoundDetails = (props) => (
   <Bundle load={() => import('containers/publish/PubRound/PubRoundDetails')}>
     {(PubRoundDetails) => <PubRoundDetails {...props} />}
@@ -396,6 +398,10 @@ export const routes = [
     path: '/own/OwnTask',
     component: OwnTask,
   },
+  // {
+  //   path: '/own/OwnTask/GridSearchDetal',
+  //   comnponent:
+  // },
   {
     path: '/news',
     component: News,

@@ -24,31 +24,6 @@ require('style/fontawesome/font-awesome.less');
 import { newsTypeData } from './new-data.js';
 import { cookieUtil, getShowTimeAgain } from '../../../libs/util/index.js';
 
-let currentPage = 0; //当前页码
-const isRead = (
-  <span style={{ marginLeft: 90 }}>
-    <FontAwesome name="circle" style={{ color: '#EE0000' }} />{' '}
-  </span>
-);
-function genData(NUM_ROWS = 15, pIndex = 0) {
-  const dataBlob = {};
-  for (let i = 0; i < NUM_ROWS; i++) {
-    const ii = pIndex * NUM_ROWS + i;
-    dataBlob[`${ii}`] = `row - ${ii}`;
-  }
-  return dataBlob;
-}
-const new1 = require('images/news/new-w.svg');
-
-const newTypeArr = {
-  6: require('images/news/new-w.svg'),
-  3: require('images/news/new-x.svg'),
-  4: require('images/news/new-r.svg'),
-  5: require('images/news/new-jing.svg'),
-  7: require('images/news/new-jia.svg'),
-  8: require('images/news/new-z.svg'),
-};
-
 const newsTypeDesc = {
   6: '网格化搜捕描述',
   3: '训练了一只狗',
@@ -58,86 +33,20 @@ const newsTypeDesc = {
   12: '值班描述',
 };
 
-function MyBody(props) {
-  return <div className="am-list-body my-body">{props.children}</div>;
-}
-
 const user = JSON.parse(sessionStorage.getItem('user'));
 class News extends Component {
   constructor(props) {
     super(props);
 
-    //console.log(this.props);
-    const getSectionData = (dataBlob, sectionID) => dataBlob[sectionID];
-    const getRowData = (dataBlob, sectionID, rowID) => dataBlob[rowID];
-
-    const dataSource = new ListView.DataSource({
-      getRowData,
-      getSectionHeaderData: getSectionData,
-      rowHasChanged: (row1, row2) => row1 !== row2,
-      sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-    });
-    console.log('====dataSource=======');
-    console.log(dataSource);
-    console.log('socket推送消息列表');
-    console.log(this.props.socketNewList);
-    // let { total, items } = this.props.socketMsg;
-    // if (this.props.socketMsg) {
-    //   this.setState(prevState => {
-    //     console.log('prevState');
-    //     console.log(prevState);
-    //     return {
-    //        newsNum: this.props.socketMsg.total
-    //     }
-    //   });
-    // }
     this.state = {
       newsTypeList: this.formaterList(this.props.socketNewList.items),
       newList: newsTypeData,
-      newsNum: 0,
-      hasMore: false,
-      totalPage: -1, //消息列表总页数
-      //newsList:[], //消息列表
-      createTime: '',
-      initRows: 15,
-      dataSource,
-      isLoading: true,
-      height: (document.documentElement.clientHeight * 3) / 4,
     };
-    //console.log(this.state.dataSource)
-    this.newsList = [];
-    this.rows = 15;
-  }
-
-  listMyNews(currPage = 0) {
-    React.$ajax.post(
-      '/api/msgTips/listPageByTime',
-      { currPage: currPage, userid: user.id, createTime: this.state.createTime },
-      (res) => {
-        //    this.state.totalPage=res.data.totalPage;
-        if (res.data.isEnd == 1 && res.data.data.length == 15) {
-          //当前页小于总页数时,允许滑动加载
-          this.state.hasMore = true;
-          this.state.createTime = res.data.data[res.data.data.length - 1].createTime;
-        } else {
-          this.state.hasMore = false;
-        }
-
-        const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).parentNode.offsetTop;
-
-        this.newsList = this.newsList.concat(res.data.data);
-        this.rows = this.newsList.length;
-        this.setState(function (prevState) {
-          return {
-            dataSource: prevState.dataSource.cloneWithRows(genData(this.newsList.length, currentPage)),
-            isLoading: false,
-            height: hei,
-          };
-        });
-      }
-    );
   }
   formaterList = (list) => {
+    if (!util.isArray(list)) {
+      throw new Error(`list 参数必须为数组`);
+    }
     if (list.length == 0) {
       return;
     }
@@ -147,41 +56,17 @@ class News extends Component {
     });
     return list;
   };
-  componentDidMount() {
-    this.setState({ isLoading: true });
-    // this.listMyNews(); //
+  componentDidMount() {}
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return;
+    };
   }
-
-  componentDidUpdate() {
-    console.log('111====componentDidUpdate===');
-    // console.log(this.props.socketNewList.items);
-    // this.setState({
-    //   newsTypeList: this.formaterList(this.props.socketNewList.items),
-    // });
-    // 监听消息数量变化
-    // if (this.props.socketNewList.total != this.state.newsNum) {
-    //   this.renewalNewList(this.props);
-    // }
-  }
-
   componentWillReceiveProps(nextProps) {
-    console.log('?????????????nextProps');
-    console.log(nextProps.socketNewList);
     this.setState({
       newsTypeList: this.formaterList(nextProps.socketNewList.items),
     });
   }
-
-  onEndReached = (event) => {
-    if (!this.state.hasMore) {
-      return;
-    }
-
-    this.setState({
-      isLoading: true,
-    });
-    // this.listMyNews(currentPage);
-  };
   handleLink = (obj) => {
     //已读信息通过WebSocket通知服务器
     // debugger;
@@ -221,57 +106,9 @@ class News extends Component {
   handleNewLIst = (item) => {
     const { history } = this.props;
     // history.push(`${obj.link}?titleType=${obj.text}`); title: item.title
-    history.push({ pathname: `/news/list`, search: `?title=${item.title}` });
+    history.push({ pathname: `/news/list`, search: `?title=${encodeURI(item.typeNote)}&icon=${item.icon}` });
   };
   render() {
-    const separator = (sectionID, rowID) => (
-      <div
-        key={`${sectionID}-${rowID}`}
-        style={{
-          backgroundColor: '#F5F5F9',
-          height: 8,
-          borderTop: '1px solid #ECECED',
-          borderBottom: '1px solid #ECECED',
-        }}
-      />
-    );
-
-    //let {totalPage,newsList}=this.state;
-    let { totalPage } = this.state;
-    let newsList = this.newsList;
-
-    let index = newsList.length - 1;
-
-    const row = (rowData, sectionID, rowID) => {
-      if (index < 0) {
-        return null;
-      }
-      const obj = newsList[rowID];
-      //console.log(obj)
-      return (
-        <div key={rowID} style={{ padding: '0 15px' }}>
-          <div
-            style={{ display: '-webkit-box', display: 'flex', padding: '15px 0' }}
-            onClick={() => this.handleLink(obj)}
-          >
-            <div style={{ lineHeight: 1, width: '100%' }}>
-              <div style={{ marginBottom: '8px' }}>
-                <span style={{ fontSize: 15, fontWeight: 'bold' }}>{obj.title ? obj.title : '--'}</span>
-                <div style={{ float: 'right' }}>
-                  {' '}
-                  {obj.status == 0 ? isRead : ''}
-                  {obj.createTime ? moment(obj.createTime).format('MM-DD') : '--'}{' '}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    };
-    // console.log('socket推送消息列表');
-    // console.log(this.props.socketNewList);
-    // let { total, items } = this.props.socketMsg;
-
     return (
       <div className="Own">
         <Header
@@ -311,32 +148,6 @@ class News extends Component {
                   </List>
                 );
               })}
-
-            {/* <ListView
-              className="own-round-list"
-              ref={(el) => (this.lv = el)}
-              dataSource={this.state.dataSource}
-              renderFooter={() => (
-                <div style={{ paddingTop: "12px", paddingBottom: "48px", textAlign: "center" }}>
-                  {this.state.isLoading ? "加载..." : "没有更多数据了"}
-                </div>
-              )}
-              renderRow={row}
-              renderSeparator={separator}
-              renderBodyComponent={() => <MyBody />}
-              style={{
-                height: this.state.height,
-                overflow: "auto",
-              }}
-              onScroll={() => {
-                console.log("scroll");
-              }}
-              pageSize={this.rows}
-              initialListSize={this.rows}
-              scrollRenderAheadDistance={500}
-              onEndReached={this.onEndReached}
-              onEndReachedThreshold={10}
-            /> */}
           </div>
         </div>
         <Footer />
@@ -354,6 +165,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(News));
-
-// WEBPACK FOOTER //
-// ./src/redux/containers/news/News.js
