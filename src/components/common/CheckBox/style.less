@@ -1,73 +1,141 @@
-.choose-list {
-  display: flex;
-  background-color: #ffffff;
-  font-size: 17px;
-  padding: 7px 15px;
+.am-modal-content {
+  border-radius: 0.426667rem 0.426667rem 0px 0px;
 }
-.choose-list .left {
-  width: 85px;
-  line-height: 30px;
-  margin-right: 5px;
+.check-box {
+  .header {
+    height: 1.28rem;
+    line-height: 1.28rem;
+    background-color: #f7f7f7;
+    font-weight: 500;
+    position: relative;
+    border-radius: 0.426667rem 0.426667rem 0px 0px;
+    span {
+      font-size: 0.426667rem;
+      position: absolute;
+      top: 0;
+    }
+    .cancel {
+      color: #adb0bc;
+      left: 0.453333rem;
+    }
+    .confirm {
+      color: #527ad9;
+      right: 0.453333rem;
+    }
+    .title {
+      color: #4b4c4f;
+      font-size: 0.453333rem;
+    }
+  }
+  .main {
+    width: 90%;
+    margin: 0 auto;
+    padding: 0.48rem 0;
+    .am-search {
+      height: 1.2rem;
+      padding: 0;
+      background-color: transparent;
+      .am-search-input {
+        height: 1.2rem;
+        border-radius: 0.053333rem;
+        border: 0.026667rem solid #e2e2e2;
+        .am-search-value {
+          height: 1.2rem;
+          line-height: 1.2rem;
+        }
+        .am-search-synthetic-ph {
+          height: 1.2rem;
+          line-height: 1.2rem;
+          font-size: 0.426667rem;
+        }
+        .am-search-clear {
+          top: 0.22rem;
+        }
+      }
+    }
+    .choice-condition {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.373333rem;
+      .picker-box {
+        flex: 1;
+        .am-list-item {
+          //padding: 0;
+          width: 100%;
+          height: 0.96rem;
+          min-height: auto;
+          background: #fafafa;
+          border-radius: 0.053333rem;
+          color: #81838c;
+          font-size: 0.4rem;
+          .am-list-line {
+            padding-right: 0;
+            .am-list-extra {
+              text-align: left;
+            }
+            .am-list-arrow-horizontal {
+              position: absolute;
+              right: 15px;
+            }
+          }
+        }
+      }
+      .select-all {
+        width: 2.8rem;
+        height: 0.96rem;
+        margin-left: 0.346667rem;
+        background: #fafafa;
+        border-radius: 0.053333rem;
+        color: #81838c;
+        font-size: 0.4rem;
+        text-align: center;
+        border: none;
+        .am-icon-md {
+          width: 0.4rem;
+        }
+      }
+      .select-all.choice {
+        color: #fff;
+        background-color: #527ad9;
+      }
+    }
+    .person-list {
+      margin-top: 0.106667rem;
+      max-height: 6rem;
+      overflow-y: auto;
+      li {
+        width: 2.8rem;
+        height: 1.093333rem;
+        line-height: 1.093333rem;
+        background: #fafafa;
+        border-radius: 0.053333rem;
+        color: #81838c;
+        font-size: 0.373333rem;
+        text-align: center;
+        margin-left: 0.3rem;
+        float: left;
+        margin-top: 0.346667rem;
+      }
+      li:nth-child(3n + 1) {
+        margin-left: 0;
+      }
+      li.choice {
+        color: #fff;
+        background-color: #527ad9;
+      }
+    }
+  }
 }
-.choose-list .right {
-  flex: 1;
-  line-height: 30px;
-  margin-right: 5px;
-  text-align: right;
+
+.clearfix {
+  zoom: 1;
 }
-.choose-list .right span {
-  border: none;
-  color: #bbbbbb;
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  line-height: 0;
+  content: '';
 }
-.choose-list .icon {
-  height: 20px;
-  line-height: 20px;
-  font-size: 14px;
-  text-align: center;
-  border: 1px #15c619 solid;
-  background-color: #d0f4d1;
-  border-radius: 10px;
-  color: #15c619;
-  margin-top: 4px;
-  padding: 0 8px;
-}
-.choose-list.list-disable {
-  color: #bbbbbb;
-}
-.choose-box {
-  height: 100%;
-  position: relative;
-}
-.choose-box .content {
-  position: absolute;
-  top: 46px;
-  bottom: 1rem;
-  left: 0;
-  right: 0;
-  overflow-y: auto;
-}
-.choose-box .choose-list-box {
-  height: 100%;
-}
-.choose-box .btn-box {
-  position: absolute;
-  left: 0;
-  bottom: 0.1rem;
-  width: 100%;
-  color: #ffffff;
-  display: flex;
-}
-.choose-box .btn-box .sure,
-.choose-box .btn-box .cancel {
-  border-radius: 0.36rem;
-  text-align: center;
-  height: .8rem;
-  line-height: .8rem;
-  font-size: .4rem;
-  background-color: #15c619;
-  flex: 1;
-  margin: 0 10%;
-}
-.choose-box .btn-box .cancel {
-  margin-right: 0;
+.clearfix:after {
+  clear: both;
 }

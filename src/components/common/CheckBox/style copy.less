@@ -1,0 +1,73 @@
+.choose-list {
+  display: flex;
+  background-color: #ffffff;
+  font-size: 17px;
+  padding: 7px 15px;
+}
+.choose-list .left {
+  width: 85px;
+  line-height: 30px;
+  margin-right: 5px;
+}
+.choose-list .right {
+  flex: 1;
+  line-height: 30px;
+  margin-right: 5px;
+  text-align: right;
+}
+.choose-list .right span {
+  border: none;
+  color: #bbbbbb;
+}
+.choose-list .icon {
+  height: 20px;
+  line-height: 20px;
+  font-size: 14px;
+  text-align: center;
+  border: 1px #15c619 solid;
+  background-color: #d0f4d1;
+  border-radius: 10px;
+  color: #15c619;
+  margin-top: 4px;
+  padding: 0 8px;
+}
+.choose-list.list-disable {
+  color: #bbbbbb;
+}
+.choose-box {
+  height: 100%;
+  position: relative;
+}
+.choose-box .content {
+  position: absolute;
+  top: 46px;
+  bottom: 1rem;
+  left: 0;
+  right: 0;
+  overflow-y: auto;
+}
+.choose-box .choose-list-box {
+  height: 100%;
+}
+.choose-box .btn-box {
+  position: absolute;
+  left: 0;
+  bottom: 0.1rem;
+  width: 100%;
+  color: #ffffff;
+  display: flex;
+}
+.choose-box .btn-box .sure,
+.choose-box .btn-box .cancel {
+  border-radius: 0.36rem;
+  text-align: center;
+  height: .8rem;
+  line-height: .8rem;
+  font-size: .4rem;
+  background-color: #15c619;
+  flex: 1;
+  margin: 0 10%;
+}
+.choose-box .btn-box .cancel {
+  margin-right: 0;
+}
