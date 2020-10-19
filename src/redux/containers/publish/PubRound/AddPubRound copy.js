@@ -1,17 +1,40 @@
 import React, { Component } from 'react';
-import { List, InputItem, TextareaItem, Calendar, Picker, Button, WhiteSpace, Icon, Grid } from 'antd-mobile';
+import {
+  List,
+  Picker,
+  DatePicker,
+  TextareaItem,
+  InputItem,
+  Stepper,
+  WhiteSpace,
+  WingBlank,
+  Button,
+  Toast,
+  Calendar,
+  Modal,
+  Icon,
+} from 'antd-mobile';
 import { createForm } from 'rc-form';
 import Header from 'components/common/Header';
 import PeopleBox from 'components/common/CheckBox';
 import enUS from 'antd-mobile/lib/calendar/locale/en_US';
 import zhCN from 'antd-mobile/lib/calendar/locale/zh_CN';
 import PubRoundMap from './PubRoundMap';
-import moment from 'moment';
 import { withRouter, Link } from 'react-router-dom';
-require('style/publish/public.less');
-
+import moment from 'moment';
+require('style/publish/pubRound.less');
+const Item = List.Item;
+const Brief = Item.Brief;
 const nowTimeStamp = Date.now();
 const now = new Date(nowTimeStamp);
+const seasons = '2018-04-22';
+const alert = Modal.alert;
+function failToast(text, fn) {
+  Toast.fail(text, 1);
+}
+function successToast(text, fn) {
+  Toast.success(text, 1, fn, true);
+}
 
 class AddPubRoundComponent extends Component {
   constructor(props) {
@@ -35,7 +58,6 @@ class AddPubRoundComponent extends Component {
       disabled: false,
       reportArr: [],
       reportUserId: '9',
-      modalShow: false,
     };
     this.timer = null;
     this.isRequest = false;
@@ -279,7 +301,6 @@ class AddPubRoundComponent extends Component {
       chooseMembArr: data,
       selectedName: names.join(','),
       selectedId: ids,
-      modalShow: false,
     });
   }
   changePeo = (data) => {
@@ -301,19 +322,54 @@ class AddPubRoundComponent extends Component {
       });
     }
   }
-  showModal = () => {
-    this.setState({
-      modalShow: true,
-    });
-  };
+
   render() {
     const { getFieldProps } = this.props.form;
     return (
-      <div className="form-main">
-        <Header title="发布日常巡逻" pointer="pointer"></Header>
+      <div className="add-content">
+        <Header title="发布日常巡逻" pointer="pointer" />
         <div className="list-box">
           <List className="list">
-            <p className="title">任务名称</p>
+            {this.state.disabled
+              ? null
+              : this.renderBtn(
+                  <span>
+                    <i className="tips">*</i>巡逻时间
+                  </span>,
+                  '',
+                  {
+                    pickTime: true,
+                    showShortcut: true,
+                    defaultValue: [
+                      this.state.startTime ? new Date(this.state.startTime) : '',
+                      this.state.endTime ? new Date(this.state.endTime) : '',
+                    ],
+                  }
+                )}
+            {/*this.renderBtn('默认选择范围', 'Selected Date Range', { defaultValue: [new Date(+now - 86400000), new Date(+now - 345600000)] })*/}
+
+            {this.state.startTime && (
+              <List.Item disabled={this.state.disabled}>开始时间: {this.state.startTime.toLocaleString()}</List.Item>
+            )}
+            {this.state.endTime && (
+              <List.Item disabled={this.state.disabled}>结束时间: {this.state.endTime.toLocaleString()}</List.Item>
+            )}
+            {this.state.disabled ? null : (
+              <Calendar
+                {...this.state.config}
+                title={'巡逻时间'}
+                visible={this.state.show}
+                onCancel={this.onCancel}
+                onConfirm={this.onConfirm}
+                onSelectHasDisableDate={this.onSelectHasDisableDate}
+                getDateExtra={this.getDateExtra}
+                defaultDate={now}
+                minDate={new Date(+now - 5184000000)}
+                maxDate={new Date(+now + 31536000000)}
+              ></Calendar>
+            )}
+          </List>
+          <List className="list">
             <InputItem
               title="任务名称"
               {...getFieldProps('taskName', {
@@ -323,102 +379,84 @@ class AddPubRoundComponent extends Component {
               placeholder="请输入任务名称"
               disabled={this.state.disabled}
               clear
-            ></InputItem>
+            >
+              <i className="tips">*</i>任务名称
+            </InputItem>
           </List>
-          <List className="list">
-            <p className="title">巡逻时间</p>
-            <List className="list">
-              {this.state.disabled
-                ? null
-                : this.renderBtn(<span>{/* <i className="tips">*</i>巡逻时间 */}</span>, '', {
-                    pickTime: true,
-                    showShortcut: true,
-                    defaultValue: [
-                      this.state.startTime ? new Date(this.state.startTime) : '',
-                      this.state.endTime ? new Date(this.state.endTime) : '',
-                    ],
-                  })}
-              {/*this.renderBtn('默认选择范围', 'Selected Date Range', { defaultValue: [new Date(+now - 86400000), new Date(+now - 345600000)] })*/}
-              {this.state.startTime && (
-                <List.Item disabled={this.state.disabled}>开始时间: {this.state.startTime.toLocaleString()}</List.Item>
-              )}
-              {this.state.endTime && (
-                <List.Item disabled={this.state.disabled}>结束时间: {this.state.endTime.toLocaleString()}</List.Item>
-              )}
-              {this.state.disabled ? null : (
-                <Calendar
-                  {...this.state.config}
-                  title={'巡逻时间'}
-                  visible={this.state.show}
-                  onCancel={this.onCancel}
-                  onConfirm={this.onConfirm}
-                  onSelectHasDisableDate={this.onSelectHasDisableDate}
-                  getDateExtra={this.getDateExtra}
-                  defaultDate={now}
-                  minDate={new Date(+now - 5184000000)}
-                  maxDate={new Date(+now + 31536000000)}
-                ></Calendar>
-              )}
-            </List>
-          </List>
-          <List className="list">
-            <p className="title">巡逻地点</p>
-            <Picker
-              extra="请选择巡逻地点"
-              cols={1}
+          <List className="list dress-choose-list">
+            <InputItem
               {...getFieldProps('patrolsLocation', {
                 initialValue: this.state.taskInfo ? this.state.taskInfo.patrolsLocation : '',
                 rules: [{ required: true, message: '巡逻地点不能为空！' }],
               })}
+              title="巡逻地点"
+              editable={false}
+              //  disabled={this.state.disabled}
+              clear
             >
-              <List.Item arrow="horizontal"></List.Item>
-            </Picker>
+              <i className="tips">*</i>巡逻地点
+              <i className="icon" onClick={this.addCoord.bind(this)}>
+                {this.state.disabled ? '查看' : '添加'}
+              </i>
+            </InputItem>
           </List>
           <List className="list">
-            <p className="title">巡逻人员</p>
-            {/* <Picker
-              extra="请选择巡逻人员"
-              cols={1}
-              {...getFieldProps('selectedName', {
-                initialValue: this.state.selectedName,
-              })}
-            >
-              <List.Item arrow="horizontal"></List.Item>
-            </Picker> */}
-            <List.Item arrow="horizontal" onClick={this.showModal}>
+            <WhiteSpace size="xm" />
+            {this.state.disabled ? (
               <InputItem
+                title="巡逻人员"
                 {...getFieldProps('selectedName', {
                   initialValue: this.state.selectedName,
                 })}
-                placeholder="请选择巡逻人员"
-                disabled={true}
-                clear
-              ></InputItem>
-            </List.Item>
-            <PeopleBox
-              searchTip="姓名、警号"
-              title="添加人员"
-              modalShow={this.state.modalShow}
-              clickOk={(data) => this.clickOk(data)}
-              dataList={this.state.PeopleList}
-              showValue={this.state.selectedName}
-            />
+                disabled={this.state.disabled}
+              >
+                <i className="tips">*</i>巡逻人员
+              </InputItem>
+            ) : (
+              <PeopleBox
+                title="巡逻人员"
+                initTip="请选择队员"
+                searchTip="请输入查询内容"
+                disabled={this.state.disabled}
+                clickOk={(data) => this.clickOk(data)}
+                dataList={this.state.PeopleList}
+                showValue={this.state.selectedName}
+                useDefaultDom={true}
+              />
+            )}
           </List>
+          {!this.state.disabled ? (
+            <List className="list">
+              <Picker
+                data={this.state.reportArr}
+                placeholder="请选择上报人员"
+                cols={1}
+                value={[this.state.reportUserId]}
+                className="forss"
+                onOk={(value) => this.changePeo(value)}
+              >
+                <List.Item arrow="horizontal">
+                  <i className="tips">*</i>上报人员
+                </List.Item>
+              </Picker>
+            </List>
+          ) : (
+            <div className="list pointer-list list-disable">
+              <div className="name">
+                <i className="tips">*</i>上报人员
+              </div>
+              <div className="cont">
+                {this.state.taskInfo.reportUserName ? this.state.taskInfo.reportUserName : '----'}
+              </div>
+            </div>
+          )}
           <List className="list">
-            <p className="title">上报人员</p>
-            <Picker
-              data={this.state.reportArr}
-              extra="请选择上报人员"
-              cols={1}
-              value={[this.state.reportUserId]}
-              onOk={(value) => this.changePeo(value)}
-            >
-              <List.Item arrow="horizontal"></List.Item>
-            </Picker>
-          </List>
-          <List className="list">
-            <p className="title">巡逻说明</p>
             <TextareaItem
+              title={
+                <span>
+                  <i className="tips">*</i>巡逻说明
+                </span>
+              }
               autoHeight="true"
               clear
               disabled={this.state.disabled}
@@ -427,19 +465,45 @@ class AddPubRoundComponent extends Component {
                 rules: [{ required: true, message: '巡逻说明不能为空！' }],
               })}
               placeholder="请输入巡逻说明"
-              rows={2}
             />
           </List>
-          <List className="list list-button">
-            <Button type="primary" onClick={this.submit}>
-              发布任务
-            </Button>
-          </List>
         </div>
+        {!this.state.disabled ? (
+          <div className="btn-box">
+            <button className="clear" style={{ display: 'none' }}>
+              清空
+            </button>
+            <button className="publish" onClick={this.submit}>
+              发布
+            </button>
+          </div>
+        ) : null}
+
+        {this.state.disabled && this.state.taskInfo && this.state.taskInfo.taskStatus < 2 ? (
+          <div className="btn-box only-btn">
+            <button className="stop" onClick={this.showStop}>
+              终止任务
+            </button>
+          </div>
+        ) : null}
+
+        {this.state.isMap ? (
+          <PubRoundMap
+            isMap={this.state.isMap}
+            taskInfo={this.state.taskInfo}
+            // handleShow={this.handleShow.bind(this)}
+            onMapData={(data) => this.getMapInfo(data)}
+            onCancel={this.handleCancel}
+            onCreate={this.handleCoo}
+          />
+        ) : null}
       </div>
     );
   }
 }
-
+//ReactMixin.onClass(AddPubRoundComponent,Reflux.listenTo(Store, 'onChange'));
 const AddPubRound = createForm()(AddPubRoundComponent);
 export default withRouter(AddPubRound);
+
+// WEBPACK FOOTER //
+// ./src/redux/containers/publish/PubRound/AddPubRound.js
