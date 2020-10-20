@@ -1,77 +1,125 @@
-.form-main {
+.layer-main {
   width: 100%;
   height: 100%;
-  background-color: #fff;
-  position: relative;
-  .list-box {
+  .parent-container {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    .child-container {
+      flex: 1;
+      position: relative;
+      .components {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        box-sizing: border-box;
+        height: 100%;
+        overflow: auto;
+        background-color: #fff;
+      }
+    }
+  }
+}
+
+.form-main {
+  .list {
+    width: 90%;
+    margin: 0 auto;
+    padding-top: 0.453333rem;
+    .am-list-body {
+      border-color: #e5e5e5;
+      border-top: none;
+    }
+    .title {
+      font-size: 0.426667rem;
+      color: #4b4c4f;
+      font-weight: 500;
+      height: 0.6rem;
+      line-height: 0.6rem;
+    }
+    .am-list-item {
+      padding-left: 0;
+    }
+    .am-list-item .am-list-line {
+      padding-right: 0;
+      border-bottom: none;
+    }
     .list {
-      width: 90%;
-      margin: 0 auto;
-      padding-top: 0.453333rem;
-      .am-list-body {
-        border-color: #e5e5e5;
+      width: 100%;
+      padding-top: 0;
+      .am-list-line {
         border-top: none;
-      }
-      .title {
-        font-size: 0.426667rem;
-        color: #4b4c4f;
-        font-weight: 500;
-        height: 0.6rem;
-        line-height: 0.6rem;
-      }
-      .am-list-item {
-        padding-left: 0;
-      }
-      .am-list-item .am-list-line {
-        padding-right: 0;
         border-bottom: none;
       }
-      .list {
-        width: 100%;
-        padding-top: 0;
-        .am-list-line {
-          border-top: none;
-          border-bottom: none;
+    }
+    .am-list-extra {
+      text-align: left;
+      overflow: initial;
+    }
+    .am-button-primary {
+      color: #fff;
+      font-size: 0.453333rem;
+      height: 1.306667rem;
+      line-height: 1.306667rem;
+      border-radius: 0.106667rem;
+      background-color: #527ad9;
+    }
+    .am-list-arrow-horizontal {
+      position: absolute;
+      right: 0;
+    }
+    input::-webkit-input-placeholder {
+      color: #adb0bc;
+      font-size: 0.426667rem;
+    }
+    input::-moz-placeholder {
+      color: #adb0bc;
+      font-size: 0.426667rem;
+    }
+    input::-moz-placeholder {
+      color: #adb0bc;
+      font-size: 0.426667rem;
+    }
+    input::-ms-input-placeholder {
+      color: #adb0bc;
+      font-size: 0.426667rem;
+    }
+    .am-list-extra,
+    .am-input-control input,
+    .am-textarea-control textarea {
+      //color: #adb0bc;
+      color: #000;
+      font-size: 0.426667rem;
+    }
+    .input-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 9px 0;
+      .value-box {
+        flex: 1;
+        line-height: 28px;
+        p {
+          color: #000;
+          font-size: 0.426667rem;
+        }
+        span {
+          color: #adb0bc;
+          font-size: 0.426667rem;
         }
       }
-      .am-list-extra {
-        text-align: left;
-      }
-      .am-button-primary {
-        color: #fff;
-        font-size: 0.453333rem;
-        height: 1.306667rem;
-        line-height: 1.306667rem;
-        border-radius: 0.106667rem;
-        background-color: #527ad9;
-      }
-      .am-list-arrow-horizontal {
-        position: absolute;
-        right: 0;
-      }
-      input::-webkit-input-placeholder {
-        color: #adb0bc;
-        font-size: 0.426667rem;
-      }
-      input::-moz-placeholder {
-        color: #adb0bc;
-        font-size: 0.426667rem;
-      }
-      input::-moz-placeholder {
-        color: #adb0bc;
-        font-size: 0.426667rem;
-      }
-      input::-ms-input-placeholder {
-        color: #adb0bc;
-        font-size: 0.426667rem;
-      }
-      .am-list-extra {
-        color: #adb0bc;
-        font-size: 0.426667rem;
+      .am-icon {
+        width: 28px;
+        height: 28px;
+        color: #cecece;
+        font-weight: 500;
+        margin-right: -6px;
       }
     }
-    .list.list-button {
-      padding: 0.8rem 0;
-    }
+  }
+  .list.list-button {
+    padding: 0.8rem 0;
   }
 }

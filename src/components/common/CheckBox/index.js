@@ -35,11 +35,12 @@ class Choose extends Component {
       allList: [],
       masterList: [],
       disabled: false,
-	  useDefaultDom: true,
-	  isSelectAll: false
+      useDefaultDom: true,
+      isSelectAll: false,
     };
   }
   componentWillReceiveProps(nextProps) {
+	  console.log(nextProps,'=========================')
     const { modalShow, dataList } = nextProps;
     this.setState({
       modalShow: modalShow,
@@ -51,7 +52,10 @@ class Choose extends Component {
       modalShow: false,
     });
     let selectedArr = [];
-    this.state.allList.map((item) => {
+    // this.state.allList.map((item) => {
+    //   item.remark && selectedArr.push(item);
+    // });
+    this.state.masterList.map((item) => {
       item.remark && selectedArr.push(item);
     });
     this.props.clickOk && this.props.clickOk(selectedArr);
@@ -76,13 +80,61 @@ class Choose extends Component {
       masterList: this.state.allList,
     });
   };
+  // 选择人员
   selectOption = (data) => {
-    data.remark = !data.remark;
-    console.log(data, '===============================');
+    const { masterList } = this.state;
+    let arr = [];
+    if (masterList && masterList.length > 0) {
+      console.log(masterList, masterList.length);
+      masterList.map((item) => {
+        if (data.id === item.id) {
+          item.remark = !item.remark;
+        }
+        arr.push(item);
+      });
+      this.setState({
+        masterList: arr,
+      });
+      //是否全部被选择
+      let bol = false;
+      masterList.map((item) => {
+        if (!item.remark) {
+          bol = true;
+        }
+      });
+      this.setState({
+        isSelectAll: !bol ? true : false,
+      });
+    }
+  };
+  //全选
+  selectAll = () => {
+    this.setState(
+      {
+        isSelectAll: !this.state.isSelectAll,
+      },
+      () => {
+        let arr = [];
+        if (this.state.isSelectAll) {
+          this.state.masterList.map((item) => {
+            item.remark = true;
+            arr.push(item);
+          });
+        } else {
+          this.state.masterList.map((item) => {
+            item.remark = false;
+            arr.push(item);
+          });
+        }
+        this.setState({
+          masterList: arr,
+        });
+      }
+    );
   };
 
   render() {
-    const { masterList, disabled } = this.state;
+    const { masterList, disabled, isSelectAll } = this.state;
     const { title, initTip, searchTip, showValue, useDefaultDom } = this.props;
     const { getFieldProps } = this.props.form;
     return (
@@ -117,7 +169,14 @@ class Choose extends Component {
                   <List.Item arrow="horizontal"></List.Item>
                 </Picker>
               </div>
-              <Button icon="check-circle" className="select-all choice">
+              {/* <Button icon="check-circle" className="select-all choice">
+                全选
+              </Button> */}
+              <Button
+                icon="check-circle"
+                onClick={this.selectAll}
+                className={isSelectAll ? 'select-all choice' : 'select-all'}
+              >
                 全选
               </Button>
             </div>
@@ -129,13 +188,10 @@ class Choose extends Component {
                     //   <li className="choice">牛德华</li>
                     <li
                       key={`${item.id}`}
-                      onClick={() => {
-						item.remark = !item.remark;
-						console.log(item.remark,'{{{{{{{{{{{{{}}}}')
-                      }}
+                      onClick={() => this.selectOption(item)}
                       className={item.remark ? 'choice' : ''}
                     >
-                      {item.name + item.remark}
+                      {item.name}
                     </li>
                   );
                 })

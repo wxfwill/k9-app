@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { List, InputItem, TextareaItem, Calendar, Picker, Button, WhiteSpace, Icon, Grid } from 'antd-mobile';
+import { List, InputItem, TextareaItem, Calendar, Picker, Button, WhiteSpace, Icon, Toast } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import Header from 'components/common/Header';
 import PeopleBox from 'components/common/CheckBox';
 import enUS from 'antd-mobile/lib/calendar/locale/en_US';
 import zhCN from 'antd-mobile/lib/calendar/locale/zh_CN';
 import PubRoundMap from './PubRoundMap';
-import moment from 'moment';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 require('style/publish/public.less');
 
 const nowTimeStamp = Date.now();
@@ -149,9 +148,9 @@ class AddPubRoundComponent extends Component {
         this.isRequest = true;
         const dataObj = {
           drawShapeDTO: this.state.taskInfo.drawShapeDTO,
-          endTime: moment(this.state.endTime).format('YYYY-MM-DD HH:mm:ss'),
+          endTime: util.formatDate(new Date(this.state.endTime), 'yyyy-MM-dd hh:mm:ss'),
           patrolsLocation: this.state.taskInfo.patrolsLocation,
-          startTime: moment(this.state.startTime).format('YYYY-MM-DD HH:mm:ss'),
+          startTime: util.formatDate(new Date(this.state.startTime), 'yyyy-MM-dd hh:mm:ss'),
           taskContent: value.taskContent,
           taskName: value.taskName,
           id: this.state.id,
@@ -161,8 +160,7 @@ class AddPubRoundComponent extends Component {
         React.$ajax.publish.distributeTask(dataObj).then((res) => {
           if (res && res.code == 0) {
             this.isRequest = false;
-            /*  this.sendReport(res.data, (result) => {
-                            })*/
+
             let { history } = this.props;
             Toast.info('发布成功！');
             sessionStorage.setItem('currTabs', 1);
@@ -203,23 +201,22 @@ class AddPubRoundComponent extends Component {
       }
     });
   }
-  renderBtn(zh, en, config = {}) {
-    config.locale = this.state.en ? enUS : zhCN;
-    return (
-      <List.Item
-        arrow="horizontal"
-        onClick={() => {
-          document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
-          this.setState({
-            show: true,
-            config,
-          });
-        }}
-      >
-        {this.state.en ? en : zh}
-      </List.Item>
-    );
-  }
+  renderBtn = () => {
+    let configs = {
+      pickTime: true,
+      showShortcut: true,
+      defaultValue: [
+        this.state.startTime ? new Date(this.state.startTime) : '',
+        this.state.endTime ? new Date(this.state.endTime) : '',
+      ],
+    };
+    configs.locale = this.state.en ? enUS : zhCN;
+    document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
+    this.setState({
+      show: true,
+      config: configs,
+    });
+  };
   changeLanguage = () => {
     this.setState({
       en: !this.state.en,
@@ -260,9 +257,9 @@ class AddPubRoundComponent extends Component {
     });
   };
 
-  addCoord() {
+  addCoord = () => {
     this.setState({ isMap: true });
-  }
+  };
 
   clickOk(data) {
     let names = [];
@@ -306,136 +303,144 @@ class AddPubRoundComponent extends Component {
       modalShow: true,
     });
   };
+
   render() {
     const { getFieldProps } = this.props.form;
     return (
-      <div className="form-main">
-        <Header title="发布日常巡逻" pointer="pointer"></Header>
-        <div className="list-box">
-          <List className="list">
-            <p className="title">任务名称</p>
-            <InputItem
-              title="任务名称"
-              {...getFieldProps('taskName', {
-                initialValue: this.state.taskInfo ? this.state.taskInfo.taskName : '',
-                rules: [{ required: true, message: '任务名称不能为空！' }],
-              })}
-              placeholder="请输入任务名称"
-              disabled={this.state.disabled}
-              clear
-            ></InputItem>
-          </List>
-          <List className="list">
-            <p className="title">巡逻时间</p>
-            <List className="list">
-              {this.state.disabled
-                ? null
-                : this.renderBtn(<span>{/* <i className="tips">*</i>巡逻时间 */}</span>, '', {
-                    pickTime: true,
-                    showShortcut: true,
-                    defaultValue: [
-                      this.state.startTime ? new Date(this.state.startTime) : '',
-                      this.state.endTime ? new Date(this.state.endTime) : '',
-                    ],
-                  })}
-              {/*this.renderBtn('默认选择范围', 'Selected Date Range', { defaultValue: [new Date(+now - 86400000), new Date(+now - 345600000)] })*/}
-              {this.state.startTime && (
-                <List.Item disabled={this.state.disabled}>开始时间: {this.state.startTime.toLocaleString()}</List.Item>
-              )}
-              {this.state.endTime && (
-                <List.Item disabled={this.state.disabled}>结束时间: {this.state.endTime.toLocaleString()}</List.Item>
-              )}
-              {this.state.disabled ? null : (
-                <Calendar
-                  {...this.state.config}
-                  title={'巡逻时间'}
-                  visible={this.state.show}
-                  onCancel={this.onCancel}
-                  onConfirm={this.onConfirm}
-                  onSelectHasDisableDate={this.onSelectHasDisableDate}
-                  getDateExtra={this.getDateExtra}
-                  defaultDate={now}
-                  minDate={new Date(+now - 5184000000)}
-                  maxDate={new Date(+now + 31536000000)}
-                ></Calendar>
-              )}
-            </List>
-          </List>
-          <List className="list">
-            <p className="title">巡逻地点</p>
-            <Picker
-              extra="请选择巡逻地点"
-              cols={1}
-              {...getFieldProps('patrolsLocation', {
-                initialValue: this.state.taskInfo ? this.state.taskInfo.patrolsLocation : '',
-                rules: [{ required: true, message: '巡逻地点不能为空！' }],
-              })}
-            >
-              <List.Item arrow="horizontal"></List.Item>
-            </Picker>
-          </List>
-          <List className="list">
-            <p className="title">巡逻人员</p>
-            {/* <Picker
-              extra="请选择巡逻人员"
-              cols={1}
-              {...getFieldProps('selectedName', {
-                initialValue: this.state.selectedName,
-              })}
-            >
-              <List.Item arrow="horizontal"></List.Item>
-            </Picker> */}
-            <List.Item arrow="horizontal" onClick={this.showModal}>
-              <InputItem
-                {...getFieldProps('selectedName', {
-                  initialValue: this.state.selectedName,
-                })}
-                placeholder="请选择巡逻人员"
-                disabled={true}
-                clear
-              ></InputItem>
-            </List.Item>
-            <PeopleBox
-              searchTip="姓名、警号"
-              title="添加人员"
-              modalShow={this.state.modalShow}
-              clickOk={(data) => this.clickOk(data)}
-              dataList={this.state.PeopleList}
-              showValue={this.state.selectedName}
-            />
-          </List>
-          <List className="list">
-            <p className="title">上报人员</p>
-            <Picker
-              data={this.state.reportArr}
-              extra="请选择上报人员"
-              cols={1}
-              value={[this.state.reportUserId]}
-              onOk={(value) => this.changePeo(value)}
-            >
-              <List.Item arrow="horizontal"></List.Item>
-            </Picker>
-          </List>
-          <List className="list">
-            <p className="title">巡逻说明</p>
-            <TextareaItem
-              autoHeight="true"
-              clear
-              disabled={this.state.disabled}
-              {...getFieldProps('taskContent', {
-                initialValue: this.state.taskInfo ? this.state.taskInfo.taskContent : '',
-                rules: [{ required: true, message: '巡逻说明不能为空！' }],
-              })}
-              placeholder="请输入巡逻说明"
-              rows={2}
-            />
-          </List>
-          <List className="list list-button">
-            <Button type="primary" onClick={this.submit}>
-              发布任务
-            </Button>
-          </List>
+      <div className="layer-main">
+        <div className="parent-container">
+          <Header title="发布日常巡逻" pointer="pointer"></Header>
+          <div className="child-container">
+            <div className="components">
+              <div className="form-main">
+                <List className="list">
+                  <p className="title">任务名称</p>
+                  <InputItem
+                    title="任务名称"
+                    {...getFieldProps('taskName', {
+                      initialValue: this.state.taskInfo ? this.state.taskInfo.taskName : '',
+                      rules: [{ required: true, message: '任务名称不能为空！' }],
+                    })}
+                    placeholder="请输入任务名称"
+                    disabled={this.state.disabled}
+                    clear
+                  ></InputItem>
+                </List>
+                <List className="list">
+                  <p className="title">巡逻时间</p>
+                  <div className="input-item" onClick={this.renderBtn}>
+                    <div className="value-box">
+                      {this.state.startTime && this.state.endTime ? (
+                        <p>
+                          开始时间：{this.state.startTime.toLocaleString()}
+                          <br />
+                          结束时间：{this.state.endTime.toLocaleString()}
+                        </p>
+                      ) : (
+                        <span>请选择巡逻时间</span>
+                      )}
+                    </div>
+                    <Icon type="right" />
+                  </div>
+                </List>
+                <List className="list">
+                  <p className="title">巡逻地点</p>
+                  <div className="input-item" onClick={this.addCoord}>
+                    <div className="value-box">
+                      {this.state.taskInfo && this.state.taskInfo.patrolsLocation ? (
+                        <p>{this.state.taskInfo.patrolsLocation}</p>
+                      ) : (
+                        <span>请选择巡逻地点</span>
+                      )}
+                    </div>
+                    <Icon type="right" />
+                  </div>
+                </List>
+                <List className="list">
+                  <p className="title">巡逻人员</p>
+                  <div className="input-item" onClick={this.showModal}>
+                    <div className="value-box">
+                      {this.state.selectedName && this.state.selectedName.length > 0 ? (
+                        <p>{this.state.selectedName}</p>
+                      ) : (
+                        <span>请选择巡逻人员</span>
+                      )}
+                    </div>
+                    <Icon type="right" />
+                  </div>
+                </List>
+                {this.state.selectedName && this.state.selectedName.length > 0 ? (
+                  <List className="list">
+                    <p className="title">上报人员</p>
+                    <Picker
+                      data={this.state.reportArr}
+                      extra="请选择上报人员"
+                      cols={1}
+                      value={[this.state.reportUserId]}
+                      onOk={(value) => this.changePeo(value)}
+                    >
+                      <List.Item arrow="horizontal"></List.Item>
+                    </Picker>
+                  </List>
+                ) : null}
+                <List className="list">
+                  <p className="title">巡逻说明</p>
+                  <TextareaItem
+                    autoHeight="true"
+                    clear
+                    disabled={this.state.disabled}
+                    {...getFieldProps('taskContent', {
+                      initialValue: this.state.taskInfo ? this.state.taskInfo.taskContent : '',
+                      rules: [{ required: true, message: '巡逻说明不能为空！' }],
+                    })}
+                    placeholder="请填写相关任务描述"
+                    rows={2}
+                  />
+                </List>
+                <List className="list list-button">
+                  <Button type="primary" onClick={this.submit}>
+                    发布任务
+                  </Button>
+                </List>
+              </div>
+            </div>
+          </div>
         </div>
+        {/* 时间选择器 */}
+        {this.state.disabled ? null : (
+          <Calendar
+            {...this.state.config}
+            title={'巡逻时间'}
+            visible={this.state.show}
+            onCancel={this.onCancel}
+            onConfirm={this.onConfirm}
+            onSelectHasDisableDate={this.onSelectHasDisableDate}
+            getDateExtra={this.getDateExtra}
+            defaultDate={now}
+            minDate={new Date(+now - 5184000000)}
+            maxDate={new Date(+now + 31536000000)}
+          ></Calendar>
+        )}
+        {/* 巡逻人员列表 */}
+        <PeopleBox
+          searchTip="姓名、警号"
+          title="添加人员"
+          modalShow={this.state.modalShow}
+          clickOk={(data) => this.clickOk(data)}
+          dataList={this.state.PeopleList}
+          showValue={this.state.selectedName}
+        />
+        {/* 地图 */}
+        {this.state.isMap ? (
+          <PubRoundMap
+            isMap={this.state.isMap}
+            taskInfo={this.state.taskInfo}
+            // handleShow={this.handleShow.bind(this)}
+            onMapData={(data) => this.getMapInfo(data)}
+            onCancel={this.handleCancel}
+            onCreate={this.handleCoo}
+          />
+        ) : null}
       </div>
     );
   }
