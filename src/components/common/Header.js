@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import { Icon, Modal, Popover } from 'antd-mobile';
+import { Icon, DatePicker, Modal, Popover } from 'antd-mobile';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import { bindActionCreators } from 'redux';
@@ -8,6 +8,9 @@ import * as systomStatus from 'actions/systomStatus';
 import { saveSocketNewList } from 'store/actions/websocketAction';
 import { sendMessage } from 'components/common/websocket';
 import store from 'websocket/store';
+import { updateLocale } from 'moment';
+const nowTimeStamp = Date.now();
+const now = new Date(nowTimeStamp);
 const Item = Popover.Item;
 require('style/common/header.less');
 class Header extends Component {
@@ -15,49 +18,18 @@ class Header extends Component {
     super(props);
     this.state = {
       modal1: false,
+      customContent1: null,
+      isShow: false,
+      date: now,
       info: '',
       taskType: '',
       poverVisibe: false,
     };
-    this.timer = null;
   }
   jump() {
     const { history } = this.props;
     history.goBack();
   }
-  componentWillMount() {
-    //初始化socket连接
-    // store.dispatch({ type: true });
-    // if (typeof this.props.socketMsg == "undefined") {
-    //   this.props.sysActions.newSocket();
-    // } else {
-    //   if (systomStatus.reWebsocket().readyState == 2 || systomStatus.reWebsocket().readyState == 3) {
-    //     this.props.sysActions.newSocket();
-    //   } else {
-    //     systomStatus.reWebsocket().send(JSON.stringify({ msgType: "HeartBeat" }));
-    //   }
-    // }
-    // this.timer = setInterval(this.openWebsocket, 30000);
-    // setTimeout(() => {
-    //   const ws = store.getState();
-    //   ws.$soctket_emit(JSON.stringify({ msgType: 'HeartBeat' }), () => {
-    //     console.log('发送成功', 'hahahahhhhhhhhhhhhhhhhhhhhhh');
-    //   });
-    // }, 500);
-  }
-
-  openWebsocket = () => {
-    // if (systomStatus.reWebsocket().readyState == 2 || systomStatus.reWebsocket().readyState == 3) {
-    //   this.props.sysActions.newSocket();
-    // } else {
-    //   systomStatus.reWebsocket().send(JSON.stringify({ msgType: 'HeartBeat' }));
-    // }
-    // console.log(store);
-    // const ws = store.getState();
-    // ws.$soctket_emit(JSON.stringify({ msgType: 'HeartBeat' }), () => {
-    //   console.log('发送成功');
-    // });
-  };
   handleShow() {
     this.props.handleShow();
   }
@@ -75,16 +47,11 @@ class Header extends Component {
         }
       }
     });
-    // const ws = store.getState();
-    // ws.$soctket_close();
+    if (this.props.customContent) {
+      this.setState({ customContent1: this.props.customContent });
+    }
   }
-  componentWillUnmount() {
-    clearInterval(this.timer);
-    // if (systomStatus && systomStatus.reWebsocket() && systomStatus.reWebsocket().readyState == 1) {
-    //   systomStatus.reWebsocket().send(JSON.stringify({ msgType: 'HeartBeat' }));
-    // }
-    //		systomStatus.closeSocket();
-  }
+  componentWillUnmount() {}
   componentWillReceiveProps(nextProps) {
     if (Immutable.is(Immutable.Map(this.props.socketMsg), Immutable.Map(nextProps.socketMsg))) {
       return;
@@ -159,9 +126,24 @@ class Header extends Component {
       [key]: false,
     });
   };
-
+  handleChange = (data) => {
+    console.log('ok');
+    console.log(data);
+    let time = util.formatDate(new Date(data), 'yyyy-MM-dd');
+    this.setState({ customContent1: time });
+    this.setState({ date: data });
+    this.setState({ isShow: !this.state.isShow });
+  };
+  hanleCancel = () => {
+    this.setState({ isShow: !this.state.isShow });
+  };
+  handleClick = (e) => {
+    e.stopPropagation();
+    this.setState({ isShow: !this.state.isShow });
+  };
   render() {
-    const { user, title, pointer, history, customSet, isSet, isSearch, noColor } = this.props;
+    const { user, title, pointer, history, customContent, isSet, isSearch, noColor } = this.props;
+
     let className = noColor ? 'header nobgcolor' : 'header';
     return (
       <div className={className} ref={this.props.myRef}>
@@ -217,10 +199,23 @@ class Header extends Component {
             <span className="header-set">{''}</span>
           </Popover>
         ) : null}
-        {typeof customSet !== 'undefined' ? (
-          <span className="header-set" onClick={this.handleShow.bind(this)}>
-            {''}
-          </span>
+        {typeof customContent !== 'undefined' ? (
+          <DatePicker
+            mode="date"
+            title="选择日期"
+            value={this.state.date}
+            onOk={this.handleChange.bind(this)}
+            onDismiss={this.hanleCancel.bind(this)}
+          >
+            <span className="header-custom" onClick={(e) => this.handleClick(e)}>
+              {this.state.customContent1}
+              {this.state.isShow ? (
+                <Icon className="icon-down" size="xs" type="up" color="#4B4C4F"></Icon>
+              ) : (
+                <Icon className="icon-down" size="xs" type="down" color="#4B4C4F"></Icon>
+              )}
+            </span>
+          </DatePicker>
         ) : null}
         {typeof isSearch !== 'undefined' ? <Icon className="header-search" type="search" size="md" /> : null}
         <Modal
@@ -255,6 +250,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));
-
-// WEBPACK FOOTER //
-// ./src/components/common/Header.js

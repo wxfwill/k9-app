@@ -1,137 +1,162 @@
 import React, { Component } from 'react';
-import { List, Button, Toast, Modal, Accordion } from 'antd-mobile';
+import { withRouter } from 'react-router-dom';
+import ReactDOM from 'react-dom';
+import { Tabs, List, Badge } from 'antd-mobile';
 import Header from 'components/common/Header';
-import Footer from 'components/common/Footer';
-import { connect } from 'react-redux';
-import { saveAccount, savePassword, saveUserInfo, savePasswordData, saveToken } from 'store/actions/loginAction';
-import { CallApp } from 'libs/util';
-import { withRouter, Link } from 'react-router-dom';
+// 网格化搜捕
+import OwnGridList from './GridSearch';
+// 训练计划
+import Drill from './Drill';
+// 日常巡逻
+import DailyPatrol from './DailyPatrol';
+//紧急调配
+import EmergencyDeployment from './EmergencyDeployment';
+// 定点集合
+import OwnEmDepComponent from './AggregatePoint';
+// 外勤任务
+import Itinerancy from './Itinerancy';
 
-const Item = List.Item;
-const Brief = Item.Brief;
-const alert = Modal.alert;
-
-const iconList = {
-  newsPic: require('images/own/news.png'),
-  track: require('images/own/track.png'),
-  manage: require('images/own/jq.svg'),
-  monitoring: require('images/own/monitoring.png'),
-  task: require('images/own/task.png'),
-  diagnose: require('images/own/diagnose.png'),
-  equipment: require('images/own/device.svg'),
-  watch: require('images/own/watch.png'),
-  leave: require('images/own/leave.png'),
-  account: require('images/own/accent.svg'),
-  approval: require('images/own/approval.png'),
-  holiday: require('images/own/jia.svg'),
-  group: require('images/own/group.png'),
-  feeding: require('images/own/feeding.png'),
-  call: require('images/own/call.png'),
-};
-const ownPic = require('images/own/user.svg');
-
-require('style/own/own.less');
-
-let myTask = [
+require('style/own/ownTask.less');
+const tabs = [
   {
-    text: '网格化搜捕',
-    icon: require('images/own/own-search.svg'),
-    link: '',
+    title: '网格化搜捕',
+    label: '0',
+    id: 0,
+    icon: require('images/own/tasktab/grild.svg'),
+    ActiveIcon: require('images/own/tasktab/active-grild.svg'),
   },
   {
-    text: '日常巡逻',
-    icon: require('images/own/jq.svg'),
-    link: '',
+    title: '训练计划',
+    label: '1',
+    id: 1,
+    icon: require('images/own/tasktab/xun.svg'),
+    ActiveIcon: require('images/own/tasktab/active-xun.svg'),
   },
   {
-    text: '紧急调配',
-    icon: require('images/own/watch.png'),
-    link: '',
+    title: '日常巡逻',
+    label: '2',
+    id: 2,
+    icon: require('images/own/tasktab/daily.svg'),
+    ActiveIcon: require('images/own/tasktab/active-daily.svg'),
   },
   {
-    text: '定点集合',
-    icon: require('images/own/approval.png'),
-    link: '',
+    title: '紧急调配',
+    label: '3',
+    id: 3,
+    icon: require('images/own/tasktab/jing.svg'),
+    ActiveIcon: require('images/own/tasktab/active-jing.svg'),
   },
   {
-    text: '外勤任务',
-    icon: require('images/own/jia.svg'),
-    link: '',
+    title: '定点集合',
+    label: '4',
+    id: 4,
+    icon: require('images/own/tasktab/ding.svg'),
+    ActiveIcon: require('images/own/tasktab/active-ding.svg'),
   },
   {
-    text: '训练计划',
-    icon: require('images/own/accent.svg'),
-    link: '',
+    title: '外勤任务',
+    label: '5',
+    id: 5,
+    icon: require('images/own/tasktab/task.svg'),
+    ActiveIcon: require('images/own/tasktab/active-task.svg'),
   },
 ];
 
 class OwnTask extends Component {
   constructor(props) {
     super(props);
+    this.headerHeight = React.createRef();
+    this.tabHeight = React.createRef();
     this.state = {
-      taskData: myTask,
+      title: '',
+      defaultKey: 0,
+      tabH: 0,
+      herderH: 0,
+      tabType: '0',
+      key: 0,
     };
-  }
-  componentDidMount() {}
-
-  handleJump() {
-    let { history } = this.props;
-    history.push('test');
-  }
-  // 点击跳转
-  handleLink = (item) => {
-    let { history } = this.props;
-    history.push(item.link);
-  };
-  componentWillMount() {
-    console.log('use');
-    console.log(this.props.location);
   }
   componentWillUnmount() {
     this.setState = (state, callback) => {
       return;
     };
   }
+  addTask = () => {};
+  componentWillMount() {}
+  componentDidMount() {
+    this.setState({
+      tabH:
+        ReactDOM.findDOMNode(this.tabHeight.current) &&
+        ReactDOM.findDOMNode(this.tabHeight.current).querySelector('.am-tabs-tab-bar-wrap').clientHeight,
+      herderH:
+        ReactDOM.findDOMNode(this.headerHeight.current) &&
+        ReactDOM.findDOMNode(this.headerHeight.current).querySelector('.header-title').clientHeight,
+    });
+  }
+  onRef = (name, ref) => {
+    if (name == 'parent') {
+      this.parent = ref;
+    }
+  };
+  handleClickTab = (item, index) => {
+    this.setState({ defaultKey: index });
+  };
   render() {
     return (
-      <div className="Own">
-        <Header pointer title="我的任务" noColor="own" />
-        <div className="midder-content">
-          <div className="inner-content">
-            <div className="list-wrap">
-              {this.state.taskData.map((item, index) => {
-                return (
-                  <List className="list-item" key={index} onClick={this.handleLink.bind(this, item)}>
-                    <Item arrow="horizontal" thumb={<img src={item.icon} alt="list-icon" className="list-img" />}>
-                      {item.text}
-                    </Item>
-                  </List>
-                );
-              })}
-            </div>
+      <div className="ownTask">
+        <Header
+          pointer
+          title="我的任务"
+          myRef={this.headerHeight}
+          handleShow={this.addTask.bind(this)}
+          noColor="own"
+          key={this.state.defaultKey}
+          customContent="请选择时间"
+        />
+        <Tabs
+          ref={this.tabHeight}
+          tabs={tabs}
+          renderTab={(tab) => {
+            return (
+              <div className="header-tab">
+                <img src={this.state.defaultKey == tab.id ? tab.ActiveIcon : tab.icon} alt="icon" />
+                {this.state.defaultKey == tab.id ? (
+                  <span className="active-text">{tab.title}</span>
+                ) : (
+                  <span>{tab.title}</span>
+                )}
+              </div>
+            );
+          }}
+          initialPage={0}
+          prerenderingSiblingsNumber={0}
+          swipeable={false}
+          onTabClick={(tab, index) => {
+            this.handleClickTab(tab, index);
+          }}
+        >
+          <div style={{ boxSizing: 'border-box' }}>
+            <OwnGridList tabHeight={this.state.tabH} headerH={this.state.herderH}></OwnGridList>
           </div>
-        </div>
+          <div style={{ boxSizing: 'border-box', height: '100%' }}>
+            <Drill tabHeight={this.state.tabH} headerH={this.state.herderH}></Drill>
+          </div>
+          <div style={{ boxSizing: 'border-box' }}>
+            <DailyPatrol tabHeight={this.state.tabH} headerH={this.state.herderH}></DailyPatrol>
+          </div>
+          <div style={{ boxSizing: 'border-box' }}>
+            <EmergencyDeployment tabHeight={this.state.tabH} headerH={this.state.herderH}></EmergencyDeployment>
+          </div>
+          <div style={{ boxSizing: 'border-box' }}>
+            <OwnEmDepComponent tabHeight={this.state.tabH} headerH={this.state.herderH}></OwnEmDepComponent>
+          </div>
+          <div style={{ boxSizing: 'border-box', height: '100%' }}>
+            <Itinerancy tabHeight={this.state.tabH} headerH={this.state.herderH}></Itinerancy>
+          </div>
+        </Tabs>
       </div>
     );
   }
 }
 
-function loginStateToProps(state) {
-  return {
-    loginAccount: state.loginReducer.isRemeber,
-    loginPass: state.loginReducer.isPass,
-    userInfo: state.loginReducer.userInfo,
-    password: state.loginReducer.password,
-    token: state.loginReducer.token,
-  };
-}
-
-const loginActionToProps = (dispatch) => ({
-  remeberAccount: () => dispatch(saveAccount()),
-  remeberPassword: () => dispatch(savePassword()),
-  userInfoAction: (data) => dispatch(saveUserInfo(data)),
-  passwordAction: (data) => dispatch(savePasswordData(data)),
-  tokenAction: (token) => dispatch(saveToken(token)),
-});
-
-export default connect(loginStateToProps, loginActionToProps)(withRouter(OwnTask));
+export default withRouter(OwnTask);

@@ -14,7 +14,7 @@ function MyBody(props) {
   return <div className="am-list-body my-body">{props.children}</div>;
 }
 
-class Itinerancy extends Component {
+class DailyPatrol extends Component {
   constructor(props) {
     super(props);
     const ds = new ListView.DataSource({
@@ -126,7 +126,7 @@ class Itinerancy extends Component {
                   height: '1.066667rem',
                   borderRadius: '0.213333rem',
                   overflow: 'hidden',
-                  background: `url(${require('images/own/tasktab/active-task.svg')}) left top no-repeat`,
+                  background: `url(${require('images/own/tasktab/active-daily.svg')}) left top no-repeat`,
                   backgroundSize: '100% 100%',
                   display: 'inline-block',
                 }}
@@ -215,4 +215,4 @@ const mapDispatchToProps = (dispatch) => ({
   SocketNewListActions: (list) => dispatch(saveSocketNewList(list)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Itinerancy));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(DailyPatrol));

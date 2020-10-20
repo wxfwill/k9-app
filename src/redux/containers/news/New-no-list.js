@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import { ListView, List, Modal } from 'antd-mobile';
+import { connect } from 'react-redux';
 import NoData from 'components/common/No-data';
+import { saveSocketNewList } from 'store/actions/websocketAction';
+import { sendMessage } from 'components/common/websocket';
 // require("style/own/own.less");
 const Item = List.Item;
 const alert = Modal.alert;
@@ -155,9 +158,25 @@ class NewNoList extends Component {
     // let obj = util.urlParse(this.props.location.search);
     // this.setState({ title: obj.title });
   }
+  handleNoNews = (item) => {
+    console.log(item);
+    sendMessage({ serviceCode: 'readMsg', payload: item.msgIds.join(',') }, (data) => {
+      console.log('发送成功readMsg成功');
+      console.log(JSON.parse(data));
+      let res = JSON.parse(data);
+      if (res.code === 0) {
+        console.log('阅读消息');
+        console.log(res);
+        // 消息统计 减1
+        if (res.serviceCode == 'statisticsMsgTips') {
+          console.log('jing 111111111');
+          this.props.SocketNewListActions(res.data);
+        }
+      }
+    });
+  };
   renderRow = (rowData) => {
     let index = this.state.todoList.length - 1;
-    console.log('index==========' + index);
     // if (index < 0) {
     //   return null;
     //   index = this.state.newsListNoTypeData.length - 1;
@@ -168,7 +187,7 @@ class NewNoList extends Component {
     let item = rowData;
     return (
       item && (
-        <List className="new-list-type" key={item.taskName}>
+        <List className="new-list-type" key={item.taskName} onClick={this.handleNoNews.bind(this, item)}>
           <Item
             extra={
               <div
@@ -274,4 +293,11 @@ class NewNoList extends Component {
   }
 }
 
-export default withRouter(NewNoList);
+const mapStateToProps = (state) => ({
+  socketNewList: state.socketReducer.newLIst,
+});
+const mapDispatchToProps = (dispatch) => ({
+  SocketNewListActions: (list) => dispatch(saveSocketNewList(list)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(NewNoList));
