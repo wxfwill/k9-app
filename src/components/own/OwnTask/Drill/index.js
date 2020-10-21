@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import { ListView, List, Modal } from 'antd-mobile';
 import { connect } from 'react-redux';
@@ -22,9 +21,10 @@ class Drill extends Component {
     });
     this.state = {
       currPage: 1,
-      finished: false,
+      finished: null,
       pageSize: 10,
       sortFieldName: '',
+      taskCreateDate: null,
       sortType: 'desc',
       hasMore: true,
       todoList: [],
@@ -39,10 +39,12 @@ class Drill extends Component {
     };
   }
   handleSearchList = (per) => {
-    React.$ajax.news.gridSearchList(per).then((res) => {
+    React.$ajax.own.myTaskTrainList(per).then((res) => {
       if (res.code == 0) {
         let resultData = res.data;
-        this.state.todoList = this.state.todoList.concat(resultData.list);
+        let resList = resultData.list ? resultData.list : [];
+        this.state.todoList = this.state.todoList.concat(resList);
+        // this.setState({ todoList: this.state.todoList.concat(resultData.list) });
 
         if (this.state.todoList.length < resultData.totalCount) {
           // 可以滑动
@@ -50,7 +52,8 @@ class Drill extends Component {
         } else {
           this.state.hasMore = false;
         }
-        this.setState(function (prevState) {
+
+        this.setState(function (prevState, props) {
           return {
             dataSource: prevState.dataSource.cloneWithRows(this.state.todoList),
             isLoading: false,
@@ -60,10 +63,10 @@ class Drill extends Component {
     });
   };
   componentDidMount() {
+    let { currPage, finished, pageSize, sortFieldName, sortType, taskCreateDate } = this.state;
     const hei = document.documentElement.clientHeight - this.props.tabHeight - this.props.headerH;
     this.setState({ height: hei });
-    let { currPage, finished, pageSize, sortFieldName, sortType } = this.state;
-    this.handleSearchList({ currPage, finished, pageSize, sortFieldName, sortType });
+    this.handleSearchList({ currPage, finished, pageSize, sortFieldName, sortType, taskCreateDate });
     this.props.onRef && this.props.onRef('parent', this);
   }
   onEndReached = (event) => {
@@ -73,8 +76,8 @@ class Drill extends Component {
     this.setState({ isLoading: true });
     this.setState({ currPage: ++this.state.currPage });
 
-    let { currPage, finished, pageSize, sortFieldName, sortType } = this.state;
-    this.handleSearchList({ currPage, finished, pageSize, sortFieldName, sortType });
+    let { currPage, finished, pageSize, sortFieldName, sortType, taskCreateDate } = this.state;
+    this.handleSearchList({ currPage, finished, pageSize, sortFieldName, sortType, taskCreateDate });
   };
   noData = () => {
     console.log('未处理');
@@ -84,10 +87,17 @@ class Drill extends Component {
   };
   addTask = () => {};
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps===训练计划');
-    if (this.props.tabHeight !== nextProps.tabHeight) {
-      const hei = document.documentElement.clientHeight - nextProps.tabHeight - nextProps.headerH;
-      this.setState({ height: hei });
+    // if (this.props.tabHeight !== nextProps.tabHeight) {
+    //   const hei = document.documentElement.clientHeight - nextProps.tabHeight - nextProps.headerH;
+    //   this.setState({ height: hei });
+    // }
+    console.log(123);
+    if (this.props.date !== nextProps.date) {
+      console.log(456);
+      this.setState({ taskCreateDate: nextProps.date, todoList: [], currPage: 1 }, () => {
+        let { currPage, finished, pageSize, sortFieldName, sortType, taskCreateDate } = this.state;
+        this.handleSearchList({ currPage, finished, pageSize, sortFieldName, sortType, taskCreateDate });
+      });
     }
   }
   handleNoNews = (item) => {};
@@ -98,7 +108,7 @@ class Drill extends Component {
     let item = rowData;
     return (
       item && (
-        <List className="new-list-type" key={item.taskName} onClick={this.handleNoNews.bind(this, item)}>
+        <List className="new-list-type" key={item.subjectName} onClick={this.handleNoNews.bind(this, item)}>
           <Item
             extra={
               <div
@@ -135,18 +145,14 @@ class Drill extends Component {
             }
             multipleLine
           >
-            <div className="new-title">{item.taskName}</div>
-            <div className="new-desc">
-              <span className="content">主要内容:</span>
-              {item.taskContent}
-            </div>
+            <div className="new-title">{item.subjectName}</div>
             <div className="new-desc">
               <span className="content">开始时间:</span>
-              {util.formatDate(new Date(item.planStartTime), 'yyyy-MM-dd hh:mm')}
+              {util.formatDate(new Date(item.trainDate), 'yyyy-MM-dd hh:mm')}
             </div>
             <div className="new-desc">
-              <span className="content">发布人:</span>
-              {item.operatorName}
+              <span className="content">训练人员:</span>
+              {item.planUserNames.join(' 、')}
             </div>
           </Item>
           {
@@ -154,15 +160,6 @@ class Drill extends Component {
               <span className="task-txt">查看详情</span>
             </div>
           }
-          {/* {item.status == 1 ? (
-            <div className="task-btn">
-              <span className="task-txt" onClick={() => this.cancelTask()}>
-                取消任务
-              </span>
-            </div>
-          ) : (
-            ''
-          )} */}
         </List>
       )
     );
@@ -185,7 +182,7 @@ class Drill extends Component {
           ref={(el) => (this.lv = el)}
           dataSource={this.state.dataSource}
           renderFooter={() => (
-            <div style={{ padding: 30, textAlign: 'center' }}>
+            <div style={{ padding: '0.4rem', textAlign: 'center' }}>
               {this.state.isLoading ? 'Loading...' : this.state.todoList.length == 0 ? <NoData /> : '无更多数据了'}
             </div>
           )}

@@ -7,8 +7,7 @@ import { bindActionCreators } from 'redux';
 import * as systomStatus from 'actions/systomStatus';
 import { saveSocketNewList } from 'store/actions/websocketAction';
 import { sendMessage } from 'components/common/websocket';
-import store from 'websocket/store';
-import { updateLocale } from 'moment';
+
 const nowTimeStamp = Date.now();
 const now = new Date(nowTimeStamp);
 const Item = Popover.Item;
@@ -34,6 +33,7 @@ class Header extends Component {
     this.props.handleShow();
   }
   componentDidMount() {
+    this.props.changeTimeList && this.props.changeTimeList(null);
     sendMessage({ serviceCode: 'statisticsMsgTips', payload: JSON.stringify({ status: 0 }) }, (data) => {
       console.log('发送成功statisticsMsgTips成功');
       console.log(JSON.parse(data));
@@ -133,6 +133,7 @@ class Header extends Component {
     this.setState({ customContent1: time });
     this.setState({ date: data });
     this.setState({ isShow: !this.state.isShow });
+    this.props.changeTimeList(time);
   };
   hanleCancel = () => {
     this.setState({ isShow: !this.state.isShow });
@@ -140,6 +141,9 @@ class Header extends Component {
   handleClick = (e) => {
     e.stopPropagation();
     this.setState({ isShow: !this.state.isShow });
+  };
+  handleRightClick = (e) => {
+    this.props.handleRightTitleClick();
   };
   render() {
     const { user, title, pointer, history, customContent, isSet, isSearch, noColor } = this.props;
@@ -216,6 +220,11 @@ class Header extends Component {
               )}
             </span>
           </DatePicker>
+        ) : null}
+        {typeof customRightTitle !== 'undefined' ? (
+          <span className="header-customRightTitle" onClick={(e) => this.handleRightClick(e)}>
+            {customRightTitle}
+          </span>
         ) : null}
         {typeof isSearch !== 'undefined' ? <Icon className="header-search" type="search" size="md" /> : null}
         <Modal

@@ -16,51 +16,9 @@ import OwnEmDepComponent from './AggregatePoint';
 // 外勤任务
 import Itinerancy from './Itinerancy';
 
+import * as own from 'localData/own/ownTask';
+
 require('style/own/ownTask.less');
-const tabs = [
-  {
-    title: '网格化搜捕',
-    label: '0',
-    id: 0,
-    icon: require('images/own/tasktab/grild.svg'),
-    ActiveIcon: require('images/own/tasktab/active-grild.svg'),
-  },
-  {
-    title: '训练计划',
-    label: '1',
-    id: 1,
-    icon: require('images/own/tasktab/xun.svg'),
-    ActiveIcon: require('images/own/tasktab/active-xun.svg'),
-  },
-  {
-    title: '日常巡逻',
-    label: '2',
-    id: 2,
-    icon: require('images/own/tasktab/daily.svg'),
-    ActiveIcon: require('images/own/tasktab/active-daily.svg'),
-  },
-  {
-    title: '紧急调配',
-    label: '3',
-    id: 3,
-    icon: require('images/own/tasktab/jing.svg'),
-    ActiveIcon: require('images/own/tasktab/active-jing.svg'),
-  },
-  {
-    title: '定点集合',
-    label: '4',
-    id: 4,
-    icon: require('images/own/tasktab/ding.svg'),
-    ActiveIcon: require('images/own/tasktab/active-ding.svg'),
-  },
-  {
-    title: '外勤任务',
-    label: '5',
-    id: 5,
-    icon: require('images/own/tasktab/task.svg'),
-    ActiveIcon: require('images/own/tasktab/active-task.svg'),
-  },
-];
 
 class OwnTask extends Component {
   constructor(props) {
@@ -74,6 +32,7 @@ class OwnTask extends Component {
       herderH: 0,
       tabType: '0',
       key: 0,
+      date: util.formatDate(new Date(Date.now()), 'yyyy-MM-dd'),
     };
   }
   componentWillUnmount() {
@@ -81,7 +40,9 @@ class OwnTask extends Component {
       return;
     };
   }
-  addTask = () => {};
+  changeTimeList = (time) => {
+    this.setState({ date: time });
+  };
   componentWillMount() {}
   componentDidMount() {
     this.setState({
@@ -108,14 +69,14 @@ class OwnTask extends Component {
           pointer
           title="我的任务"
           myRef={this.headerHeight}
-          handleShow={this.addTask.bind(this)}
+          changeTimeList={this.changeTimeList.bind(this)}
           noColor="own"
           key={this.state.defaultKey}
           customContent="请选择时间"
         />
         <Tabs
           ref={this.tabHeight}
-          tabs={tabs}
+          tabs={own.tabs}
           renderTab={(tab) => {
             return (
               <div className="header-tab">
@@ -136,16 +97,20 @@ class OwnTask extends Component {
           }}
         >
           <div style={{ boxSizing: 'border-box' }}>
-            <OwnGridList tabHeight={this.state.tabH} headerH={this.state.herderH}></OwnGridList>
+            <OwnGridList tabHeight={this.state.tabH} headerH={this.state.herderH} date={this.state.date}></OwnGridList>
           </div>
           <div style={{ boxSizing: 'border-box', height: '100%' }}>
-            <Drill tabHeight={this.state.tabH} headerH={this.state.herderH}></Drill>
+            <Drill tabHeight={this.state.tabH} headerH={this.state.herderH} date={this.state.date}></Drill>
           </div>
           <div style={{ boxSizing: 'border-box' }}>
-            <DailyPatrol tabHeight={this.state.tabH} headerH={this.state.herderH}></DailyPatrol>
+            <DailyPatrol tabHeight={this.state.tabH} headerH={this.state.herderH} date={this.state.date}></DailyPatrol>
           </div>
           <div style={{ boxSizing: 'border-box' }}>
-            <EmergencyDeployment tabHeight={this.state.tabH} headerH={this.state.herderH}></EmergencyDeployment>
+            <EmergencyDeployment
+              tabHeight={this.state.tabH}
+              headerH={this.state.herderH}
+              date={this.state.date}
+            ></EmergencyDeployment>
           </div>
           <div style={{ boxSizing: 'border-box' }}>
             <OwnEmDepComponent tabHeight={this.state.tabH} headerH={this.state.herderH}></OwnEmDepComponent>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import { ListView, List, Modal } from 'antd-mobile';
 import { connect } from 'react-redux';
@@ -22,9 +21,10 @@ class OwnGridList extends Component {
     });
     this.state = {
       currPage: 1,
-      finished: false,
+      finished: null,
       pageSize: 10,
       sortFieldName: '',
+      taskCreateDate: null,
       sortType: 'desc',
       hasMore: true,
       todoList: [],
@@ -39,10 +39,11 @@ class OwnGridList extends Component {
     };
   }
   handleSearchList = (per) => {
-    React.$ajax.news.gridSearchList(per).then((res) => {
+    React.$ajax.own.myGridTaskList(per).then((res) => {
       if (res.code == 0) {
         let resultData = res.data;
-        this.state.todoList = this.state.todoList.concat(resultData.list);
+        // this.state.todoList = this.state.todoList.concat(resultData.list);
+        this.setState({ todoList: this.state.todoList.concat(resultData.list) });
 
         if (this.state.todoList.length < resultData.totalCount) {
           // 可以滑动
@@ -50,7 +51,8 @@ class OwnGridList extends Component {
         } else {
           this.state.hasMore = false;
         }
-        this.setState(function (prevState) {
+
+        this.setState(function (prevState, props) {
           return {
             dataSource: prevState.dataSource.cloneWithRows(this.state.todoList),
             isLoading: false,
@@ -60,8 +62,6 @@ class OwnGridList extends Component {
     });
   };
   componentDidMount() {
-    let { currPage, finished, pageSize, sortFieldName, sortType } = this.state;
-    this.handleSearchList({ currPage, finished, pageSize, sortFieldName, sortType });
     this.props.onRef && this.props.onRef('parent', this);
   }
   onEndReached = (event) => {
@@ -71,8 +71,8 @@ class OwnGridList extends Component {
     this.setState({ isLoading: true });
     this.setState({ currPage: ++this.state.currPage });
 
-    let { currPage, finished, pageSize, sortFieldName, sortType } = this.state;
-    this.handleSearchList({ currPage, finished, pageSize, sortFieldName, sortType });
+    let { currPage, finished, pageSize, sortFieldName, sortType, taskCreateDate } = this.state;
+    this.handleSearchList({ currPage, finished, pageSize, sortFieldName, sortType, taskCreateDate });
   };
   noData = () => {
     console.log('未处理');
@@ -82,10 +82,17 @@ class OwnGridList extends Component {
   };
   addTask = () => {};
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps===网格化搜捕');
     if (this.props.tabHeight !== nextProps.tabHeight) {
       const hei = document.documentElement.clientHeight - nextProps.tabHeight - nextProps.headerH;
       this.setState({ height: hei });
+    }
+    console.log(123);
+    if (this.props.date !== nextProps.date) {
+      console.log(456);
+      this.setState({ taskCreateDate: nextProps.date, todoList: [], currPage: 1 }, () => {
+        let { currPage, finished, pageSize, sortFieldName, sortType, taskCreateDate } = this.state;
+        this.handleSearchList({ currPage, finished, pageSize, sortFieldName, sortType, taskCreateDate });
+      });
     }
   }
   handleNoNews = (item) => {};
@@ -152,15 +159,6 @@ class OwnGridList extends Component {
               <span className="task-txt">查看详情</span>
             </div>
           }
-          {/* {item.status == 1 ? (
-            <div className="task-btn">
-              <span className="task-txt" onClick={() => this.cancelTask()}>
-                取消任务
-              </span>
-            </div>
-          ) : (
-            ''
-          )} */}
         </List>
       )
     );
@@ -183,7 +181,7 @@ class OwnGridList extends Component {
           ref={(el) => (this.lv = el)}
           dataSource={this.state.dataSource}
           renderFooter={() => (
-            <div style={{ padding: 30, textAlign: 'center' }}>
+            <div style={{ padding: '0.4rem', textAlign: 'center' }}>
               {this.state.isLoading ? 'Loading...' : this.state.todoList.length == 0 ? <NoData /> : '无更多数据了'}
             </div>
           )}

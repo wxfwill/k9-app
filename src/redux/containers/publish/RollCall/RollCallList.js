@@ -1,269 +1,185 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { withRouter, Link } from 'react-router-dom';
-import { createForm } from 'rc-form';
+import { withRouter } from 'react-router-dom';
+import { ListView, List, Modal } from 'antd-mobile';
+import { connect } from 'react-redux';
 import Header from 'components/common/Header';
-import { List, DatePicker, Button, ListView, Toast, Modal } from 'antd-mobile';
-import moment from 'moment';
-require('style/own/own.less');
+import NoData from 'components/common/No-data';
+import { saveSocketNewList } from 'store/actions/websocketAction';
+
+require('style/own/rocall.less');
 
 const Item = List.Item;
-const Brief = Item.Brief;
-const nowTimeStamp = Date.now();
-const now = new Date(nowTimeStamp);
 const alert = Modal.alert;
 
-let listData = [];
-const stateArr = [
-  {
-    className: 'going',
-    name: '未审批',
-  },
-  {
-    className: 'nostart',
-    name: '驳回',
-  },
-  {
-    className: 'going',
-    name: '待销假',
-  },
-  {
-    className: 'end',
-    name: '已销假',
-  },
-];
-
-function genData(len = 0, oldlen = 0) {
-  const dataBlob = {};
-  for (let i = 0; i < len; i++) {
-    const ii = oldlen + i;
-    dataBlob[`${ii}`] = `row - ${ii}`;
-  }
-  return dataBlob;
-}
-
 function MyBody(props) {
-  return <div className="am-list-body my-body">{props.children}</div>;
+  return <div className="rocall-body">{props.children}</div>;
 }
 
-class RollCallList extends Component {
+class RollCallListForm extends Component {
   constructor(props) {
     super(props);
-    const dataSource = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
+    const ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2,
     });
-
+    this.headerHeight = React.createRef();
     this.state = {
-      startDate: now,
-      dataSource,
       currPage: 1,
-      isLoading: true,
+      finished: false,
+      pageSize: 10,
+      qryDateStr: '',
+      sortFieldName: '',
+      sortType: 'desc',
       hasMore: true,
+      todoList: [],
+      dataSource: ds,
+      isLoading: true,
+      height: 0,
     };
-    this.timer = null;
   }
-  componentDidMount() {
-    this.initDate();
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return;
+    };
   }
-  initDate(data) {
-    let _this = this;
-    _this.setState({
-      startDate: data ? data : now,
-      currPage: 1,
-    });
-    const hei =
-      document.documentElement.clientHeight -
-      ReactDOM.findDOMNode(this.lv).parentNode.querySelector('.header').clientHeight -
-      ReactDOM.findDOMNode(this.lv).parentNode.querySelector('.date-picker-list').clientHeight;
-    console.log(ReactDOM.findDOMNode(this.lv).parentNode, '=============', hei);
+  handleSearchList = (per) => {
+    // React.$ajax.own.myGridTaskList({ startDate: per }).then((res) => {
+    React.$ajax.publish.rollCallListPage(per).then((res) => {
+      if (res.code == 0) {
+        let resultData = res.data;
+        this.state.todoList = this.state.todoList.concat(resultData.list);
 
-    _this.getContent(
-      moment(data).format('YYYY-MM-DD'),
-      function (result) {
-        listData = result.data.list;
-        _this.rData = genData(listData.length);
-        let { hasMore, currPage } = _this.state;
-        if (currPage < result.data.totalPage) {
-          hasMore = true;
+        if (this.state.todoList.length < resultData.totalCount) {
+          // 可以滑动
+          this.state.hasMore = true;
         } else {
-          hasMore = false;
+          this.state.hasMore = false;
         }
-        const dataSource = new ListView.DataSource({
-          rowHasChanged: (row1, row2) => row1 !== row2,
+        this.setState(function (prevState) {
+          return {
+            dataSource: prevState.dataSource.cloneWithRows(this.state.todoList),
+            isLoading: false,
+          };
         });
-        _this.setState({
-          dataSource: dataSource.cloneWithRows(_this.rData),
-          isLoading: false,
-          height: hei,
-          hasMore: hasMore,
-          currPage: 1,
-        });
-      },
-      true
-    );
-  }
-  getContent(data, callback, flag) {
-    const dataObj = { qryDateStr: data, currPage: flag ? 1 : this.state.currPage, pageSize: 6 };
-    React.$ajax.publish.rollCallListPage(dataObj).then((res) => {
-      if (res && res.code == 0) {
-        console.log(res);
-        callback && callback(res);
       }
     });
+  };
+  componentDidMount() {
+    this.setState({
+      herderH:
+        ReactDOM.findDOMNode(this.headerHeight.current) &&
+        ReactDOM.findDOMNode(this.headerHeight.current).querySelector('.header-title').clientHeight,
+    });
+
+    this.setState((nextState) => {
+      const hei = document.documentElement.clientHeight - nextState.herderH;
+      return {
+        height: hei,
+      };
+    });
+
+    let { currPage, qryDateStr, pageSize } = this.state;
+    this.handleSearchList({ currPage, qryDateStr, pageSize });
+    this.props.onRef && this.props.onRef('parent', this);
   }
   onEndReached = (event) => {
-    let { currPage, isLoading, hasMore, startDate } = this.state;
-
-    let _this = this;
-    if (isLoading || !hasMore) {
+    if (!this.state.hasMore) {
       return;
     }
-    _this.setState({
-      isLoading: true,
-    });
-    currPage++;
-    this.setState({
-      currPage: currPage,
-    });
-    //到底部触发加载
-    this.getContent(
-      moment(startDate).format('YYYY-MM-DD'),
-      function (result) {
-        let oldlen = listData.length;
-        listData = [...listData, ...result.data.list];
-        if (currPage < result.data.totalPage) {
-          hasMore = true;
-        } else {
-          hasMore = false;
-        }
-        _this.rData = { ..._this.rData, ...genData(result.data.list.length, oldlen) };
-        _this.setState({
-          dataSource: _this.state.dataSource.cloneWithRows(_this.rData),
-          isLoading: false,
-          hasMore: hasMore,
-        });
-      },
-      false
-    );
+    this.setState({ isLoading: true });
+    this.setState({ currPage: ++this.state.currPage });
+
+    let { currPage, qryDateStr, pageSize } = this.state;
+    this.handleSearchList({ currPage, qryDateStr, pageSize });
   };
-  handleChange(data) {
-    this.setState({
-      currPage: 1,
-    });
-    this.initDate(data);
-  }
-  handleOk() {}
-  goDetail = (item) => {
+  componentWillReceiveProps(nextProps) {}
+  handleNoNews = (item) => {
+    console.log(item);
     const { history } = this.props;
-    console.log(history);
     history.push(`/publish/rollCallDetails?id=${item.id}`);
-    console.log(history);
   };
-  handleLink = (address, id) => {
-    let { history } = this.props;
-    history.push({ pathname: address, query: id });
-  };
-
-  onChange(type, data) {
-    let handle = this.handleRes()[type];
-    typeof handle !== 'undefined' && handle();
-  }
-
-  showAlert = (id) => {
-    const alertInstance = alert('删除', '确定删除此任务吗?', [
-      { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
-      { text: '确定', onPress: () => this.delTask(id) },
-    ]);
-  };
-
-  //删除草稿
-  delTask = (id) => {
-    commonJs.ajaxPost(
-      '/api/dailyPatrols/delTaskById',
-      {
-        id: id,
-      },
-      (res) => {
-        if (res.code == 0) {
-          this.initDate(this.state.startDate);
-        } else {
-          Toast.info(res.msg);
-          return;
-        }
-      }
+  renderRow = (rowData) => {
+    if (!rowData) {
+      throw new Error('rowData 获取的值为空');
+    }
+    let item = rowData;
+    return (
+      item && (
+        <List className="rollcall-item" key={item.id} onClick={this.handleNoNews.bind(this, item)}>
+          <Item
+            className="rollcall-img"
+            arrow="horizontal"
+            thumb={
+              <span
+                style={{
+                  width: '0.853333rem',
+                  height: '0.853333rem',
+                  borderRadius: '50%',
+                  overflow: 'hidden',
+                  background: `url(${require('images/own/own-roll-call.svg')}) left top no-repeat`,
+                  backgroundSize: '100% 100%',
+                  display: 'inline-block',
+                }}
+              />
+            }
+          >
+            {util.formatDate(new Date(item.opTime), 'yyyy-MM-dd')}
+            {'  点名记录'}
+          </Item>
+        </List>
+      )
     );
   };
-
   render() {
-    const separator = (sectionID, rowID) => <div key={`${sectionID}-${rowID}`} />;
-    const row = (rowData, sectionID, rowID) => {
-      if (!listData[rowID]) {
-        return null;
-      }
-      let obj = listData[rowID];
-      let st = stateArr[obj.status];
+    const separator = (sectionID, rowID) => {
       return (
-        obj && (
-          <List className="new-list-type" key={rowID}>
-            <Item align="top" multipleLine onClick={() => this.goDetail(obj)}>
-              <div className="new-desc">
-                <span className="content">提交人：</span>
-                {obj.operatorName ? obj.operatorName : '--'}
-              </div>
-              <div className="new-desc">
-                <span className="content">提交时间：</span>
-                {obj.opTime ? moment(obj.opTime).format('YYYY-MM-DD HH:mm:ss') : '--'}
-              </div>
-              <div className="new-desc">
-                <span className="content">详情：</span>
-                {obj.content ? obj.content : '--'}
-              </div>
-            </Item>
-          </List>
-        )
+        <div
+          key={`${sectionID}-${rowID}`}
+          style={{
+            width: '9.36rem',
+            height: '0.32rem',
+          }}
+        />
       );
     };
     return (
-      <div className="new-list-wrap Own">
-        <Header title="点名列表" pointer="pointer" />
-        <List style={{ backgroundColor: 'white' }} className="date-picker-list">
-          <DatePicker
-            mode="date"
-            title="选择日期"
-            value={this.state.startDate}
-            onOk={this.handleOk.bind(this)}
-            onChange={this.handleChange.bind(this)}
-          >
-            <Item arrow="horizontal">时间</Item>
-          </DatePicker>
-        </List>
-        <ListView
-          ref={(el) => (this.lv = el)}
-          dataSource={this.state.dataSource}
-          renderFooter={() => (
-            <div style={{ padding: 30, textAlign: 'center' }}>
-              {this.state.isLoading ? 'Loading...' : '无更多数据了'}
-            </div>
-          )}
-          style={{
-            height: this.state.height,
-            overflow: 'auto',
-            //bottom: '0.1rem',
-            //top: 95,
-          }}
-          renderBodyComponent={() => <MyBody />}
-          renderRow={row}
-          renderSeparator={separator}
-          onScroll={() => {
-            console.log('scroll');
-          }}
-          scrollRenderAheadDistance={500}
-          onEndReached={this.onEndReached}
-          onEndReachedThreshold={10}
-        />
+      <div className="roll-call-wrap">
+        <Header pointer title="点名记录" myRef={this.headerHeight} />
+        {this.state.dataSource && (
+          <ListView
+            ref={(el) => (this.lv = el)}
+            dataSource={this.state.dataSource}
+            renderFooter={() => (
+              <div style={{ padding: '0.4rem', textAlign: 'center' }}>
+                {this.state.isLoading ? 'Loading...' : this.state.todoList.length == 0 ? <NoData /> : '无更多数据了'}
+              </div>
+            )}
+            renderBodyComponent={() => <MyBody />}
+            renderRow={(rowData, i) => this.renderRow(rowData, i)}
+            renderSeparator={separator}
+            style={{
+              height: this.state.height,
+              overflow: 'auto',
+            }}
+            pageSize={1}
+            onScroll={() => {
+              // console.log('scroll');
+            }}
+            scrollRenderAheadDistance={500}
+            onEndReached={this.onEndReached}
+            onEndReachedThreshold={300}
+          />
+        )}
       </div>
     );
   }
 }
-const RollCallListForm = createForm()(RollCallList);
-export default withRouter(RollCallListForm);
+
+const mapStateToProps = (state) => ({
+  socketNewList: state.socketReducer.newLIst,
+});
+const mapDispatchToProps = (dispatch) => ({
+  SocketNewListActions: (list) => dispatch(saveSocketNewList(list)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(RollCallListForm));
