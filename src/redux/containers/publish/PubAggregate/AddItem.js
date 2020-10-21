@@ -286,13 +286,13 @@ class AddComponent extends Component {
                   </div>
                 </List>
                 <List className="list">
-                  <p className="title">巡逻人员</p>
+                  <p className="title">选择人员</p>
                   <div className="input-item" onClick={this.showModal}>
                     <div className="value-box">
                       {this.state.members && this.state.members.length > 0 ? (
                         <p>{this.state.members}</p>
                       ) : (
-                        <span>请选择巡逻人员</span>
+                        <span>请选择人员</span>
                       )}
                     </div>
                     <Icon type="right" />
