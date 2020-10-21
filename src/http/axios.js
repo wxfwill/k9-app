@@ -25,9 +25,9 @@ let ajax = function $axios(options) {
         // store.subscribe(() => {
         //   console.log('subscribe');
         //   console.log(store.getState().loginReducer.token);
-        //   config.headers['Authorization'] = store.getState().loginReducer.token
-        //     ? store.getState().loginReducer.token
-        //     : null;
+        //   // config.headers['Authorization'] = store.getState().loginReducer.token
+        //   //   ? store.getState().loginReducer.token
+        //   //   : null;
         // });
         console.log('token123');
         console.log(store.getState().loginReducer.token);
@@ -72,6 +72,7 @@ let ajax = function $axios(options) {
         }
       },
       (err) => {
+        Toast.hide();
         var error = JSON.parse(JSON.stringify(err));
         if (error.code === 'ECONNABORTED' && error.message.indexOf('timeout') !== -1) {
           // return instance.request(originalRequest); // 再重复请求一次
