@@ -146,7 +146,7 @@ class Header extends Component {
     this.props.handleRightTitleClick();
   };
   render() {
-    const { user, title, pointer, history, customContent, isSet, isSearch, noColor } = this.props;
+    const { user, title, pointer, history, customContent, isSet, isSearch, noColor, customRightTitle } = this.props;
 
     let className = noColor ? 'header nobgcolor' : 'header';
     return (
