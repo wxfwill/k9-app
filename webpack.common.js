@@ -76,6 +76,7 @@ const commonSet = {
     extensions: ['.js', '.json', '.jsx'],
     alias: {
       //配置路径常量
+      page: `${srcPath}/page`,
       localData: `${srcPath}/localData`,
       components: `${srcPath}/components`,
       actions: `${srcPath}/redux/actions`,

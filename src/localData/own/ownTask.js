@@ -8,25 +8,27 @@ export const appMenu = [
   {
     text: '轨迹查看',
     icon: require('images/own/own-trail.svg'),
+    link: '/own/TailView',
   },
   {
     text: '点名',
     icon: require('images/own/own-roll-call.svg'),
-    link: '/publish/rollCallList',
+    link: '/own/callList',
   },
   {
     text: '审批管理',
     icon: require('images/own/own-approval.svg'),
-    link: '/publish/approval?titleType=审批管理',
+    link: '/own/OwnApproval?titleType=审批管理',
   },
   {
     text: '请假申请',
     icon: require('images/own/own-vacation.svg'),
-    link: '/publish/leaveList',
+    link: '/own/OwnLeaveList',
   },
   {
     text: '犬病上报',
     icon: require('images/own/own-dog-report.svg'),
+    link: '/own/DogManageList',
   },
   {
     text: '修改密码',

@@ -65,18 +65,6 @@ const PublishRollCallDetails = (props) => (
   </Bundle>
 );
 
-// 审批管理
-const PublishApproval = (props) => (
-  <Bundle load={() => import('containers/publish/ApprovalMangement')}>
-    {(PublishApproval) => <PublishApproval {...props} />}
-  </Bundle>
-);
-// 审批管理详情
-const PublishApprovalDetails = (props) => (
-  <Bundle load={() => import('containers/publish/ApprovalMangement/details')}>
-    {(PublishApprovalDetails) => <PublishApprovalDetails {...props} />}
-  </Bundle>
-);
 // 请假申请
 const PublishVacation = (props) => (
   <Bundle load={() => import('containers/publish/VacationMangement')}>
@@ -105,12 +93,41 @@ const PublishDogReport = (props) => (
 const UpdatePwd = (props) => (
   <Bundle load={() => import('containers/updatePwd/index')}>{(UpdatePwd) => <UpdatePwd {...props} />}</Bundle>
 );
-// 我的任务
-const OwnTask = (props) => (
-  <Bundle load={() => import('components/own/OwnTask')}>{(OwnTask) => <OwnTask {...props} />}</Bundle>
-);
 
 //****我的****
+const Own = (props) => <Bundle load={() => import('page/own/Own')}>{(Own) => <Own {...props} />}</Bundle>;
+// 我的任务
+const OwnTask = (props) => (
+  <Bundle load={() => import('page/own/OwnTask')}>{(OwnTask) => <OwnTask {...props} />}</Bundle>
+);
+// 轨迹查看
+const TailView = (props) => (
+  <Bundle load={() => import('page/own/TrailView')}>{(TailView) => <TailView {...props} />}</Bundle>
+);
+// 点名
+const OwnCallList = (props) => (
+  <Bundle load={() => import('page/own/Call/List')}>{(OwnCallList) => <OwnCallList {...props} />}</Bundle>
+);
+// 审批管理
+const OwnApproval = (props) => (
+  <Bundle load={() => import('page/own/Approval')}>{(OwnApproval) => <OwnApproval {...props} />}</Bundle>
+);
+// 审批管理详情
+const OwnApprovalDetails = (props) => (
+  <Bundle load={() => import('page/own/Approval/ApprovalDetails')}>
+    {(OwnApprovalDetails) => <OwnApprovalDetails {...props} />}
+  </Bundle>
+);
+// 请假申请列表
+const OwnLeaveList = (props) => (
+  <Bundle load={() => import('page/own/OwnLevel/list')}>{(OwnLeaveList) => <OwnLeaveList {...props} />}</Bundle>
+);
+// 请假申请详情
+const OwnLeaveListDetails = (props) => (
+  <Bundle load={() => import('page/own/OwnLevel/LevelDetails')}>
+    {(OwnLeaveListDetails) => <OwnLeaveListDetails {...props} />}
+  </Bundle>
+);
 
 const PubRoundDetails = (props) => (
   <Bundle load={() => import('containers/publish/PubRound/PubRoundDetails')}>
@@ -153,7 +170,6 @@ const ItinerancyDetail = (props) => (
   </Bundle>
 );
 
-const Own = (props) => <Bundle load={() => import('components/own/Own')}>{(Own) => <Own {...props} />}</Bundle>;
 const OwnLevel = (props) => (
   <Bundle load={() => import('components/own/OwnLevel')}>{(OwnLevel) => <OwnLevel {...props} />}</Bundle>
 );
@@ -209,12 +225,12 @@ const OwnGridSearchMap = (props) => (
   </Bundle>
 );
 const Fight = (props) => <Bundle load={() => import('containers/fight')}>{(Fight) => <Fight {...props} />}</Bundle>;
-const Check = (props) => <Bundle load={() => import('containers/check')}>{(Check) => <Check {...props} />}</Bundle>;
+const Check = (props) => <Bundle load={() => import('page/mapPage')}>{(Check) => <Check {...props} />}</Bundle>;
 
 const Test = (props) => <Bundle load={() => import('components/test')}>{(Test) => <Test {...props} />}</Bundle>;
 /**警犬管理 */
 const DogManage = (props) => (
-  <Bundle load={() => import('components/own/DogManage/index')}>{(DogManage) => <DogManage {...props} />}</Bundle>
+  <Bundle load={() => import('components/own/DogManage/index.js')}>{(DogManage) => <DogManage {...props} />}</Bundle>
 );
 /**警犬监控 */
 const DogMonitor = (props) => (
@@ -239,11 +255,10 @@ const SickUpdate = (props) => (
 );
 
 /**消息提示 */
-const News = (props) => <Bundle load={() => import('containers/news/News')}>{(News) => <News {...props} />}</Bundle>;
+const News = (props) => <Bundle load={() => import('page/news/News')}>{(News) => <News {...props} />}</Bundle>;
 const NewsList = (props) => (
-  <Bundle load={() => import('containers/news/New-list')}>{(NewsList) => <NewsList {...props} />}</Bundle>
+  <Bundle load={() => import('page/news/New-list')}>{(NewsList) => <NewsList {...props} />}</Bundle>
 );
-// const NewsListCom = (props) => <Bundle load={() => import("containers/news/New-common")}>{(NewsListCom) => <NewsListCom {...props} />}</Bundle>;
 
 /**警犬运动统计 */
 const DogActivity = (props) => (
@@ -307,6 +322,30 @@ const ReportDetail = (props) => (
     {(ReportDetail) => <ReportDetail {...props} />}
   </Bundle>
 );
+
+// 地图相关
+// 创建任务
+const MapCreate = (props) => (
+  <Bundle load={() => import('page/mapPage/createTask')}>{(MapCreate) => <MapCreate {...props} />}</Bundle>
+);
+// 创建任务后分配人员
+const AssignPerson = (props) => (
+  <Bundle load={() => import('page/mapPage/assignPerson')}>{(AssignPerson) => <AssignPerson {...props} />}</Bundle>
+);
+// 发布任务
+const PushTask = (props) => (
+  <Bundle load={() => import('page/mapPage/pushTask')}>{(PushTask) => <PushTask {...props} />}</Bundle>
+);
+// 添加小组成员
+const AddTeamPerson = (props) => (
+  <Bundle load={() => import('page/mapPage/addTeamPerson')}>{(AddTeamPerson) => <AddTeamPerson {...props} />}</Bundle>
+);
+
+// 任务详情
+const MapTaskDetal = (props) => (
+  <Bundle load={() => import('page/mapPage/taskDetal')}>{(MapTaskDetal) => <MapTaskDetal {...props} />}</Bundle>
+);
+
 import NotFound from 'components/NotFound';
 export const routes = [
   {
@@ -320,6 +359,26 @@ export const routes = [
   {
     path: '/login/policy',
     component: LoginPolicy,
+  },
+  {
+    path: '/map/taskDetal',
+    component: MapTaskDetal,
+  },
+  {
+    path: '/map/createTask',
+    component: MapCreate,
+  },
+  {
+    path: '/map/assignPerson',
+    component: AssignPerson,
+  },
+  {
+    path: '/map/pushTask',
+    component: PushTask,
+  },
+  {
+    path: '/map/addTeamPerson',
+    component: AddTeamPerson,
   },
   {
     path: '/publish',
@@ -370,14 +429,6 @@ export const routes = [
     component: PublishRollCallDetails,
   },
   {
-    path: '/publish/approval',
-    component: PublishApproval,
-  },
-  {
-    path: '/publish/approvalDetails',
-    component: PublishApprovalDetails,
-  },
-  {
     path: '/publish/vacation',
     component: PublishVacation,
   },
@@ -398,10 +449,34 @@ export const routes = [
     path: '/own/OwnTask',
     component: OwnTask,
   },
-  // {
-  //   path: '/own/OwnTask/GridSearchDetal',
-  //   comnponent:
-  // },
+  {
+    path: '/own/TailView',
+    component: TailView,
+  },
+  {
+    path: '/own/callList',
+    component: OwnCallList,
+  },
+  {
+    path: '/own/OwnApproval',
+    component: OwnApproval,
+  },
+  {
+    path: '/own/DogManageListDetal',
+    component: OwnApprovalDetails,
+  },
+  {
+    path: '/own/OwnLeaveList',
+    component: OwnLeaveList,
+  },
+  {
+    path: '/own/OwnLeaveListDetails',
+    component: OwnLeaveListDetails,
+  },
+  {
+    path: '/own/DogManageList',
+    component: DogManage,
+  },
   {
     path: '/news',
     component: News,
