@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { Button, List, DatePicker, InputItem, SearchBar, Drawer, TextareaItem } from 'antd-mobile';
-import moment from 'moment';
+import { Button, List, DatePicker, TextareaItem, Picker } from 'antd-mobile';
 import Header from 'components/common/Header';
-
 import { createForm } from 'rc-form';
-
 import { toast } from 'libs/util';
-
+import { QuickList } from 'localData/DogReport';
+require('style/publish/public.less');
 /**
  * 犬病上报
  */
@@ -24,41 +22,27 @@ class DogReport extends Component {
     this.timer = null;
   }
 
-  componentDidMount() {}
-  getDogs = (text) => {
-    clearTimeout(this.timer);
-    this.setState({ SearchText: text });
-    const self = this;
-    this.timer = setTimeout(() => {
-      const dataObj = { dogName: text };
-      React.$ajax.publish.deleteApproval(dataObj).then((res) => {
-        if (res && res.code == 0) {
-          this.setState({ dogList: res.data, open: true });
-        }
-      });
-    }, 500);
-  };
+  componentDidMount() {
+    this.queryDogList();
+  }
 
-  renderSidebar = () => {
-    const { dogList } = this.state;
-    return dogList.map((item) => {
-      return (
-        <List.Item
-          key={item.id + 'slider'}
-          arrow="horizontal"
-          style={{ width: document.documentElement.clientWidth }}
-          onClick={() => {
-            this.setState({ open: false, SearchText: item.name, dogId: item.id });
-          }}
-        >
-          {item.name}
-        </List.Item>
-      );
+  // 查询所有警犬
+  queryDogList = () => {
+    React.$ajax.publish.getByNameOrNumber({ dogName: '' }).then((res) => {
+      if (res && res.code == 0) {
+        let list = [];
+        res.data.map((item) => {
+          list.push({ label: item.name, value: item.id });
+        });
+        this.setState({ dogList: list });
+      }
     });
   };
 
   submit = () => {
-    const { date, dogId } = this.state;
+    //const { date, dogId } = this.state;
+    const { date } = this.state;
+    let dogId = this.props.form.getFieldValue('dogId') ? this.props.form.getFieldValue('dogId')[0] : '';
     let symptom = this.props.form.getFieldValue('symptom');
     if (dogId == '') {
       toast('请选择犬只！');
@@ -67,73 +51,99 @@ class DogReport extends Component {
       toast('请填写发病症状！');
       return;
     }
-
     const user = JSON.parse(sessionStorage.getItem('user'));
-    const dataObj = { dogId, morbidityTime: moment(date).format('YYYY-MM-DD'), symptom, userId: user.id };
+    const dataObj = { dogId, morbidityTime: util.formatDate(new Date(date), 'yyyy-MM-dd'), symptom, userId: user.id };
     React.$ajax.publish.reportDisease(dataObj).then((res) => {
       if (res && res.code == 0) {
         toast('上报成功！');
-        setTimeout(() => {
-          this.props.history.push('/own');
-        }, 1500);
+        this.props.history.push('/own');
       }
     });
   };
 
+  //添加快捷输入
+  shortcutInput = (val) => {
+    const symptom = this.props.form.getFieldValue('symptom');
+    this.setState(
+      {
+        symptom: symptom + val,
+      },
+      () => {
+        this.props.form.setFieldsValue({ symptom: this.state.symptom });
+      }
+    );
+  };
+
   render() {
     const { getFieldProps } = this.props.form;
-    const { SearchText, open } = this.state;
-
+    const { dogList, symptom } = this.state;
     return (
-      <div className="sick_update">
-        <Header title="犬病上报" pointer />
-        <DatePicker
-          mode="date"
-          title="选择日期"
-          extra="Optional"
-          value={this.state.date}
-          onChange={(date) => this.setState({ date })}
-          // onOk={date => {this.getEquipmentList(date)}}
-        >
-          <List.Item arrow="horizontal">日期</List.Item>
-        </DatePicker>
-        <List>
-          <SearchBar
-            placeholder="输入警犬名称或者编号"
-            value={SearchText}
-            onChange={(value) => {
-              this.getDogs(value);
-            }}
-            onCancel={() => {
-              this.setState({ open: false });
-            }}
-          />
-          <Drawer
-            // className="my-drawer"
-            style={{ minHeight: document.documentElement.clientHeight, top: 42, display: open ? 'block' : 'none' }}
-            enableDragHandle
-            contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
-            sidebar={this.renderSidebar()}
-            open={this.state.open}
-            onOpenChange={this.onOpenChange}
-          >
-            ''
-          </Drawer>
-        </List>
-        <List>
-          <TextareaItem
-            {...getFieldProps('symptom')}
-            clear
-            title="疾病症状："
-            placeholder="描述疾病症状"
-            autoHeight
-            rows={6}
-          />
-        </List>
-
-        <Button type="primary" style={{ position: 'absolute', bottom: 0, width: '100%' }} onClick={this.submit}>
-          上报
-        </Button>
+      <div className="layer-main">
+        <div className="parent-container">
+          <Header title="犬病上报" pointer="pointer" />
+          <div className="child-container">
+            <div className="components">
+              <div className="form-main">
+                <List className="list">
+                  <p className="title">警犬名称</p>
+                  <Picker data={dogList} cols={1} {...getFieldProps('dogId')} className="forss">
+                    <List.Item arrow="horizontal"></List.Item>
+                  </Picker>
+                </List>
+                <List className="list">
+                  <p className="title">发病日期</p>
+                  <DatePicker
+                    mode="date"
+                    title="选择日期"
+                    extra="Optional"
+                    value={this.state.date}
+                    onChange={(date) => this.setState({ date })}
+                    // onOk={date => {this.getEquipmentList(date)}}
+                  >
+                    <List.Item arrow="horizontal"></List.Item>
+                  </DatePicker>
+                </List>
+                <List className="list">
+                  <p className="title">发病症状</p>
+                  <TextareaItem
+                    {...getFieldProps('symptom', {
+                      initialValue: this.state.symptom ? this.state.symptom : '',
+                    })}
+                    clear
+                    placeholder="描述疾病症状"
+                    defaultValue={symptom}
+                    autoHeight
+                    rows={3}
+                  />
+                  <div className="list-botm">
+                    <p className="lit-tle">快捷输入</p>
+                    <div className="tag-container">
+                      {QuickList &&
+                        QuickList.map((item) => {
+                          return (
+                            <p
+                              className="tag-list"
+                              key={item.label}
+                              onClick={() => {
+                                this.shortcutInput(item.label);
+                              }}
+                            >
+                              {item.label}
+                            </p>
+                          );
+                        })}
+                    </div>
+                  </div>
+                </List>
+                <List className="list list-button">
+                  <Button type="primary" onClick={this.submit}>
+                    上报
+                  </Button>
+                </List>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -141,6 +151,3 @@ class DogReport extends Component {
 
 const DogReportWrapper = createForm()(DogReport);
 module.exports = DogReportWrapper;
-
-// WEBPACK FOOTER //
-// ./src/components/own/DogManage/Sickupdate.js

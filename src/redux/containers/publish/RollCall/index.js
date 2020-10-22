@@ -113,9 +113,17 @@ class RollCall extends Component {
     const titleType = util.urlParse(this.props.location.search).titleType;
     const { getFieldProps } = this.props.form;
     let { files, value, isRemark, currentTime, isSuccess, currentId } = this.state;
+    const { history } = this.props;
     return (
       <div className="parent-container">
-        <Header title={titleType} pointer="pointer" />
+        <Header
+          title={titleType}
+          pointer="pointer"
+          customRightTitle="点名记录"
+          handleRightTitleClick={() => {
+            history.push('/publish/rollCallList');
+          }}
+        />
         <div className="child-container">
           <div className="components">
             <div className="dianming-box">

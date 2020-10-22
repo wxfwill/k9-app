@@ -1,33 +1,15 @@
 import React, { Component } from 'react';
-import {
-  List,
-  Picker,
-  DatePicker,
-  TextareaItem,
-  InputItem,
-  Stepper,
-  WhiteSpace,
-  WingBlank,
-  Button,
-  Toast,
-  ImagePicker,
-} from 'antd-mobile';
+import { List, DatePicker, TextareaItem, Picker, Toast, Button, ImagePicker } from 'antd-mobile';
 import { createForm } from 'rc-form';
-import ReactMixin from 'react-mixin';
 import Header from 'components/common/Header';
-import { withRouter, Link } from 'react-router-dom';
-import moment from 'moment';
+import { withRouter } from 'react-router-dom';
 import { loading } from 'libs/util';
-require('style/own/ownLevel.less');
+require('style/publish/public.less');
 const Item = List.Item;
-const Brief = Item.Brief;
 const nowTimeStamp = Date.now();
 const now = new Date(nowTimeStamp);
 function failToast(text, fn) {
   Toast.fail(text, 1);
-}
-function successToast(text, fn) {
-  Toast.success(text, 1, fn, true);
 }
 class Vacation extends Component {
   constructor(props) {
@@ -37,19 +19,11 @@ class Vacation extends Component {
       end: now,
       hasError: false,
       value: '',
-      val: 1,
+      val: 0,
       seasons: [],
       files: null,
     };
-    this.timer = null;
   }
-  handleChange(type, date) {
-    this.setState({
-      [type]: date,
-    });
-  }
-  handleOk() {}
-
   componentDidMount() {
     // 获取请假类型
     React.$ajax.publish.getLeaveTypeList().then((res) => {
@@ -67,19 +41,6 @@ class Vacation extends Component {
         return;
       }
     });
-  }
-  handleNumber(type) {
-    this.numObj()[type](this);
-  }
-  numObj() {
-    return {
-      cut: function (pointer) {
-        pointer.setState({ val: pointer.state.val == 0.5 ? 0.5 : pointer.state.val - 0.5 });
-      },
-      add: function (pointer) {
-        pointer.setState({ val: pointer.state.val == 99 ? 99 : pointer.state.val + 0.5 });
-      },
-    };
   }
   handleSubmit() {
     let subData = this.props.form.getFieldsValue();
@@ -108,9 +69,9 @@ class Vacation extends Component {
         if (!isReturn) {
           return false;
         }
-        formData.append('leaveStartTimeStr', moment(this.state.start).format('YYYY-MM-DD HH:mm:ss'));
-        formData.append('leaveEndTimeStr', moment(this.state.end).format('YYYY-MM-DD HH:mm:ss'));
-        formData.append('applyTimeStr', moment(now).format('YYYY-MM-DD HH:mm:ss'));
+        formData.append('leaveStartTimeStr', util.formatDate(new Date(this.state.start), 'yyyy-MM-dd hh:mm:ss'));
+        formData.append('leaveEndTimeStr', util.formatDate(new Date(this.state.end), 'yyyy-MM-dd hh:mm:ss'));
+        formData.append('applyTimeStr', util.formatDate(new Date(now), 'yyyy-MM-dd hh:mm:ss'));
         formData.append('duration', this.state.val);
         formData.append('type', Number(subData.type[0]));
         formData.append('remark', subData.remark);
@@ -133,91 +94,111 @@ class Vacation extends Component {
       }
     });
   }
+  handleChange(type, date) {
+    let s = this.state.start;
+    let e = this.state.end;
+    type === 'start' ? (s = date) : (e = date);
+    if (s && e) {
+      if (e.getTime() - s.getTime() < 0) {
+        Toast.info('结束时间不能小于开始时间，请重新选择!');
+        return;
+      }
+    }
+    this.setState(
+      {
+        [type]: date,
+      },
+      () => {
+        //计算请假时长(保留一位小数)
+        const start = this.state.start;
+        const end = this.state.end;
+        if (start && end) {
+          this.setState({
+            val: parseInt((end.getTime() - start.getTime()) / 1000 / 360) / 10,
+          });
+        }
+      }
+    );
+  }
   onChange = (files, type, index) => {
     console.log(files, type, index);
     this.setState({
       files,
     });
   };
-
   render() {
     const titleType = util.urlParse(this.props.location.search).titleType;
     const { getFieldProps } = this.props.form;
     let { files, seasons } = this.state;
     return (
-      <div className="OwnLevel">
-        <Header title={titleType} pointer="pointer" />
-        <List style={{ backgroundColor: 'white' }} className="date-picker-list">
-          <Picker data={seasons} cols={1} {...getFieldProps('type')} className="forss">
-            <Item arrow="horizontal">请假类型</Item>
-          </Picker>
-          <DatePicker
-            title="选择日期"
-            value={this.state.start}
-            onOk={this.handleOk.bind(this)}
-            onChange={this.handleChange.bind(this, 'start')}
-          >
-            <Item arrow="horizontal">开始时间</Item>
-          </DatePicker>
-          <DatePicker
-            title="选择日期"
-            value={this.state.end}
-            onOk={this.handleOk.bind(this)}
-            onChange={this.handleChange.bind(this, 'end')}
-          >
-            <Item arrow="horizontal">结束时间</Item>
-          </DatePicker>
-          <List.Item
-            wrap
-            extra={
-              <div>
-                <span className="cut" onClick={this.handleNumber.bind(this, 'cut')}>
-                  -
-                </span>
-                <em>{(this.state.val + '').substring(0, 4)}</em>
-                <span className="add" onClick={this.handleNumber.bind(this, 'add')}>
-                  +
-                </span>
+      <div className="layer-main">
+        <div className="parent-container">
+          <Header title={titleType} pointer="pointer" />
+          <div className="child-container">
+            <div className="components">
+              <div className="form-main">
+                <List className="list">
+                  <p className="title">请假类型</p>
+                  <Picker data={seasons} cols={1} {...getFieldProps('type')} className="forss">
+                    <Item arrow="horizontal"></Item>
+                  </Picker>
+                </List>
+                <List className="list">
+                  <p className="title">开始时间</p>
+                  <DatePicker
+                    title="选择日期"
+                    value={this.state.start}
+                    onChange={this.handleChange.bind(this, 'start')}
+                  >
+                    <Item arrow="horizontal"></Item>
+                  </DatePicker>
+                </List>
+                <List className="list">
+                  <p className="title">结束时间</p>
+                  <DatePicker title="选择日期" value={this.state.end} onChange={this.handleChange.bind(this, 'end')}>
+                    <Item arrow="horizontal"></Item>
+                  </DatePicker>
+                </List>
+                <List className="list">
+                  <p className="title">请假时长</p>
+                  <div className="input-item">
+                    <div className="value-box">
+                      {this.state.val + '' ? <p>{this.state.val}小时</p> : <span>系统自动算出</span>}
+                    </div>
+                  </div>
+                </List>
+                <List className="list">
+                  <p className="title">请假事由</p>
+                  <TextareaItem
+                    {...getFieldProps('remark')}
+                    placeholder="请输入请假事由"
+                    data-seed="logId"
+                    rows={2}
+                    autoHeight
+                  />
+                </List>
+                <List className="list">
+                  <p className="title">上传照片</p>
+                  <ImagePicker
+                    title="图片"
+                    files={files ? files : []}
+                    onChange={this.onChange}
+                    onImageClick={(index, fs) => console.log(index, fs)}
+                    //     selectable={files.length < 5}
+                  ></ImagePicker>
+                </List>
+                <List className="list list-button">
+                  <Button type="primary" onClick={this.handleSubmit.bind(this)}>
+                    提交申请
+                  </Button>
+                </List>
               </div>
-            }
-          >
-            请假时长
-          </List.Item>
-          <List.Item>
-            <span>上传图片</span>
-            <div>
-              {' '}
-              <ImagePicker
-                title="图片"
-                files={files ? files : []}
-                onChange={this.onChange}
-                onImageClick={(index, fs) => console.log(index, fs)}
-                //     selectable={files.length < 5}
-                onAddImageClick={this.onAddImageClick}
-              ></ImagePicker>
             </div>
-          </List.Item>
-          <TextareaItem
-            {...getFieldProps('remark')}
-            title="请假事由"
-            placeholder="请输入请假事由"
-            data-seed="logId"
-            rows={2}
-            autoHeight
-          />
-        </List>
-        <div className="foot">
-          <WingBlank>
-            <Button className="submit" type="submit" onClick={() => this.handleSubmit()}>
-              提交
-            </Button>
-            <WhiteSpace />
-          </WingBlank>
+          </div>
         </div>
       </div>
     );
   }
 }
-
 const VacationForm = createForm()(Vacation);
 export default withRouter(VacationForm);

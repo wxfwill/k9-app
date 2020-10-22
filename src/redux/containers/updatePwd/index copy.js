@@ -1,17 +1,35 @@
 import React, { Component } from 'react';
-import { List, InputItem, Button, Toast } from 'antd-mobile';
+import {
+  List,
+  Picker,
+  DatePicker,
+  TextareaItem,
+  InputItem,
+  Stepper,
+  WhiteSpace,
+  WingBlank,
+  Button,
+  Toast,
+} from 'antd-mobile';
 import Reflux from 'reflux';
 import { createForm } from 'rc-form';
 import ReactMixin from 'react-mixin';
 import Header from 'components/common/Header';
 import Store from './store';
-import { withRouter } from 'react-router-dom';
+import Actions from './actions';
+import { withRouter, Link } from 'react-router-dom';
+import moment from 'moment';
 import { CallApp } from 'libs/util';
-require('style/publish/public.less');
+const Item = List.Item;
+const Brief = Item.Brief;
 const nowTimeStamp = Date.now();
 const now = new Date(nowTimeStamp);
+const seasons = '2018-04-22';
 function failToast(text, fn) {
   Toast.fail(text, 1);
+}
+function successToast(text, fn) {
+  Toast.success(text, 1, fn, true);
 }
 class UpdatePwdComponent extends Component {
   constructor(props) {
@@ -31,7 +49,10 @@ class UpdatePwdComponent extends Component {
       [type]: date,
     });
   }
+  handleOk() {}
   componentDidMount() {
+    // this.timer = setInterval(  this.getUserLocation, 3000)
+
     //通过id获取详情数据
     const dataObj = {}; //{id: this.props.location.query.id}
     React.$ajax.login.getTodayOnDuty(dataObj).then((res) => {
@@ -97,33 +118,20 @@ class UpdatePwdComponent extends Component {
   render() {
     const { getFieldProps } = this.props.form;
     return (
-      <div className="layer-main">
-        <div className="parent-container">
-          <Header title="修改密码" pointer="pointer" />
-          <div className="child-container">
-            <div className="components">
-              <div className="form-main">
-                <List className="list">
-                  <p className="title">原始密码</p>
-                  <InputItem {...getFieldProps('password')} type="password" placeholder="请输入原始密码"></InputItem>
-                </List>
-                <List className="list">
-                  <p className="title">新密码</p>
-                  <InputItem {...getFieldProps('newpassword')} type="password" placeholder="请输入新密码"></InputItem>
-                </List>
-                <List className="list">
-                  <p className="title">确认密码</p>
-                  <InputItem {...getFieldProps('newpassword1')} type="password" placeholder="请确认新密码"></InputItem>
-                </List>
-                <List className="list list-button">
-                  <Button type="primary" onClick={this.submit}>
-                    确认
-                  </Button>
-                </List>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="OwnLevel">
+        <Header title="修改密码" pointer="pointer" />
+        <WhiteSpace size="xl" />
+        <List>
+          <InputItem {...getFieldProps('password')} type="password" placeholder="请输入原始密码"></InputItem>
+          <WhiteSpace size="xm" />
+          <InputItem {...getFieldProps('newpassword')} type="password" placeholder="请输入新密码"></InputItem>
+          <WhiteSpace size="xm" />
+          <InputItem {...getFieldProps('newpassword1')} type="password" placeholder="请确认新密码"></InputItem>
+          <WhiteSpace size="xl" />
+          <Button type="primary" onClick={this.submit}>
+            确认
+          </Button>
+        </List>
       </div>
     );
   }
@@ -131,3 +139,6 @@ class UpdatePwdComponent extends Component {
 ReactMixin.onClass(UpdatePwdComponent, Reflux.listenTo(Store, 'onChange'));
 const UpdatePwd = createForm()(UpdatePwdComponent);
 export default withRouter(UpdatePwd);
+
+// WEBPACK FOOTER //
+// ./src/components/own/Account/UpdatePwd.js
