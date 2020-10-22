@@ -1,97 +1,103 @@
 import React, { Component } from 'react';
 import Bundle from './Bundle';
 
+// 登录
 const Login = (props) => (
-  <Bundle load={() => import('containers/login/Login')}>{(Login) => <Login {...props} />}</Bundle>
+  <Bundle load={() => import('page/other/Login/Login')}>{(Login) => <Login {...props} />}</Bundle>
 );
 const LoginPolicy = (props) => (
-  <Bundle load={() => import('containers/login/Policy')}>{(LoginPolicy) => <LoginPolicy {...props} />}</Bundle>
+  <Bundle load={() => import('page/other/Login/Policy')}>{(LoginPolicy) => <LoginPolicy {...props} />}</Bundle>
+);
+
+/**密码修改 */
+const UpdatePwd = (props) => (
+  <Bundle load={() => import('page/other/UpdatePwd/index')}>{(UpdatePwd) => <UpdatePwd {...props} />}</Bundle>
 );
 
 // ===工作台相关===
-const Publish = (props) => (
-  <Bundle load={() => import('containers/publish/Publish')}>{(Publish) => <Publish {...props} />}</Bundle>
-);
+const Publish = (props) => <Bundle load={() => import('page/workbench')}>{(Publish) => <Publish {...props} />}</Bundle>;
 // 网格化搜索
 const PublishGridSearch = (props) => (
-  <Bundle load={() => import('containers/publish/GridSeach')}>
+  <Bundle load={() => import('page/workbench/GridSeach')}>
     {(PublishGridSearch) => <PublishGridSearch {...props} />}
   </Bundle>
 );
 // 日常巡逻
 const AddPubRound = (props) => (
-  <Bundle load={() => import('containers/publish/PubRound/AddPubRound')}>
+  <Bundle load={() => import('page/workbench/PubRound/AddPubRound')}>
     {(AddPubRound) => <AddPubRound {...props} />}
   </Bundle>
 );
 // 训练计划
 const AddPubTraining = (props) => (
-  <Bundle load={() => import('containers/publish/PubTraining/AddPubTraining')}>
+  <Bundle load={() => import('page/workbench/PubTraining/AddPubTraining')}>
     {(AddPubTraining) => <AddPubTraining {...props} />}
   </Bundle>
 );
 // 紧急调配
 const AddEmedep = (props) => (
-  <Bundle load={() => import('containers/publish/PubEmedep/AddItem')}>{(AddEmedep) => <AddEmedep {...props} />}</Bundle>
+  <Bundle load={() => import('page/workbench/PubEmedep/AddItem')}>{(AddEmedep) => <AddEmedep {...props} />}</Bundle>
 );
 // 定点集合
 const AddAggregate = (props) => (
-  <Bundle load={() => import('containers/publish/PubAggregate/AddItem')}>
+  <Bundle load={() => import('page/workbench/PubAggregate/AddItem')}>
     {(AddAggregate) => <AddAggregate {...props} />}
   </Bundle>
 );
 // 外请任务
 const AddItinerancy = (props) => (
-  <Bundle load={() => import('containers/publish/PubItinerancy/AddItem')}>
+  <Bundle load={() => import('page/workbench/PubItinerancy/AddItem')}>
     {(AddItinerancy) => <AddItinerancy {...props} />}
   </Bundle>
 );
+
 // 点名
 const PublishRollCall = (props) => (
-  <Bundle load={() => import('containers/publish/RollCall')}>
-    {(PublishRollCall) => <PublishRollCall {...props} />}
-  </Bundle>
+  <Bundle load={() => import('page/workbench/RollCall')}>{(PublishRollCall) => <PublishRollCall {...props} />}</Bundle>
 );
 // 点名列表
 const PublishRollCallList = (props) => (
-  <Bundle load={() => import('containers/publish/RollCall/RollCallList')}>
+  <Bundle load={() => import('page/workbench/RollCall/RollCallList')}>
     {(PublishRollCallList) => <PublishRollCallList {...props} />}
   </Bundle>
 );
 // 点名详情
 const PublishRollCallDetails = (props) => (
-  <Bundle load={() => import('containers/publish/RollCall/RollCallDetails')}>
+  <Bundle load={() => import('page/workbench/RollCall/RollCallDetails')}>
     {(PublishRollCallDetails) => <PublishRollCallDetails {...props} />}
+  </Bundle>
+);
+
+// 审批管理
+const ApprovalMangement = (props) => (
+  <Bundle load={() => import('page/workbench/ApprovalMangement')}>
+    {(ApprovalMangement) => <ApprovalMangement {...props} />}
   </Bundle>
 );
 
 // 请假申请
 const PublishVacation = (props) => (
-  <Bundle load={() => import('containers/publish/VacationMangement')}>
+  <Bundle load={() => import('page/workbench/VacationMangement')}>
     {(PublishVacation) => <PublishVacation {...props} />}
   </Bundle>
 );
 // 请假申请列表
 const PublishLeaveList = (props) => (
-  <Bundle load={() => import('containers/publish/VacationMangement/list')}>
+  <Bundle load={() => import('page/workbench/VacationMangement/list')}>
     {(PublishLeaveList) => <PublishLeaveList {...props} />}
   </Bundle>
 );
 // 请假申请详情
 const PublishLeaveDetails = (props) => (
-  <Bundle load={() => import('containers/publish/VacationMangement/details')}>
+  <Bundle load={() => import('page/workbench/VacationMangement/details')}>
     {(PublishLeaveDetails) => <PublishLeaveDetails {...props} />}
   </Bundle>
 );
 // 犬病上报
 const PublishDogReport = (props) => (
-  <Bundle load={() => import('containers/publish/DogReport')}>
+  <Bundle load={() => import('page/workbench/DogReport')}>
     {(PublishDogReport) => <PublishDogReport {...props} />}
   </Bundle>
-);
-/**密码修改 */
-const UpdatePwd = (props) => (
-  <Bundle load={() => import('containers/updatePwd/index')}>{(UpdatePwd) => <UpdatePwd {...props} />}</Bundle>
 );
 
 //****我的****
@@ -381,63 +387,67 @@ export const routes = [
     component: AddTeamPerson,
   },
   {
-    path: '/publish',
+    path: '/workbench',
     component: Publish,
     auth: true,
   },
   {
-    path: '/publish/gridSearch',
+    path: '/workbench/gridSearch',
     component: PublishGridSearch,
     auth: true,
   },
   {
-    path: '/publish/round',
+    path: '/workbench/round',
     component: AddPubRound,
   },
   {
-    path: '/publish/training',
+    path: '/workbench/training',
     component: AddPubTraining,
   },
   {
-    path: '/publish/addEmedep',
+    path: '/workbench/addEmedep',
     component: AddEmedep,
   },
   {
-    path: '/publish/addAggregate',
+    path: '/workbench/ApprovalMangement',
+    component: ApprovalMangement,
+  },
+  {
+    path: '/workbench/addAggregate',
     component: AddAggregate,
   },
   {
-    path: '/publish/addItinerancy',
+    path: '/workbench/addItinerancy',
     component: AddItinerancy,
   },
   {
-    path: '/publish/dogReport',
+    path: '/workbench/dogReport',
     component: PublishDogReport,
     auth: true,
   },
   {
-    path: '/publish/rollCall',
+    path: '/workbench/rollCall',
     component: PublishRollCall,
     auth: true,
   },
   {
-    path: '/publish/rollCallList',
+    path: '/workbench/rollCallList',
     component: PublishRollCallList,
   },
   {
-    path: '/publish/rollCallDetails',
+    path: '/workbench/rollCallDetails',
     component: PublishRollCallDetails,
   },
   {
-    path: '/publish/vacation',
+    path: '/workbench/vacation',
     component: PublishVacation,
   },
   {
-    path: '/publish/leaveList',
+    path: '/workbench/leaveList',
     component: PublishLeaveList,
   },
   {
-    path: '/publish/leaveDetails',
+    path: '/workbench/leaveDetails',
     component: PublishLeaveDetails,
   },
   {

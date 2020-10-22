@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-require("./no-data.less");
-const noImg = require("images/news/no-data.svg");
+import React, { Component } from 'react';
+require('style/no-data.less');
+const noImg = require('images/news/no-data.svg');
 
 class NoData extends Component {
   constructor(props) {

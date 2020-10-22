@@ -2,16 +2,8 @@ import React, { Component } from 'react';
 import { Button, Toast, Checkbox, Flex, InputItem } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { createWebsocket } from 'components/common/websocket';
-import store from 'websocket/store';
-import {
-  saveAccount,
-  savePassword,
-  saveUserInfo,
-  savePasswordData,
-  saveToken,
-} from '../../../store/actions/loginAction';
+import { saveAccount, savePassword, saveUserInfo, savePasswordData, saveToken } from 'store/actions/loginAction';
 
 const AgreeItem = Checkbox.AgreeItem;
 
@@ -130,9 +122,6 @@ class Login extends Component {
 
         // 建立websocket
         createWebsocket();
-        // store.dispatch({ type: true });
-        // this.props.remeberPassword();
-        // console.log('dispatch');
         // console.log(this.props.dispatch(saveToken(res.data.token)));
         history.push({ pathname: '/own', state: user });
 
@@ -305,11 +294,6 @@ const loginActionToProps = (dispatch) => ({
   passwordAction: (data) => dispatch(savePasswordData(data)),
   tokenAction: (token) => dispatch(saveToken(token)),
 });
-
-// const mapDispatchToProps = (dispatch) => {
-//   let actions = bindActionCreators({ saveToken });
-//   return { ...actions, dispatch };
-// };
 
 const loginForm = createForm()(Login);
 

@@ -73,6 +73,11 @@ class ApprovalMangement extends Component {
   componentDidMount() {
     this.initDate();
   }
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
   initDate(data) {
     let _this = this;
     _this.setState({
@@ -268,7 +273,7 @@ class ApprovalMangement extends Component {
     };
     return (
       <div className="own-listbox">
-        <Header title="审批管理" pointer />
+        <Header title={titleType} pointer />
         <List style={{ backgroundColor: 'white' }} className="date-picker-list">
           <DatePicker
             mode="date"

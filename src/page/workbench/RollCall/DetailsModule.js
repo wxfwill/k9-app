@@ -1,34 +1,22 @@
 import React, { Component } from 'react';
-import { withRouter, Link } from 'react-router-dom';
-import { List, Picker, WingBlank, Toast, Carousel, Modal } from 'antd-mobile';
-import Header from 'components/common/Header';
-import { createForm } from 'rc-form';
-require('style/common/common.less');
-
-const Item = List.Item;
-
-class RollCallDetails extends Component {
+import { Toast, WingBlank, Carousel, Modal } from 'antd-mobile';
+import { withRouter } from 'react-router-dom';
+require('./style.less');
+class DetailsModule extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasError: false,
-      value: '',
-      val: 1,
-      callInfo: null,
-      files: null,
-      disabled: true,
-      data: [],
+      callInfo: {},
       imgHeight: 376,
       modal1: false,
     };
-    this.timer = null;
   }
   componentDidMount() {
-    const currentId = util.urlParse(this.props.location.search).id;
+    const currentId = this.props.id;
     if (currentId) {
       React.$ajax.publish.rollCallInfo({ id: currentId }).then((res) => {
+        console.log(res, '================================');
         if (res && res.code == 0) {
-          console.log(res);
           this.setState({
             callInfo: res.data,
           });
@@ -39,13 +27,6 @@ class RollCallDetails extends Component {
       });
     }
   }
-  handleChange(type, date) {
-    this.setState({
-      [type]: date,
-    });
-  }
-  handleOk() {}
-
   showModal = (key) => (e) => {
     e.preventDefault(); // 修复 Android 上点击穿透
     this.setState({
@@ -57,7 +38,6 @@ class RollCallDetails extends Component {
       [key]: false,
     });
   };
-
   onWrapTouchStart = (e) => {
     if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
       return;
@@ -68,33 +48,34 @@ class RollCallDetails extends Component {
     // }
   };
   render() {
-    const { getFieldProps } = this.props.form;
-    let { files, callInfo, disabled } = this.state;
+    const { callInfo } = this.state;
     return (
-      <div className="own-listbox">
-        <Header title="点名详情" pointer="pointer" />
-        <div>
-          <List style={{ backgroundColor: 'white' }} className="date-picker-list">
-            <Item extra={callInfo ? callInfo.operatorName : '--'}>提交人</Item>
-            <Item>
-              图片
-              <div style={{ float: 'right', overflowX: 'auto' }}>
-                {callInfo && callInfo.photoNames.length > 0
-                  ? callInfo.photoNames.map((file, index) => (
-                      <img
-                        onClick={this.showModal('modal1')}
-                        key={index}
-                        src={`${config.apiUrl}/api/attendance/img?fileName=${file}`}
-                        style={{ height: '60px', width: '60px', marginRight: '8px' }}
-                      />
-                    ))
-                  : '--'}
-              </div>
-            </Item>
-            <Item extra={callInfo ? callInfo.content : '--'}>详情</Item>
-          </List>
+      <div>
+        <div className="infor-list">
+          <p>时间</p>
+          <div className="infor-cont">
+            <p>{callInfo.opTime ? util.formatDate(new Date(callInfo.opTime), 'yyyy-MM-dd hh:mm:ss') : '--'}</p>
+          </div>
         </div>
-
+        <div className="infor-list">
+          <p>照片</p>
+          <div className="infor-cont">
+            {callInfo.photoNames && callInfo.photoNames.length > 0 ? (
+              <img
+                src={`${config.apiUrl}/api/attendance/img?fileName=${callInfo.photoNames[0]}`}
+                onClick={this.showModal('modal1')}
+              />
+            ) : (
+              '--'
+            )}
+          </div>
+        </div>
+        <div className="infor-list">
+          <p>备注</p>
+          <div className="infor-cont">
+            <p>{callInfo.content ? callInfo.content : '--'}</p>
+          </div>
+        </div>
         <Modal
           visible={this.state.modal1}
           transparent
@@ -114,7 +95,7 @@ class RollCallDetails extends Component {
         >
           <WingBlank>
             <Carousel autoplay={false} infinite>
-              {callInfo &&
+              {callInfo.photoNames &&
                 callInfo.photoNames.map((file, index) => (
                   <a key={index} style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}>
                     <img
@@ -136,5 +117,4 @@ class RollCallDetails extends Component {
   }
 }
 
-const RollCallDetailsForm = createForm()(RollCallDetails);
-export default withRouter(RollCallDetailsForm);
+export default withRouter(DetailsModule);

@@ -8,6 +8,8 @@ import * as systomStatus from 'actions/systomStatus';
 import { saveSocketNewList } from 'store/actions/websocketAction';
 import { sendMessage } from 'components/common/websocket';
 
+import { quickData } from 'localData/other';
+
 const nowTimeStamp = Date.now();
 const now = new Date(nowTimeStamp);
 const Item = Popover.Item;
@@ -88,11 +90,12 @@ class Header extends Component {
     }
   }
   onSelect = (opt) => {
-    console.log(opt.props.value);
+    console.log(opt);
+    let { history } = this.props;
     this.setState({
       poverVisibe: false,
-      selected: opt.props.value,
     });
+    opt.props.link && history.push(`${opt.props.link}?titleType=${opt.props.value}`);
   };
   handleVisibleChange = (visible) => {
     console.log('visible');
@@ -166,37 +169,18 @@ class Header extends Component {
           <Popover
             mask={false}
             visible={this.state.poverVisibe}
-            overlay={[
-              <Item
-                key="1"
-                value="name"
-                icon={<img src={require('images/own/own-name.svg')} className="am-icon am-icon-xs" alt="" />}
-                data-seed="logId"
-              >
-                点名
-              </Item>,
-              <Item
-                key="2"
-                value="dogReport"
-                icon={<img src={require('images/own/own-dog.svg')} className="am-icon am-icon-xs" alt="" />}
-              >
-                犬病上报
-              </Item>,
-              <Item
-                key="3"
-                value="leaveApply"
-                icon={<img src={require('images/own/own-jia.svg')} className="am-icon am-icon-xs" alt="" />}
-              >
-                请假申请
-              </Item>,
-              <Item
-                key="4"
-                value="track"
-                icon={<img src={require('images/own/own-sou.svg')} className="am-icon am-icon-xs" alt="" />}
-              >
-                网格化搜捕
-              </Item>,
-            ]}
+            overlay={quickData.map((item, index) => {
+              return (
+                <Item
+                  key={index}
+                  value={item.title}
+                  link={item.link}
+                  icon={<img src={item.icon} className="am-icon am-icon-xs" alt="" />}
+                >
+                  {item.title}
+                </Item>
+              );
+            })}
             onSelect={this.onSelect}
             onVisibleChange={this.handleVisibleChange}
           >

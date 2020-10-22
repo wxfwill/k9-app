@@ -18,17 +18,7 @@ const ownPic = require('images/nav/self-icon.svg');
 const ownActivePic = require('images/nav/self-icon-active.svg');
 
 require('style/common/footer.less');
-const newMsgObj = {
-  1: { text: '请假审批', link: '/app/monitoring/leaveCheck' },
-  2: { text: '犬病治疗', link: '/app/dog/cure' },
-  3: { text: '训练任务', link: '/app/drill/pdogdrill' },
-  4: { text: '日常巡逻', link: '/app/monitoring/duty' },
-  5: { link: '/app/monitoring/deploy' },
-  6: { text: '网格搜捕', link: '/app/monitoring/grid' },
-  7: { text: '外出执勤', link: '/app/monitoring/duty' },
-  8: { text: '集合点', link: '' },
-  9: { text: '', link: '' },
-};
+
 class Footer extends Component {
   constructor(props) {
     super(props);
@@ -39,7 +29,7 @@ class Footer extends Component {
       flag = 'blueTab';
     } else if (this.props.history.location.pathname == '/check') {
       flag = 'redTab';
-    } else if (this.props.history.location.pathname == '/publish') {
+    } else if (this.props.history.location.pathname == '/workbench') {
       flag = 'greenTab';
     }
 
@@ -154,13 +144,13 @@ class Footer extends Component {
               icon={{ uri: releasePic }}
               selectedIcon={{ uri: releaseActivePic }}
               title="工作台"
-              key="publish"
+              key="workbench"
               selected={this.state.selectedTab === 'greenTab'}
               onPress={() => {
                 this.setState({
                   selectedTab: 'greenTab',
                 });
-                this.props.history.push('/publish');
+                this.props.history.push('/workbench');
               }}
             >
               {this.renderContent('工作台')}

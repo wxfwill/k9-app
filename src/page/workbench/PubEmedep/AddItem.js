@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import { List, Icon, Tabs, DatePicker, PickerView, Modal, InputItem, TextareaItem, Picker, Toast } from 'antd-mobile';
-import Reflux from 'reflux';
+import { List, Icon, DatePicker, PickerView, Modal, InputItem, TextareaItem, Picker, Toast, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
-import { withRouter, Link } from 'react-router-dom';
-import moment from 'moment';
+import { withRouter } from 'react-router-dom';
 import Header from 'components/common/Header';
-import Choose from 'components/common/CheckBox';
+import PeopleBox from 'components/common/CheckBox';
 import PubAggMap from './PubEmedepMap';
 
-require('style/publish/pubEmedep.less');
+require('style/publish/public.less');
+require('components/common/CheckBox/style.less');
 
 const Item = List.Item;
 const alert = Modal.alert;
@@ -41,6 +40,7 @@ class AddComponent extends Component {
       combatTypeArr: [[{ label: '请选择', value: '' }]],
       pubEmedepInfo: null,
       chooseMembArr: [],
+      PeopleBoxShow: false,
     };
     this.combatTypeObj = {};
     this.tempCombatTypeValue = [];
@@ -61,6 +61,7 @@ class AddComponent extends Component {
       chooseMembArr: data,
       members: valArr.join(),
       userIds: idArr.join(),
+      PeopleBoxShow: false,
     });
   };
   choosePoint = () => {
@@ -73,6 +74,11 @@ class AddComponent extends Component {
       modalShow: !prevState.modalShow,
     }));
   };
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
   requestAllMembers = (backCall) => {
     React.$ajax.publish.getCombatStaff().then((result) => {
       if (result && result.code == 0) {
@@ -201,7 +207,7 @@ class AddComponent extends Component {
       return false;
     }
     this.isRequest = true;
-    data.startDateStr = moment(data.startDateStr).format('YYYY-MM-DD');
+    data.startDateStr = util.formatDate(new Date(data.startDateStr), 'yyyy-MM-dd');
     data.userIds = userIds;
     data.location = location;
     data.drawShapeDTO = {
@@ -319,6 +325,12 @@ class AddComponent extends Component {
       });
   };
 
+  showModal = () => {
+    this.setState({
+      PeopleBoxShow: true,
+    });
+  };
+
   render() {
     const { getFieldProps, getFieldDecorator, getFieldError } = this.props.form;
     const {
@@ -343,132 +355,120 @@ class AddComponent extends Component {
     const title = titleType[this.titleType] ? titleType[this.titleType] : titleType.add;
     let errors;
     return (
-      <div className="add-content">
-        <Header title={title} pointer noColor />
-        <div className="list-box">
-          <List className="list">
-            <DatePicker
-              {...getFieldProps('startDateStr', {
-                initialValue: startDateStr,
-                rules: [{ required: true, message: '选择日期不能为空！' }],
-              })}
-              mode="date"
-              disabled={disabled}
-              title="请选择日期"
-              value={startDateStr}
-              onOk={this.handleOk.bind(this)}
-              onChange={this.handleChange.bind(this)}
-            >
-              <Item arrow="horizontal">
-                <i className="tips">*</i>选择日期
-              </Item>
-            </DatePicker>
-          </List>
-          <List className="list">
-            <InputItem
-              {...getFieldProps('taskName', {
-                initialValue: taskName,
-                rules: [{ required: true, message: '任务名称不能为空！' }],
-              })}
-              clear
-              disabled={disabled}
-              placeholder="请输入任务名称"
-            >
-              <i className="tips">*</i>任务名称
-            </InputItem>
-          </List>
-          <div className={`list pointer-list ${disabled ? 'list-disable' : ''}`}>
-            <div className="name">
-              <i className="tips">*</i>作战区域
-            </div>
-            <div className="cont">{location ? location : ''}</div>
-            <div className="icon" onClick={() => this.choosePoint()}>
-              {disabled ? '查看' : '添加'}
+      <div className="layer-main">
+        <div className="parent-container">
+          <Header title={title} pointer="pointer"></Header>
+          <div className="child-container">
+            <div className="components">
+              <div className="form-main">
+                <List className="list">
+                  <p className="title">任务名称</p>
+                  <InputItem
+                    {...getFieldProps('taskName', {
+                      initialValue: taskName,
+                      rules: [{ required: true, message: '任务名称不能为空！' }],
+                    })}
+                    clear
+                    disabled={disabled}
+                    placeholder="请输入任务名称"
+                  ></InputItem>
+                </List>
+                <List className="list">
+                  <p className="title">选择日期</p>
+                  <DatePicker
+                    {...getFieldProps('startDateStr', {
+                      initialValue: startDateStr,
+                      rules: [{ required: true, message: '选择日期不能为空！' }],
+                    })}
+                    mode="date"
+                    disabled={disabled}
+                    title="请选择日期"
+                    value={startDateStr}
+                    onOk={this.handleOk.bind(this)}
+                    onChange={this.handleChange.bind(this)}
+                  >
+                    <Item arrow="horizontal"></Item>
+                  </DatePicker>
+                </List>
+                <List className="list">
+                  <p className="title">作战区域</p>
+                  <div className="input-item" onClick={this.choosePoint}>
+                    <div className="value-box">{location ? <p>{location}</p> : <span>请选择作战区域</span>}</div>
+                    <Icon type="right" />
+                  </div>
+                </List>
+                <List className="list">
+                  <p className="title">作战类型</p>
+                  <div className="input-item" onClick={this.chooseType}>
+                    <div className="value-box">
+                      {combatTypeName ? <p>{combatTypeName}</p> : <span>请选择作战类型</span>}
+                    </div>
+                    <Icon type="right" />
+                  </div>
+                </List>
+                <List className="list">
+                  <p className="title">作战人员</p>
+                  <div className="input-item" onClick={this.showModal}>
+                    <div className="value-box">
+                      {this.state.members && this.state.members.length > 0 ? (
+                        <p>{this.state.members}</p>
+                      ) : (
+                        <span>请选择巡逻人员</span>
+                      )}
+                    </div>
+                    <Icon type="right" />
+                  </div>
+                </List>
+                {this.state.members && this.state.members.length > 0 ? (
+                  <List className="list">
+                    <p className="title">上报人员</p>
+                    <Picker
+                      data={reportArr}
+                      placeholder="请选择上报人员"
+                      cols={1}
+                      value={[reportUserId]}
+                      onOk={(value) => this.changePeo(value)}
+                    >
+                      <List.Item arrow="horizontal"></List.Item>
+                    </Picker>
+                  </List>
+                ) : null}
+                <List className="list">
+                  <p className="title">作战内容</p>
+                  <TextareaItem
+                    {...getFieldProps('taskContent', {
+                      initialValue: taskContent,
+                      rules: [{ required: true, message: '作战内容不能为空！' }],
+                    })}
+                    disabled={disabled}
+                    clear
+                    placeholder="作战内容"
+                    data-seed="logId"
+                    autoHeight
+                    rows={2}
+                  />
+                </List>
+                <List className="list list-button">
+                  <Button type="primary" onClick={this.handleSubmit.bind(this)}>
+                    发布
+                  </Button>
+                </List>
+              </div>
             </div>
           </div>
-          <div className={`list pointer-list ${disabled ? 'list-disable' : ''}`}>
-            <div className="name">
-              <i className="tips">*</i>作战类型
-            </div>
-            <div className="cont">{combatTypeName ? combatTypeName : ''}</div>
-            {disabled ? (
-              ''
-            ) : (
-              <div className="icon" onClick={() => this.chooseType()}>
-                选择
-              </div>
-            )}
-          </div>
-          <Choose
-            title="作战人员"
-            initTip=""
-            disabled={disabled}
-            useDefaultDom={true}
-            searchTip="请输入查询内容"
-            clickOk={(data) => this.clickOk(data)}
-            dataList={allMembers}
-            showValue={members}
-          />
-          {!disabled ? (
-            <List className="list">
-              <Picker
-                data={reportArr}
-                placeholder="请选择上报人员"
-                cols={1}
-                className="forss"
-                value={[reportUserId]}
-                onOk={(value) => this.changePeo(value)}
-              >
-                <List.Item arrow="horizontal">
-                  <i className="tips">*</i>上报人员
-                </List.Item>
-              </Picker>
-            </List>
-          ) : (
-            <div className="list pointer-list list-disable">
-              <div className="name">
-                <i className="tips">*</i>上报人员
-              </div>
-              <div className="cont">{reportUserName ? reportUserName : '----'}</div>
-            </div>
-          )}
-          <List className="list">
-            <TextareaItem
-              {...getFieldProps('taskContent', {
-                initialValue: taskContent,
-                rules: [{ required: true, message: '作战内容不能为空！' }],
-              })}
-              title={
-                <span>
-                  <i className="tips">*</i>作战内容
-                </span>
-              }
-              disabled={disabled}
-              clear
-              placeholder="作战内容"
-              data-seed="logId"
-              autoHeight
-            />
-          </List>
         </div>
-        {!disabled ? (
-          <div className="btn-box">
-            <button className="clear" onClick={() => this.clearAll()} style={{ display: 'none' }}>
-              清空
-            </button>
-            <button className="publish" onClick={() => this.handleSubmit()}>
-              发布
-            </button>
-          </div>
-        ) : null}
+        {/* 人员列表 */}
+        <PeopleBox
+          searchTip="请输入查询内容"
+          title="作战人员"
+          modalShow={this.state.PeopleBoxShow}
+          clickOk={(data) => this.clickOk(data)}
+          useDefaultDom={true}
+          dataList={allMembers}
+          showValue={members}
+        />
 
-        {disabled && taskStatus < 2 ? (
-          <div className="btn-box only-btn">
-            <button className="stop" onClick={this.showStop}>
-              终止任务
-            </button>
-          </div>
-        ) : null}
+        {/* 地图 */}
         {this.state.isMap ? (
           <PubAggMap
             isMap={this.state.isMap}
@@ -479,23 +479,28 @@ class AddComponent extends Component {
             disabled={disabled}
           />
         ) : null}
+        {/* 作战类型列表 */}
         <Modal popup visible={modalShow} animationType="slide-up">
-          <div className="pick-view-btn">
-            <span className="cancel" onClick={() => this.combatCancel()}>
-              取消
-            </span>
-            <span className="sure" onClick={() => this.combatOk()}>
-              确定
-            </span>
-            <div>请选择作战类型</div>
+          <div className="check-box">
+            <div className="header">
+              <span className="cancel" onClick={this.combatCancel.bind(this)}>
+                取消
+              </span>
+              <p className="title">请选择作战类型</p>
+              <span className="confirm" onClick={this.combatOk.bind(this)}>
+                确定
+              </span>
+            </div>
+            <div className="main">
+              <PickerView
+                cols={1}
+                onChange={this.combatTypeChange}
+                value={combatType}
+                data={combatTypeArr}
+                cascade={false}
+              />
+            </div>
           </div>
-          <PickerView
-            cols={1}
-            onChange={this.combatTypeChange}
-            value={combatType}
-            data={combatTypeArr}
-            cascade={false}
-          />
         </Modal>
       </div>
     );
