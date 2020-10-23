@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="41px" viewBox="0 0 40 41" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>结束</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="2-地图-团队任务-进行中" transform="translate(-355.000000, -1073.000000)" fill="#FFFFFF">
+            <g id="按钮组" transform="translate(71.000000, 1034.000000)">
+                <g id="结束按钮" transform="translate(224.000000, 0.000000)">
+                    <g id="编组-9" transform="translate(60.000000, 39.500000)">
+                        <path d="M34,31.7 C34,33.2458507 32.7458507,34.5 31.2,34.5 L8.80041792,34.5 C7.25414405,34.4995388 6.00069196,33.2462737 6,31.7 L6,9.30041792 C6.00046135,7.75398094 7.25398095,6.50046135 8.80041792,6.5 L31.2,6.5 C32.7458508,6.5 34,7.75414928 34,9.30041792 L34,31.7 Z" id="路径"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Modal, List, Button, WhiteSpace, WingBlank, Icon, Stepper } from 'antd-mobile';
+
+import ButtonComponent from 'components/mapPage/buttonComponent.js';
+
 require('style/mapPage/style.less');
 function closest(el, selector) {
   const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
@@ -65,6 +68,9 @@ class CreateTask extends Component {
           }}
           className="mapPage"
         >
+          <ButtonComponent middleColor="gray" />
+          <ButtonComponent middleColor="red" />
+          <ButtonComponent />
           <div className="mapage-layer">
             <div className="mapege-box">
               <div className="stepper-box">
