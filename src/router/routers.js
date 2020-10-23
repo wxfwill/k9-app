@@ -14,7 +14,7 @@ const UpdatePwd = (props) => (
   <Bundle load={() => import('page/other/UpdatePwd/index')}>{(UpdatePwd) => <UpdatePwd {...props} />}</Bundle>
 );
 
-// ===工作台相关===
+// ***************工作台相关   start  *****************
 const Publish = (props) => <Bundle load={() => import('page/workbench')}>{(Publish) => <Publish {...props} />}</Bundle>;
 // 网格化搜索
 const PublishGridSearch = (props) => (
@@ -99,8 +99,9 @@ const PublishDogReport = (props) => (
     {(PublishDogReport) => <PublishDogReport {...props} />}
   </Bundle>
 );
+// ***************工作台相关   end  *****************
 
-//****我的****
+// ***************我的   start  *****************
 const Own = (props) => <Bundle load={() => import('page/own/Own')}>{(Own) => <Own {...props} />}</Bundle>;
 // 我的任务
 const OwnTask = (props) => (
@@ -113,6 +114,10 @@ const TailView = (props) => (
 // 点名
 const OwnCallList = (props) => (
   <Bundle load={() => import('page/own/Call/List')}>{(OwnCallList) => <OwnCallList {...props} />}</Bundle>
+);
+// 点名详情
+const OwnCallDetails = (props) => (
+  <Bundle load={() => import('page/own/Call/CallDetails')}>{(OwnCallDetails) => <OwnCallDetails {...props} />}</Bundle>
 );
 // 审批管理
 const OwnApproval = (props) => (
@@ -134,6 +139,12 @@ const OwnLeaveListDetails = (props) => (
     {(OwnLeaveListDetails) => <OwnLeaveListDetails {...props} />}
   </Bundle>
 );
+
+/**犬病上报列表 */
+const DogManage = (props) => (
+  <Bundle load={() => import('components/own/DogManage/index.js')}>{(DogManage) => <DogManage {...props} />}</Bundle>
+);
+// ***************我的   end   *****************
 
 const PubRoundDetails = (props) => (
   <Bundle load={() => import('containers/publish/PubRound/PubRoundDetails')}>
@@ -231,13 +242,11 @@ const OwnGridSearchMap = (props) => (
   </Bundle>
 );
 const Fight = (props) => <Bundle load={() => import('containers/fight')}>{(Fight) => <Fight {...props} />}</Bundle>;
+
 const Check = (props) => <Bundle load={() => import('page/mapPage')}>{(Check) => <Check {...props} />}</Bundle>;
 
 const Test = (props) => <Bundle load={() => import('components/test')}>{(Test) => <Test {...props} />}</Bundle>;
-/**警犬管理 */
-const DogManage = (props) => (
-  <Bundle load={() => import('components/own/DogManage/index.js')}>{(DogManage) => <DogManage {...props} />}</Bundle>
-);
+
 /**警犬监控 */
 const DogMonitor = (props) => (
   <Bundle load={() => import('components/own/DogMonitor/index')}>{(DogMonitor) => <DogMonitor {...props} />}</Bundle>
@@ -297,9 +306,6 @@ const Call = (props) => <Bundle load={() => import('components/own/Call')}>{(Cal
 const AddCall = (props) => (
   <Bundle load={() => import('components/own/Call/AddCall')}>{(AddCall) => <AddCall {...props} />}</Bundle>
 );
-const CallDetails = (props) => (
-  <Bundle load={() => import('components/own/Call/CallDetails')}>{(CallDetails) => <CallDetails {...props} />}</Bundle>
-);
 
 /**密码修改 */
 // const UpdatePwd = (props) => (
@@ -353,6 +359,7 @@ const MapTaskDetal = (props) => (
 );
 
 import NotFound from 'components/NotFound';
+
 export const routes = [
   {
     path: '/',
@@ -466,6 +473,10 @@ export const routes = [
   {
     path: '/own/callList',
     component: OwnCallList,
+  },
+  {
+    path: '/own/OwnCallDetails',
+    component: OwnCallDetails,
   },
   {
     path: '/own/OwnApproval',

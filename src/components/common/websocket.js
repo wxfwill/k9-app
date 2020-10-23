@@ -4,7 +4,7 @@ let websocket,
 import store from 'store/index';
 
 const user = store.getState().loginReducer.userInfo.user;
-let url = user && `${config.host}/ws/webSocket/${user.id}`;
+let url = user && `${config.ws}/ws/webSocket/${user.id}`;
 
 let createWebsocket = () => {
   if (!url) return;

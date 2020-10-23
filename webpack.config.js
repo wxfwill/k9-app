@@ -3,13 +3,14 @@ const path = require('path');
 const webpack = require('webpack');
 const commonSet = require('./webpack.common.js');
 // var OpenBrowserPlugin = require("open-browser-webpack-plugin");
-const { address } = require('./config.js');
+const { apiUrl } = require('./config.js');
+
 const config = {
   entry: ['babel-polyfill', 'react-hot-loader/patch', './src/app.js'],
   output: {
     filename: 'assets/js/[name].js',
     path: path.resolve(__dirname, './dist'),
-    // publicPath: '/k9-app/',
+    publicPath: '/k9-app/',
   },
   devtool: commonSet.devtool, //定位错位位置
   devServer: {
@@ -21,10 +22,13 @@ const config = {
     // stats: "errors-only",
     open: true,
     host: '127.0.0.1',
-    // historyApiFallback: true,  // 默认404页面跳转index.html
+    // historyApiFallback: true, // 默认404页面跳转index.html
+    historyApiFallback: {
+      index: '/k9-app/',
+    },
     proxy: {
       '/api/*': {
-        target: address.domains + '/',
+        target: apiUrl + '/',
         changeOrigin: true,
         secure: true,
       },

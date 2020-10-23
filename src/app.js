@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Router from 'router/index';
-process.env.NODE_ENV == 'development' && require('mock/mockData.js');
 import 'lib-flexible/flexible.js';
 
 // redux

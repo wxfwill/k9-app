@@ -96,7 +96,7 @@ class RollCallListForm extends Component {
   handleNoNews = (item) => {
     console.log(item);
     const { history } = this.props;
-    history.push(`/publish/rollCallDetails?id=${item.id}`);
+    history.push(`/own/OwnCallDetails?id=${item.id}`);
   };
   renderRow = (rowData) => {
     if (!rowData) {

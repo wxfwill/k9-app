@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { routes } from './routers';
 import { connect } from 'react-redux';
 // 路由配置
@@ -15,7 +15,7 @@ class Router extends Component {
   render() {
     let token = this.props.token;
     return (
-      <HashRouter basename="/k9-app">
+      <BrowserRouter basename="/k9-app">
         <div className="app">
           <Switch>
             {routes.map((item, index) => {
@@ -36,7 +36,7 @@ class Router extends Component {
             })}
           </Switch>
         </div>
-      </HashRouter>
+      </BrowserRouter>
     );
   }
 }
