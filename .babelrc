@@ -5,7 +5,7 @@
     "es2015",
     "stage-0"
   ],
-  "plugins": ["react-hot-loader/babel", "transform-runtime","lodash", ["import", {
+  "plugins": ["transform-remove-console", "react-hot-loader/babel", "transform-runtime","lodash", ["import", {
   		"libraryName": "antd-mobile",
   		"style": true
 	}]]

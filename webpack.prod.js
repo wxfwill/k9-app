@@ -1,6 +1,5 @@
 //生产环境配置
 const webpack = require('webpack');
-// const fs = require('fs');
 const path = require('path');
 const merge = require('webpack-merge');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
@@ -16,16 +15,22 @@ module.exports = merge(common, {
     publicPath: '/k9-app/',
   },
   plugins: [
-    new UglifyJSPlugin({
-      //sourceMap:true
-    }),
+    // new UglifyJSPlugin({
+    //   uglifyOptions: {
+    //     compress: {
+    //       drop_console: true, //console
+    //       drop_debugger: true,
+    //       pure_funcs: ['console.log'], //移除console
+    //     },
+    //   },
+    // }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common', //指定公共bundle的名称。
     }),
     // new webpack.optimize.CommonsChunkPlugin({
     //   name:'vendor'//指定公共bundle的名称。
     // }),
-    // new CleanWebpackPlugin(["dist"]),
+    new CleanWebpackPlugin(['dist']),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"', //node提供的常量api
