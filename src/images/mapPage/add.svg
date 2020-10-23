@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>添加</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="2-地图-团队任务-进行中-查看队员" transform="translate(-291.000000, -1059.000000)">
+            <g id="编组-9" transform="translate(65.000000, 242.000000)">
+                <g id="编组-12" transform="translate(0.000000, 794.000000)">
+                    <g id="编组-11" transform="translate(226.000000, 22.000000)">
+                        <g id="添加" transform="translate(0.000000, 1.000000)">
+                            <rect id="矩形" fill="#D8D8D8" opacity="0" x="0" y="0" width="40" height="40"></rect>
+                            <path d="M22.5,8 L22.5,17.5 L32,17.5 L32,22.5 L22.5,22.5 L22.5,32 L17.5,32 L17.5,22.5 L8,22.5 L8,17.5 L17.5,17.5 L17.5,8 L22.5,8 Z" id="形状结合" fill="#81838C"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
