@@ -22,7 +22,7 @@ if (localStorage) {
 }
 
 require('style/login.less');
-const logoPic = require('images/icon_logo.png');
+const logoPic = require('images/icon-logo.png');
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -178,7 +178,9 @@ class Login extends Component {
   handlePass = (e) => {
     this.setState({ isRemeberPass: e.target.checked });
   };
-
+  handleForgetPass = () => {
+    Toast.info('请找管理员重置密码', 2);
+  };
   componentWillMount() {
     const remeberAccountVal = localStorage.getItem('remeberAccount');
     const remeberPassVal = localStorage.getItem('remeberPass');
@@ -238,7 +240,9 @@ class Login extends Component {
             />
           </InputItem>
           <Flex justify="end" className="forget_psw">
-            <div className="foget-text">忘记密码?</div>
+            <div className="foget-text" onClick={this.handleForgetPass.bind(this)}>
+              忘记密码?
+            </div>
           </Flex>
 
           <Button type="primary" size="small" onClick={this.handleSubmit.bind(this)} className="login-btn">
