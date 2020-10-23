@@ -3,6 +3,17 @@ import { Modal, WhiteSpace, WingBlank } from 'antd-mobile';
 import { withRouter } from 'react-router-dom';
 require('style/mapPage/personnel.less');
 
+function closest(el, selector) {
+  const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
+  while (el) {
+    if (matchesSelector.call(el, selector)) {
+      return el;
+    }
+    el = el.parentElement;
+  }
+  return null;
+}
+
 class TaskDetal extends Component {
   constructor(props) {
     super(props);
@@ -43,6 +54,7 @@ class TaskDetal extends Component {
           afterClose={() => {
             //alert('afterClose');
           }}
+          className="mapPage"
         >
           <div className="personnel-layer">
             <div className="per-head">

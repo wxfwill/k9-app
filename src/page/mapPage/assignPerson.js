@@ -3,6 +3,16 @@ import { Modal, WhiteSpace, WingBlank, SearchBar, Picker, List, Button } from 'a
 import { withRouter } from 'react-router-dom';
 import { createForm } from 'rc-form';
 require('style/mapPage/personnel.less');
+function closest(el, selector) {
+  const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
+  while (el) {
+    if (matchesSelector.call(el, selector)) {
+      return el;
+    }
+    el = el.parentElement;
+  }
+  return null;
+}
 
 const season = [
   {
@@ -146,6 +156,7 @@ class AssignPerson extends Component {
           afterClose={() => {
             //alert('afterClose');
           }}
+          className="mapPage"
         >
           <div className="personnel-layer">
             <div className="per-head">

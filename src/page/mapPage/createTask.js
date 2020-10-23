@@ -63,6 +63,7 @@ class CreateTask extends Component {
           afterClose={() => {
             console.log('afterClose');
           }}
+          className="mapPage"
         >
           <div className="mapage-layer">
             <div className="mapege-box">
