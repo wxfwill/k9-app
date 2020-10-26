@@ -80,7 +80,7 @@ class PublishComponent extends Component {
       <div className="Own work-wrap">
         <Header title="工作台" isSet="添加" handleShow={this.addShow.bind(this)} />
         <div className="own-task midder-content">
-          <div className="inner-content">
+          <div className="inner-content" style={{paddingTop:0}}>
             <Card full className="work-con mtp-24">
               <Card.Header title="发布任务"></Card.Header>
               <Card.Body>

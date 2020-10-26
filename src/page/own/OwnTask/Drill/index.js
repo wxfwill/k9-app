@@ -156,7 +156,13 @@ class Drill extends Component {
             </div>
           </Item>
           {
-            <div className="task-btn">
+            <div
+              className="task-btn"
+              onClick={() => {
+                // this.props.history.push(`/workbench/trainingDetail?id=${item.id}`);
+                this.props.history.push(`/workbench/trainingDetail?id=${JSON.stringify(item)}`);
+              }}
+            >
               <span className="task-txt">查看详情</span>
             </div>
           }

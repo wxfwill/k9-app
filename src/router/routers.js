@@ -34,6 +34,12 @@ const AddPubTraining = (props) => (
     {(AddPubTraining) => <AddPubTraining {...props} />}
   </Bundle>
 );
+// 训练计划详情
+const TrainingDetail = (props) => (
+  <Bundle load={() => import('page/workbench/PubTraining/TrainingDetail')}>
+    {(TrainingDetail) => <TrainingDetail {...props} />}
+  </Bundle>
+);
 // 紧急调配
 const AddEmedep = (props) => (
   <Bundle load={() => import('page/workbench/PubEmedep/AddItem')}>{(AddEmedep) => <AddEmedep {...props} />}</Bundle>
@@ -410,6 +416,10 @@ export const routes = [
   {
     path: '/workbench/training',
     component: AddPubTraining,
+  },
+  {
+    path: '/workbench/trainingDetail',
+    component: TrainingDetail,
   },
   {
     path: '/workbench/addEmedep',
