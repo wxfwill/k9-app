@@ -20,11 +20,11 @@ class TaskDetal extends Component {
           value: '张鑫、李成、谢伟峰',
         },
         {
-          label: '训练时间',
+          label: '执行时间',
           value: '2020-05-21 14:00',
         },
         {
-          label: '训练警犬',
+          label: '犬只',
           value: '小黑、小花、小虎',
         },
         {

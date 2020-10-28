@@ -136,6 +136,15 @@ export const getCombatStaff = (data) => {
   });
 };
 
+//查询中队列表
+export const getUserGroup = (data) => {
+  return axios({
+    url: '/api/basicData/userGroup',
+    method: 'post',
+    data,
+  });
+};
+
 //日常巡逻-终止任务
 export const stopPatrols = (data) => {
   return axios({
