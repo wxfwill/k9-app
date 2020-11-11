@@ -37,6 +37,16 @@ export const dogMange = [
     text: ' 犬病上报',
     link: '/workbench/dogReport',
   },
+  {
+    icon: require('images/publish/work.svg'),
+    text: '工作上报',
+    link: '/workbench/workAssessment',
+  },
+  {
+    icon: require('images/publish/self.svg'),
+    text: '自评上报',
+    link: '/workbench/selfAssessment',
+  },
 ];
 
 export const mertisMange = [
@@ -54,7 +64,7 @@ export const mertisMange = [
     icon: require('images/publish/vacation.svg'),
     text: '请假申请',
     link: '/workbench/vacation',
-  },
+  }
 ];
 
 export const otherMange = [

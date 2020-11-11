@@ -1,0 +1,285 @@
+.work-assessment {
+  width: 9.146667rem;
+  margin: 0 auto;
+  .am-accordion {
+    border: none;
+    .am-accordion-item {
+      margin-top: 0.373333rem;
+    }
+  }
+  .am-accordion-header {
+    height: 1.866667rem !important;
+    line-height: 1.866667rem !important;
+    background: #f6f6f6 !important;
+    border-radius: 0.16rem 0.16rem 0 0 !important;
+    border: none !important;
+    .arrow {
+      top: 0.75rem !important;
+    }
+    .time {
+      color: #2d2e31;
+      font-size: 0.48rem;
+      &::before {
+        content: '';
+        display: inline-block;
+        width: 0.64rem;
+        height: 0.64rem;
+        margin-right: 0.3rem;
+        vertical-align: middle;
+        background-size: 100% 100%;
+      }
+      &.morning::before {
+        background-image: url(../../../images/publish/morning.svg);
+      }
+      &.forenoon::before {
+        background-image: url(../../../images/publish/forenoon.svg);
+      }
+      &.afternoon::before {
+        background-image: url(../../../images/publish/afternoon.svg);
+      }
+      &.evening::before {
+        background-image: url(../../../images/publish/evening.svg);
+      }
+    }
+  }
+  .am-accordion-content-box {
+    background: #ffffff;
+    border-radius: 0 0 0.16rem 0.16rem;
+    border: 1px solid #eaeaea !important;
+    overflow: hidden;
+    .am-textarea-control textarea {
+      font-size: 0.453333rem;
+    }
+  }
+}
+
+.daily-details-components {
+  background-color: #f5f6f7 !important;
+  .daily-details {
+    width: 9.146667rem;
+    margin: 0 auto;
+    .am-wingblank.am-wingblank-lg {
+      margin-left: 0;
+      margin-right: 0;
+    }
+    .am-card {
+      border: none !important;
+      border-radius: 0.106667rem;
+    }
+    .am-card-body {
+      border-top: 1px solid #e6e6e6;
+      font-size: 0.453333rem;
+      height: 0.64rem;
+      color: #4b4c4f;
+      line-height: 0.64rem;
+    }
+    .am-card-header-content {
+      height: 0.533333rem;
+      font-size: 0.373333rem;
+      color: #81838c;
+      line-height: 0.533333rem;
+    }
+  }
+}
+
+.ranking-list {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .top {
+    width: 100%;
+    height: 4.426667rem;
+    background-image: url(../../../images/publish/ranking-list.svg);
+    background-size: 100% 100%;
+    position: relative;
+    .return {
+      position: absolute;
+      left: 0.1rem;
+      top: 0.88rem;
+      color: #fff;
+      width: 0.8rem;
+      height: 0.8rem;
+    }
+    .text {
+      color: #ffffff;
+      position: absolute;
+      top: 1.02rem;
+      left: 1rem;
+      > span {
+        font-size: 0.4rem;
+      }
+      > p {
+        height: 1.2rem;
+        font-size: 0.853333rem;
+        font-weight: bold;
+        line-height: 1.2rem;
+      }
+      .date-box {
+        position: relative;
+        width: 2.506667rem;
+        height: 0.746667rem;
+        background: #4a75be;
+        border-radius: 0.053333rem;
+        overflow: hidden;
+        margin-top: 0.2rem;
+        > p {
+          font-size: 0.32rem;
+          font-weight: 400;
+          color: #ffffff;
+          height: 0.746667rem;
+          line-height: 0.746667rem;
+          position: absolute;
+          left: 0.133333rem;
+          top: 0;
+        }
+        .am-icon {
+          position: absolute;
+          right: 0.1rem;
+          top: 0.22rem;
+          width: 0.32rem !important;
+          height: 0.32rem !important;
+        }
+        .am-list-item {
+          position: absolute;
+          left: 0;
+          top: 0;
+          opacity: 0;
+          z-index: 2;
+        }
+      }
+    }
+  }
+  .content {
+    flex: 1;
+    background-color: #fff;
+    margin-top: -0.373333rem;
+    border-radius: 0.48rem 0.48rem 0 0;
+    position: relative;
+    z-index: 2;
+    .tab {
+      border-bottom: 1px solid #e5e5e5;
+      ul {
+        display: flex;
+        li {
+          font-size: 0.426667rem;
+          color: #adb0bc;
+          height: 1.333333rem;
+          line-height: 1.333333rem;
+          text-align: center;
+        }
+      }
+    }
+    .my-list,
+    ul {
+      width: 8.96rem;
+      margin: 0 auto;
+    }
+    .my-list {
+      .am-list-body {
+        border-top: none;
+        border-color: #e5e5e5;
+      }
+      .am-list-item {
+        padding-left: 0;
+        .am-list-line {
+          padding-right: 0;
+          border-color: #e5e5e5;
+          .am-list-extra {
+            flex-basis: 100%;
+            text-align: center;
+            padding-top: 0.7rem;
+            padding-bottom: 0.7rem;
+            ul {
+              display: flex;
+              li {
+                font-size: 0.426667rem;
+                color: #4b4c4f;
+              }
+            }
+          }
+        }
+      }
+    }
+    .w15 {
+      width: 15%;
+    }
+    .w20 {
+      width: 20%;
+    }
+    .w30 {
+      width: 30%;
+    }
+  }
+}
+
+.daily-workReport {
+  background-color: #f5f6f7 !important;
+  .list-box {
+    width: 9.146667rem;
+    margin: 0 auto;
+    .am-list {
+      margin-top: 0.32rem;
+      .am-list-body {
+        border: none !important;
+        border-radius: 0.16rem;
+        .list-main {
+          padding: 0.333333rem 0.32rem;
+          box-sizing: border-box;
+          display: flex;
+          img {
+            width: 0.64rem;
+            height: 0.64rem;
+          }
+          .list-right {
+            flex: 1;
+            margin-left: 0.32rem;
+            .name {
+              b {
+                font-size: 0.48rem;
+                color: #2d2e31;
+              }
+              span {
+                font-size: 0.426667rem;
+                color: #4b4c4f;
+                margin-left: 0.32rem;
+              }
+            }
+            .time-quantum {
+              display: flex;
+              justify-content: space-between;
+              color: #4b4c4f;
+              font-size: 0.426667rem;
+              margin-top: 0.373333rem;
+              height: 0.426667rem;
+              line-height: 0.426667rem;
+              img {
+                width: 0.426667rem;
+                height: 0.426667rem;
+                vertical-align: middle;
+                margin-right: 0.1rem;
+              }
+            }
+          }
+        }
+        .list-foot {
+          display: flex;
+          justify-content: space-between;
+          font-size: 0.373333rem;
+          padding: 0.266667rem 0.32rem;
+          border-top: 1px solid #e6e6e6;
+          box-sizing: border-box;
+          span {
+            color: #81838c;
+          }
+          p {
+            color: #adb0bc;
+            .am-icon {
+              vertical-align: middle;
+            }
+          }
+        }
+      }
+    }
+  }
+}

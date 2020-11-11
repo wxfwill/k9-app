@@ -28,6 +28,12 @@ const AddPubRound = (props) => (
     {(AddPubRound) => <AddPubRound {...props} />}
   </Bundle>
 );
+// 日常巡逻详情
+const PubRoundDetails = (props) => (
+  <Bundle load={() => import('containers/publish/PubRound/PubRoundDetails')}>
+    {(PubRoundDetails) => <PubRoundDetails {...props} />}
+  </Bundle>
+);
 // 训练计划
 const AddPubTraining = (props) => (
   <Bundle load={() => import('page/workbench/PubTraining/AddPubTraining')}>
@@ -99,6 +105,36 @@ const PublishLeaveDetails = (props) => (
     {(PublishLeaveDetails) => <PublishLeaveDetails {...props} />}
   </Bundle>
 );
+// 工作上报
+const PublishWorkAssessment = (props) => (
+  <Bundle load={() => import('page/workbench/WorkAssessment')}>
+    {(PublishWorkAssessment) => <PublishWorkAssessment {...props} />}
+  </Bundle>
+);
+// 工作日报
+const PublishDailyWorkReport = (props) => (
+  <Bundle load={() => import('page/workbench/WorkAssessment/DailyWorkReport')}>
+    {(PublishDailyWorkReport) => <PublishDailyWorkReport {...props} />}
+  </Bundle>
+);
+// 工作日报详情
+const PublishDailyDetails = (props) => (
+  <Bundle load={() => import('page/workbench/WorkAssessment/DailyDetails')}>
+    {(PublishDailyDetails) => <PublishDailyDetails {...props} />}
+  </Bundle>
+);
+// 报备排行榜
+const PublishRankingList = (props) => (
+  <Bundle load={() => import('page/workbench/WorkAssessment/rankingList')}>
+    {(PublishRankingList) => <PublishRankingList {...props} />}
+  </Bundle>
+);
+// 自评上报
+const PublishSelfAssessment = (props) => (
+  <Bundle load={() => import('page/workbench/SelfAssessment')}>
+    {(PublishSelfAssessment) => <PublishSelfAssessment {...props} />}
+  </Bundle>
+);
 // 犬病上报
 const PublishDogReport = (props) => (
   <Bundle load={() => import('page/workbench/DogReport')}>
@@ -151,12 +187,6 @@ const DogManage = (props) => (
   <Bundle load={() => import('components/own/DogManage/index.js')}>{(DogManage) => <DogManage {...props} />}</Bundle>
 );
 // ***************我的   end   *****************
-
-const PubRoundDetails = (props) => (
-  <Bundle load={() => import('containers/publish/PubRound/PubRoundDetails')}>
-    {(PubRoundDetails) => <PubRoundDetails {...props} />}
-  </Bundle>
-);
 
 const PubEmedepDetails = (props) => (
   <Bundle load={() => import('containers/publish/PubEmedep/PubEmedepDetails')}>
@@ -414,6 +444,10 @@ export const routes = [
     component: AddPubRound,
   },
   {
+    path: '/workbench/roundDetail',
+    component: PubRoundDetails,
+  },
+  {
     path: '/workbench/training',
     component: AddPubTraining,
   },
@@ -458,6 +492,26 @@ export const routes = [
   {
     path: '/workbench/vacation',
     component: PublishVacation,
+  },
+  {
+    path: '/workbench/workAssessment',
+    component: PublishWorkAssessment,
+  },
+  {
+    path: '/workbench/dailyWorkReport',
+    component: PublishDailyWorkReport,
+  },
+  {
+    path: '/workbench/dailyDetails',
+    component: PublishDailyDetails,
+  },
+  {
+    path: '/workbench/rankingList',
+    component: PublishRankingList,
+  },
+  {
+    path: '/workbench/selfAssessment',
+    component: PublishSelfAssessment,
   },
   {
     path: '/workbench/leaveList',

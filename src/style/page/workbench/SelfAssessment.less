@@ -1,0 +1,195 @@
+.self-assessment {
+  width: 9.146667rem;
+  margin: 0 auto;
+  .am-list {
+    .am-list-body {
+      border: none !important;
+      .am-list-item {
+        background: #f6f6f6;
+        border-radius: 0.16rem;
+        padding-left: 0;
+        padding: 0.6rem 0.32rem;
+        box-sizing: border-box;
+        margin-top: 0.426667rem;
+        .am-list-line {
+          border: none !important;
+          padding-right: 0;
+          .am-list-content {
+            font-size: 0.453333rem;
+            color: #2d2e31;
+          }
+          .am-list-extra {
+            font-size: 0.453333rem;
+            color: #527ad9;
+          }
+          .am-list-arrow {
+            width: 0.32rem !important;
+            height: 0.32rem !important;
+            vertical-align: middle !important;
+            color: #adb0bc;
+          }
+        }
+      }
+    }
+  }
+  .card-list {
+    padding: 0.426667rem 0;
+    .am-card {
+      margin-top: 0.426667rem;
+      border: none !important;
+      border-radius: 0.106667rem;
+      padding-bottom: 0.32rem;
+      &:first-child {
+        margin-top: 0;
+      }
+      .am-card-header {
+        padding: 0 0.32rem !important;
+        height: 1.066667rem;
+        line-height: 1.066667rem;
+        .card-title {
+          display: flex;
+          justify-content: space-between;
+          > p {
+            width: 2.72rem;
+          }
+          .am-list-item.am-input-item {
+            height: 1.066667rem;
+            padding-left: 0;
+            flex: 1;
+            .am-list-line {
+              border: none !important;
+              padding-right: 0;
+              .am-input-control input {
+                font-size: 0.453333rem;
+                height: 1.066667rem;
+                line-height: 1.066667rem;
+              }
+            }
+          }
+        }
+        .am-card-header-content {
+          color: #2d2e31;
+          font-size: 0.453333rem;
+        }
+        .am-card-header-extra {
+          font-size: 0.453333rem;
+          color: #81838c;
+        }
+      }
+      .am-card-body {
+        border-color: #e6e6e6;
+        .score-box {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          height: 1.333333rem;
+          > span {
+            width: 0.906667rem;
+            color: #4b4c4f;
+            font-size: 0.453333rem;
+          }
+          .am-slider-wrapper {
+            flex: 1;
+            .am-slider {
+              margin-left: 0.4rem !important;
+              margin-right: 0.4rem !important;
+            }
+          }
+          .score {
+            font-size: 0.453333rem;
+            color: #2d2e31;
+            width: 1.733333rem;
+            height: 0.96rem;
+            line-height: 0.96rem;
+            background: #ffffff;
+            border-radius: 0.053333rem;
+            border: 1px solid #c1c4cc;
+            text-align: center;
+          }
+        }
+      }
+      .am-card-footer {
+        .am-textarea-item {
+          background: #f9f9f9;
+          border-radius: 0.106667rem;
+          border: 1px solid #f6f6f6;
+          textarea {
+            font-size: 0.373333rem !important;
+            line-height: 0.533333rem;
+          }
+        }
+      }
+    }
+  }
+  .add-cause-btn {
+    padding-bottom: 0.426667rem;
+    .am-button {
+      height: 1.333333rem;
+      line-height: 1.333333rem;
+      border-radius: 0.16rem;
+      border: none;
+      color: #2d2e31;
+      font-size: 0.453333rem;
+      b {
+        color: #adb0bc;
+        font-size: 0.6rem;
+      }
+    }
+  }
+}
+
+.SelfAssessment-Modal {
+  max-height: 100vh !important;
+  overflow: hidden;
+  .am-modal-content,
+  .am-modal-body,
+  .am-list {
+    max-height: 100vh !important;
+    overflow: hidden;
+  }
+  .am-modal-content {
+    .am-list {
+      display: flex !important;
+      flex-direction: column;
+      .am-list-header {
+        color: #2a2d37;
+        font-size: 0.48rem;
+        height: 1.173333rem;
+        line-height: 1.173333rem;
+        padding: 0;
+        background-color: #fff;
+        position: relative;
+        .am-icon {
+          position: absolute;
+          left: 0.24rem;
+          top: 0.35rem;
+        }
+      }
+      .am-list-body {
+        background-color: #f5f6f7;
+        border: none !important;
+        flex: 1;
+        overflow: auto;
+      }
+    }
+  }
+}
+
+.SelfAssessment-Popover {
+  .am-popover-content {
+    width: 6.6rem !important;
+  }
+  .am-popover-inner {
+    box-shadow: 0 0.026667rem 0.213333rem 0 rgba(0, 0, 0, 0.11);
+    padding: 0.48rem;
+    position: relative;
+    .detail-box {
+      font-size: 0.373333rem;
+      color: #4b4c4f;
+      line-height: 0.6rem;
+      .title {
+        color: #81838c;
+      }
+    }
+  }
+}
