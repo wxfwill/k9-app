@@ -288,3 +288,30 @@ export const trainSaveInfo = (data) => {
     data,
   });
 };
+
+// 自评上报-获取4W报备统计信息
+export const getFourWReportStatistics = (data) => {
+  return axios({
+    url: '/api/performanceAssessment/getFourWReportStatistics',
+    method: 'post',
+    data,
+  });
+};
+
+//自评上报-获取考勤统计信息
+export const getAttendanceStatistics = (data) => {
+  return axios({
+    url: '/api/performanceAssessment/getAttendanceStatistics',
+    method: 'post',
+    data,
+  });
+};
+
+//自评上报-新增
+export const saveSelfEvaluation = (data) => {
+  return axios({
+    url: '/api/performanceAssessment/saveSelfEvaluation',
+    method: 'post',
+    data,
+  });
+};

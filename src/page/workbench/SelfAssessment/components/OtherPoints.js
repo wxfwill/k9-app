@@ -1,6 +1,6 @@
 // 价值观考核得分
 import React, { Component } from 'react';
-import { Button, Icon, List, Modal, Card, Slider, InputItem } from 'antd-mobile';
+import { Button, Icon, List, Modal, Card, Slider, InputItem, Toast } from 'antd-mobile';
 import { createForm } from 'rc-form';
 
 function closest(el, selector) {
@@ -48,7 +48,7 @@ class OtherPoints extends Component {
     let arr = this.state.causeList;
     arr.push({
       key: index,
-      cause: '',
+      reason: '',
       score: 0,
       mark: 0,
     });
@@ -62,7 +62,7 @@ class OtherPoints extends Component {
     const { causeList } = this.state;
     causeList.map((el) => {
       if (el.key == item.key) {
-        el.cause = e;
+        el.reason = e;
         this.setState({
           causeList: causeList,
         });
@@ -122,7 +122,23 @@ class OtherPoints extends Component {
 
   //关闭表单弹窗，传出数据
   onClose = () => {
-    this.props.onClose(this.state.causeList);
+    const { causeList } = this.state;
+    let total = 0; //计算总得分
+    let isPass = true;
+    causeList && causeList.length > 0
+      ? causeList.map((item) => {
+          if (!item.reason) {
+            isPass = false;
+          }
+          total += item.mark;
+          delete item.score;
+        })
+      : null;
+    if (!isPass) {
+      Toast.fail('加减分原因填写不完整！', 1);
+      return;
+    }
+    this.props.onClose({ total: total, data: causeList });
   };
 
   render() {
@@ -142,7 +158,7 @@ class OtherPoints extends Component {
           renderHeader={() => (
             <div className="modal-title">
               <Icon type="left" onClick={this.onClose} />
-              业务与内务考核得分
+              其它得分
             </div>
           )}
           className="popup-list"
@@ -158,7 +174,7 @@ class OtherPoints extends Component {
                             <div className="card-title">
                               <p>加减分原因：</p>
                               <InputItem
-                                value={item.cause}
+                                value={item.reason}
                                 placeholder="请输入"
                                 onChange={(e) => this.getCustomCause(e, item)}
                               />

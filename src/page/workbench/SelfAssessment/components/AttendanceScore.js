@@ -19,19 +19,18 @@ class AttendanceScore extends Component {
     super(props);
     this.state = {
       visible: false,
+      causeList: [],
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    const { visible } = nextProps;
+    const { visible, defaultData } = nextProps;
     this.setState({
       visible: visible,
+      causeList: defaultData,
     });
   }
 
-  onClose = () => {
-    this.props.onClose({ a: 'ppp' });
-  };
   onWrapTouchStart = (e) => {
     // fix touch to scroll background page on iOS
     if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
@@ -43,14 +42,61 @@ class AttendanceScore extends Component {
     }
   };
 
-  log = (name) => {
+  //获取自定义分数
+  getCustomScore = (item) => {
     return (value) => {
-      console.log(`${name}: ${value}`);
+      const { causeList } = this.state;
+      causeList.map((el) => {
+        if (el.reason == item.reason) {
+          el.score = value;
+          el.mark = value;
+          this.setState({
+            causeList: causeList,
+          });
+        }
+      });
     };
+  };
+  getCustomMark = (e, item) => {
+    const { causeList } = this.state;
+    causeList.map((el) => {
+      if (el.reason == item.reason) {
+        el.mark = e;
+        this.setState({
+          causeList: causeList,
+        });
+      }
+    });
+  };
+  getCustomScores = (e, item) => {
+    const { causeList } = this.state;
+    causeList.map((el) => {
+      if (el.reason == item.reason) {
+        el.score = !isNaN(Number(e)) ? Number(e) : 0;
+        el.mark = !isNaN(Number(e)) ? Number(e) : 0;
+        this.setState({
+          causeList: causeList,
+        });
+      }
+    });
+  };
+
+  //关闭表单弹窗，传出数据
+  onClose = () => {
+    let arr = [];
+    let total = 0; //计算总得分
+    this.state.causeList && this.state.causeList.length > 0
+      ? this.state.causeList.map((item) => {
+          total += item.mark;
+          delete item.score;
+          arr.push(item);
+        })
+      : null;
+    this.props.onClose({ total: total, data: arr });
   };
 
   render() {
-    const { visible } = this.state;
+    const { visible, causeList } = this.state;
     const { getFieldProps } = this.props.form;
     return (
       <Modal
@@ -74,80 +120,58 @@ class AttendanceScore extends Component {
         >
           <div className="self-assessment">
             <div className="card-list">
-              <Card>
-                <Card.Header
-                  title="事假"
-                  extra={
-                    <Popover
-                      overlayClassName="fortest SelfAssessment-Popover"
-                      overlayStyle={{ color: 'currentColor' }}
-                      visible={this.state.visible}
-                      overlay={
-                        <div className="detail-box">
-                          <p>日期：2020-10-21</p>
-                          <p className="title">详细描述：</p>
-                          <p>
-                            一中队应到12人，实到11人，未参加集训1人，一人请假（
-                            <span style={{ color: 'red' }}>张三</span>）
-                          </p>
-                          <p></p>
-                        </div>
-                      }
-                      align={{
-                        overflow: { adjustY: 0, adjustX: 0 },
-                        offset: [-10, 0],
-                      }}
-                    >
-                      <span>扣分详情 &gt;</span>
-                    </Popover>
-                  }
-                />
-                <Card.Body>
-                  <div className="score-box">
-                    <span>分数</span>
-                    <Slider
-                      defaultValue={10}
-                      min={0}
-                      max={30}
-                      onChange={this.log('change')}
-                      onAfterChange={this.log('afterChange')}
-                    />
-                    <div className="score"></div>
-                  </div>
-                </Card.Body>
-              </Card>
-              <Card>
-                <Card.Header title="迟到" />
-                <Card.Body>
-                  <div className="score-box">
-                    <span>分数</span>
-                    <Slider
-                      defaultValue={10}
-                      min={0}
-                      max={30}
-                      onChange={this.log('change')}
-                      onAfterChange={this.log('afterChange')}
-                    />
-                    <div className="score"></div>
-                  </div>
-                </Card.Body>
-              </Card>
-              <Card>
-                <Card.Header title="旷工" />
-                <Card.Body>
-                  <div className="score-box">
-                    <span>分数</span>
-                    <Slider
-                      defaultValue={10}
-                      min={0}
-                      max={30}
-                      onChange={this.log('change')}
-                      onAfterChange={this.log('afterChange')}
-                    />
-                    <div className="score"></div>
-                  </div>
-                </Card.Body>
-              </Card>
+              {causeList && causeList.length > 0
+                ? causeList.map((item) => {
+                    return (
+                      <Card key={item.reason}>
+                        <Card.Header
+                          title={item.reason}
+                          //   extra={
+                          //     <Popover
+                          //       overlayClassName="fortest SelfAssessment-Popover"
+                          //       overlayStyle={{ color: 'currentColor' }}
+                          //       visible={this.state.visible}
+                          //       overlay={
+                          //         <div className="detail-box">
+                          //           <p>日期：2020-10-21</p>
+                          //           <p className="title">详细描述：</p>
+                          //           <p>
+                          //             一中队应到12人，实到11人，未参加集训1人，一人请假（
+                          //             <span style={{ color: 'red' }}>张三</span>）
+                          //           </p>
+                          //           <p></p>
+                          //         </div>
+                          //       }
+                          //       align={{
+                          //         overflow: { adjustY: 0, adjustX: 0 },
+                          //         offset: [-10, 0],
+                          //       }}
+                          //     >
+                          //       <span>扣分详情 &gt;</span>
+                          //     </Popover>
+                          //   }
+                        />
+                        <Card.Body>
+                          <div className="score-box">
+                            <span>分数</span>
+                            <Slider
+                              value={item.score}
+                              min={-10}
+                              max={10}
+                              step={0.5}
+                              onChange={this.getCustomScore(item)}
+                            />
+                            <InputItem
+                              value={String(item.mark)}
+                              onChange={(e) => this.getCustomMark(e, item)}
+                              onBlur={(e) => this.getCustomScores(e, item)}
+                            />
+                          </div>
+                        </Card.Body>
+                      </Card>
+                    );
+                  })
+                : null}
             </div>
           </div>
         </List>

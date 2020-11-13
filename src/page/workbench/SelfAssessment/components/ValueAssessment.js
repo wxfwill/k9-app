@@ -1,6 +1,6 @@
 // 价值观考核得分
 import React, { Component } from 'react';
-import { Icon, List, Modal, Card, TextareaItem, Slider, Popover, InputItem } from 'antd-mobile';
+import { Icon, List, Modal, Card, TextareaItem, Slider, Popover, InputItem, Toast } from 'antd-mobile';
 import { createForm } from 'rc-form';
 
 function closest(el, selector) {
@@ -25,24 +25,32 @@ class ValueAssessment extends Component {
           explain: '',
           score: 0,
           mark: 0,
+          itemSelfMark: 'itemOneSelfMark',
+          itemExplain: 'itemOneExplain',
         },
         {
           name: '激情/干净',
           explain: '',
           score: 0,
           mark: 0,
+          itemSelfMark: 'itemTwoSelfMark',
+          itemExplain: 'itemTwoExplain',
         },
         {
           name: '团结/担当',
           explain: '',
           score: 0,
           mark: 0,
+          itemSelfMark: 'itemThreeSelfMark',
+          itemExplain: 'itemThreeExplain',
         },
         {
           name: '奉献',
           explain: '',
           score: 0,
           mark: 0,
+          itemSelfMark: 'itemFourSelfMark',
+          itemExplain: 'itemFourExplain',
         },
       ],
     };
@@ -119,7 +127,23 @@ class ValueAssessment extends Component {
 
   //关闭表单弹窗，传出数据
   onClose = () => {
-    this.props.onClose(this.state.causeList);
+    let obj = {};
+    let total = 0; //计算总得分
+    let isPass = true;
+    this.state.causeList.map((item) => {
+      if (!item.explain) {
+        isPass = false;
+      }
+      total += item.mark;
+      obj[item.itemSelfMark] = item.mark;
+      obj[item.itemExplain] = item.explain;
+      delete item.score;
+    });
+    if (!isPass) {
+      Toast.fail('备注信息填写不完整！', 1);
+      return;
+    }
+    this.props.onClose({ total: total, data: obj });
   };
 
   render() {

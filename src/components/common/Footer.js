@@ -105,7 +105,7 @@ class Footer extends Component {
 						<span>我的</span>
 					</span>
 				</Link>*/}
-        <div style={{ display: this.state.role <= 3 ? '' : 'none' }} className="foorter-inner">
+        <div className="foorter-inner">
           <TabBar unselectedTintColor="#C9CCD4" tintColor="#3D5EBD" barTintColor="white" hidden={this.state.hidden}>
             <TabBar.Item
               title="消息"
@@ -172,7 +172,7 @@ class Footer extends Component {
             </TabBar.Item>
           </TabBar>
         </div>
-        <div style={{ display: this.state.role > 3 ? '' : 'none' }}>
+        {/* <div style={{ display: this.state.role > 3 ? '' : 'none' }}>
           <TabBar unselectedTintColor="#949494" tintColor="#15c619" barTintColor="white" hidden={this.state.hidden}>
             <TabBar.Item
               title="消息"
@@ -224,7 +224,7 @@ class Footer extends Component {
               {this.renderContent('我的')}
             </TabBar.Item>
           </TabBar>
-        </div>
+        </div> */}
       </div>
     );
   }

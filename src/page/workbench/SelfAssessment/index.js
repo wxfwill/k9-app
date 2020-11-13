@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Icon, List, Modal, Card, TextareaItem, Slider, Popover, InputItem } from 'antd-mobile';
+import { Button, List, Toast } from 'antd-mobile';
 import Header from 'components/common/Header';
-import { createForm } from 'rc-form';
 
 import ValueAssessment from './components/ValueAssessment';
 import FourReport from './components/FourReport';
@@ -13,28 +12,75 @@ require('style/page/workbench/SelfAssessment.less');
 
 const Item = List.Item;
 
-function closest(el, selector) {
-  const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
-  while (el) {
-    if (matchesSelector.call(el, selector)) {
-      return el;
-    }
-    el = el.parentElement;
-  }
-  return null;
-}
-
 class SelfAssessment extends Component {
   constructor(props) {
     super(props);
+    this.userInfor = JSON.parse(sessionStorage.getItem('user'));
     this.state = {
       openjiazhi: false,
       open4W: false,
       openCheckingin: false,
       openOther: false,
-      visible: false,
+      jiazhiTotal: undefined, //价值观考核总得分
+      fourWTotal: undefined, //4W总得分
+      checkinginTotal: undefined, //考勤总得分
+      otherTotal: 0, //其它得分
+      jiazhiData: null,
+      fourWData: null,
+      checkinginData: null,
+      otherData: null,
     };
   }
+
+  componentDidMount() {
+    this.getFourWReportStatistics();
+    this.getAttendanceStatistics();
+  }
+
+  //获取4w报备默认数据
+  getFourWReportStatistics = () => {
+    const reqData = {
+      userId: [this.userInfor.id], //登录人员ID
+      groupId: [this.userInfor.role], //所在中队ID
+    };
+    React.$ajax.publish.getFourWReportStatistics(reqData).then((res) => {
+      if (res && res.code == 0) {
+        let total = 0;
+        res.data.map((item) => {
+          item.score = item.mark;
+          total += item.mark;
+        });
+        this.setState({
+          fourWData: res.data,
+          fourWTotal: total,
+        });
+      }
+    });
+  };
+
+  //获取默认数据
+  getAttendanceStatistics = () => {
+    const reqData = {
+      ignorePageRequest: true, //忽略分页
+      param: {
+        userId: [this.userInfor.id], //登录人员ID
+        groupId: [this.userInfor.role], //所在中队ID
+      },
+    };
+    React.$ajax.publish.getAttendanceStatistics(reqData).then((res) => {
+      if (res && res.code == 0) {
+        let total = 0;
+        res.data.map((item) => {
+          item.score = item.mark;
+          total += item.mark;
+        });
+        this.setState({
+          checkinginData: res.data,
+          checkinginTotal: total,
+        });
+      }
+    });
+  };
 
   showModal = (key) => (e) => {
     e.preventDefault(); // 修复 Android 上点击穿透
@@ -42,33 +88,14 @@ class SelfAssessment extends Component {
       [key]: true,
     });
   };
-  onClose = (key) => () => {
-    this.setState({
-      [key]: false,
-    });
-  };
-  onWrapTouchStart = (e) => {
-    // fix touch to scroll background page on iOS
-    if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
-      return;
-    }
-    const pNode = closest(e.target, '.am-modal-content');
-    if (!pNode) {
-      e.preventDefault();
-    }
-  };
-
-  log = (name) => {
-    return (value) => {
-      console.log(`${name}: ${value}`);
-    };
-  };
 
   //获取价值观考核得分
   getValueAssessment = (data) => {
     console.log(data, '获取价值观考核得分');
     this.setState({
       openjiazhi: false,
+      jiazhiTotal: data.total,
+      jiazhiData: data.data,
     });
   };
 
@@ -77,6 +104,8 @@ class SelfAssessment extends Component {
     console.log(data, '获取4W报备得分');
     this.setState({
       open4W: false,
+      fourWTotal: data.total,
+      fourWData: data.data,
     });
   };
 
@@ -85,6 +114,8 @@ class SelfAssessment extends Component {
     console.log(data, '获取考勤得分');
     this.setState({
       openCheckingin: false,
+      checkinginTotal: data.total,
+      checkinginData: data.data,
     });
   };
 
@@ -93,14 +124,63 @@ class SelfAssessment extends Component {
     console.log(data, '获取考勤得分');
     this.setState({
       openOther: false,
+      otherTotal: data.total,
+      otherData: data.data,
     });
   };
 
+  //计算自评总分
+  getTotal = () => {
+    const { jiazhiTotal, fourWTotal, checkinginTotal, otherTotal } = this.state;
+    let total = 0;
+    const t1 = !isNaN(jiazhiTotal) ? jiazhiTotal : 0;
+    const t2 = !isNaN(fourWTotal) ? fourWTotal : 0;
+    const t3 = !isNaN(checkinginTotal) ? checkinginTotal : 0;
+    const t4 = !isNaN(otherTotal) ? otherTotal : 0;
+    total = t1 + t2 + t3 + t4;
+    return total;
+  };
+
   //提交
-  onSubmit = () => {};
+  onSubmit = () => {
+    const { jiazhiData, fourWData, checkinginData, otherData } = this.state;
+    if (!jiazhiData) {
+      Toast.fail('请填写价值观考核！', 1);
+      return;
+    }
+    const reqData = {
+      userId: this.userInfor.id,
+      squadronId: this.userInfor.role,
+      //价值观考核参数
+      assessmentValues: jiazhiData,
+      //4W报备统计参数
+      fourWReportStatisticsDTOS: fourWData,
+      //考勤统计参数
+      attendanceStatisticsDTOS: checkinginData,
+      //其它补充得分参数
+      concurringDTOS: otherData,
+    };
+    React.$ajax.publish.saveSelfEvaluation(reqData).then((res) => {
+      if (res && res.code == 0) {
+        Toast.success('上报成功！', 1);
+        this.props.history.push('/own');
+      }
+    });
+  };
 
   render() {
-    const { getFieldProps } = this.props.form;
+    const {
+      openjiazhi,
+      open4W,
+      openCheckingin,
+      openOther,
+      jiazhiTotal,
+      fourWTotal,
+      checkinginTotal,
+      otherTotal,
+      fourWData,
+      checkinginData,
+    } = this.state;
     return (
       <div className="layer-main">
         <div className="parent-container">
@@ -109,18 +189,36 @@ class SelfAssessment extends Component {
             <div className="components">
               <div className="self-assessment">
                 <List>
-                  <Item extra={<p style={{ color: '#2D2E31' }}>自评分：90</p>}>姓名：张三</Item>
-                  <Item extra="待评分" arrow="horizontal" onClick={this.showModal('openjiazhi')}>
+                  <Item extra={<p style={{ color: '#2D2E31' }}>自评分：{this.getTotal()}</p>}>
+                    姓名：{this.userInfor.name}
+                  </Item>
+                  <Item
+                    extra={!isNaN(jiazhiTotal) ? jiazhiTotal : '待评分'}
+                    arrow="horizontal"
+                    onClick={this.showModal('openjiazhi')}
+                  >
                     价值观考核得分
                   </Item>
-                  <Item extra="待评分" arrow="horizontal" onClick={this.showModal('open4W')}>
+                  <Item
+                    extra={!isNaN(fourWTotal) ? fourWTotal : '待评分'}
+                    arrow="horizontal"
+                    onClick={this.showModal('open4W')}
+                  >
                     4W报备得分
                   </Item>
-                  <Item extra="-4.5" arrow="horizontal" onClick={this.showModal('openCheckingin')}>
+                  <Item
+                    extra={!isNaN(checkinginTotal) ? checkinginTotal : '待评分'}
+                    arrow="horizontal"
+                    onClick={this.showModal('openCheckingin')}
+                  >
                     考勤得分
                   </Item>
-                  <Item extra="待评分" arrow="horizontal" onClick={this.showModal('openOther')}>
-                    业务与内务考核得分
+                  <Item
+                    extra={!isNaN(otherTotal) ? otherTotal : '待评分'}
+                    arrow="horizontal"
+                    onClick={this.showModal('openOther')}
+                  >
+                    其它得分
                   </Item>
                 </List>
               </div>
@@ -133,22 +231,20 @@ class SelfAssessment extends Component {
           </div>
         </div>
         {/* 价值观考核得分 */}
-        <ValueAssessment
-          visible={this.state.openjiazhi}
-          onClose={(data) => this.getValueAssessment(data)}
-        ></ValueAssessment>
+        <ValueAssessment visible={openjiazhi} onClose={(data) => this.getValueAssessment(data)}></ValueAssessment>
         {/* 4W报备得分 */}
-        <FourReport visible={this.state.open4W} onClose={(data) => this.getFourReport(data)}></FourReport>
+        <FourReport visible={open4W} defaultData={fourWData} onClose={(data) => this.getFourReport(data)}></FourReport>
         {/* 考勤得分 */}
         <AttendanceScore
-          visible={this.state.openCheckingin}
+          visible={openCheckingin}
+          defaultData={checkinginData}
           onClose={(data) => this.getAttendanceScore(data)}
         ></AttendanceScore>
         {/* 业务与内务考核得分 */}
-        <OtherPoints visible={this.state.openOther} onClose={(data) => this.getOtherPoints(data)}></OtherPoints>
+        <OtherPoints visible={openOther} onClose={(data) => this.getOtherPoints(data)}></OtherPoints>
       </div>
     );
   }
 }
-const SelfAssessmentWrapper = createForm()(SelfAssessment);
-module.exports = SelfAssessmentWrapper;
+
+module.exports = SelfAssessment;
