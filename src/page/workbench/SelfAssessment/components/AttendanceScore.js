@@ -49,7 +49,7 @@ class AttendanceScore extends Component {
       causeList.map((el) => {
         if (el.reason == item.reason) {
           el.score = value;
-          el.mark = value;
+          el.selfMark = value;
           this.setState({
             causeList: causeList,
           });
@@ -61,7 +61,7 @@ class AttendanceScore extends Component {
     const { causeList } = this.state;
     causeList.map((el) => {
       if (el.reason == item.reason) {
-        el.mark = e;
+        el.selfMark = e;
         this.setState({
           causeList: causeList,
         });
@@ -73,7 +73,7 @@ class AttendanceScore extends Component {
     causeList.map((el) => {
       if (el.reason == item.reason) {
         el.score = !isNaN(Number(e)) ? Number(e) : 0;
-        el.mark = !isNaN(Number(e)) ? Number(e) : 0;
+        el.selfMark = !isNaN(Number(e)) ? Number(e) : 0;
         this.setState({
           causeList: causeList,
         });
@@ -87,8 +87,9 @@ class AttendanceScore extends Component {
     let total = 0; //计算总得分
     this.state.causeList && this.state.causeList.length > 0
       ? this.state.causeList.map((item) => {
-          total += item.mark;
-          delete item.score;
+          total += item.selfMark;
+          //delete item.score;
+          //delete item.mark;
           arr.push(item);
         })
       : null;
@@ -162,7 +163,7 @@ class AttendanceScore extends Component {
                               onChange={this.getCustomScore(item)}
                             />
                             <InputItem
-                              value={String(item.mark)}
+                              value={String(item.selfMark)}
                               onChange={(e) => this.getCustomMark(e, item)}
                               onBlur={(e) => this.getCustomScores(e, item)}
                             />

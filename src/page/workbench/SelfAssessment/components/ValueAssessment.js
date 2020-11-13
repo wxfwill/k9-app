@@ -137,7 +137,7 @@ class ValueAssessment extends Component {
       total += item.mark;
       obj[item.itemSelfMark] = item.mark;
       obj[item.itemExplain] = item.explain;
-      delete item.score;
+      //delete item.score;
     });
     if (!isPass) {
       Toast.fail('备注信息填写不完整！', 1);

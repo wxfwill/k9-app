@@ -50,7 +50,7 @@ class OtherPoints extends Component {
       key: index,
       reason: '',
       score: 0,
-      mark: 0,
+      selfMark: 0,
     });
     this.setState({
       causeList: arr,
@@ -76,7 +76,7 @@ class OtherPoints extends Component {
       causeList.map((el) => {
         if (el.key == item.key) {
           el.score = value;
-          el.mark = value;
+          el.selfMark = value;
           this.setState({
             causeList: causeList,
           });
@@ -88,7 +88,7 @@ class OtherPoints extends Component {
     const { causeList } = this.state;
     causeList.map((el) => {
       if (el.key == item.key) {
-        el.mark = e;
+        el.selfMark = e;
         this.setState({
           causeList: causeList,
         });
@@ -100,7 +100,7 @@ class OtherPoints extends Component {
     causeList.map((el) => {
       if (el.key == item.key) {
         el.score = !isNaN(Number(e)) ? Number(e) : 0;
-        el.mark = !isNaN(Number(e)) ? Number(e) : 0;
+        el.selfMark = !isNaN(Number(e)) ? Number(e) : 0;
         this.setState({
           causeList: causeList,
         });
@@ -130,8 +130,9 @@ class OtherPoints extends Component {
           if (!item.reason) {
             isPass = false;
           }
-          total += item.mark;
-          delete item.score;
+          total += item.selfMark;
+          //delete item.score;
+          //delete item.key;
         })
       : null;
     if (!isPass) {
@@ -198,7 +199,7 @@ class OtherPoints extends Component {
                               onChange={this.getCustomScore(item)}
                             />
                             <InputItem
-                              value={String(item.mark)}
+                              value={String(item.selfMark)}
                               onChange={(e) => this.getCustomMark(e, item)}
                               onBlur={(e) => this.getCustomScores(e, item)}
                             />

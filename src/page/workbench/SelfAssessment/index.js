@@ -48,6 +48,8 @@ class SelfAssessment extends Component {
         let total = 0;
         res.data.map((item) => {
           item.score = item.mark;
+          item.selfMark = item.mark;
+          item.defaultMark = item.mark;
           total += item.mark;
         });
         this.setState({
@@ -72,6 +74,8 @@ class SelfAssessment extends Component {
         let total = 0;
         res.data.map((item) => {
           item.score = item.mark;
+          item.selfMark = item.mark;
+          item.defaultMark = item.mark;
           total += item.mark;
         });
         this.setState({
@@ -143,7 +147,7 @@ class SelfAssessment extends Component {
 
   //提交
   onSubmit = () => {
-    const { jiazhiData, fourWData, checkinginData, otherData } = this.state;
+    const { jiazhiData, fourWData, checkinginData, otherData, jiazhiTotal } = this.state;
     if (!jiazhiData) {
       Toast.fail('请填写价值观考核！', 1);
       return;
@@ -151,6 +155,8 @@ class SelfAssessment extends Component {
     const reqData = {
       userId: this.userInfor.id,
       squadronId: this.userInfor.role,
+      businessSelfSumMark: this.getTotal() - (!isNaN(jiazhiTotal) ? jiazhiTotal : 0), //业务的总分
+      valueSelfSumMark: !isNaN(jiazhiTotal) ? jiazhiTotal : 0, //价值观总分
       //价值观考核参数
       assessmentValues: jiazhiData,
       //4W报备统计参数
@@ -158,7 +164,7 @@ class SelfAssessment extends Component {
       //考勤统计参数
       attendanceStatisticsDTOS: checkinginData,
       //其它补充得分参数
-      concurringDTOS: otherData,
+      otherReasonsDTOS: otherData,
     };
     React.$ajax.publish.saveSelfEvaluation(reqData).then((res) => {
       if (res && res.code == 0) {
