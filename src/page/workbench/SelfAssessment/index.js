@@ -134,29 +134,38 @@ class SelfAssessment extends Component {
   };
 
   //计算自评总分
-  getTotal = () => {
+  getTotal = (type) => {
     const { jiazhiTotal, fourWTotal, checkinginTotal, otherTotal } = this.state;
     let total = 0;
     const t1 = !isNaN(jiazhiTotal) ? jiazhiTotal : 0;
     const t2 = !isNaN(fourWTotal) ? fourWTotal : 0;
     const t3 = !isNaN(checkinginTotal) ? checkinginTotal : 0;
     const t4 = !isNaN(otherTotal) ? otherTotal : 0;
-    total = t1 + t2 + t3 + t4;
+    total = t1 + t2 + t3 + t4; //所有总分
+    if (type === 'businessSelfSumMark') {
+      //业务的总分
+      total = t2 + t3 + t4;
+    }
+    if (type === 'valueSelfSumMark') {
+      //价值观总分
+      total = t1;
+    }
     return total;
   };
 
   //提交
   onSubmit = () => {
-    const { jiazhiData, fourWData, checkinginData, otherData, jiazhiTotal } = this.state;
+    const { jiazhiData, fourWData, checkinginData, otherData } = this.state;
     if (!jiazhiData) {
       Toast.fail('请填写价值观考核！', 1);
       return;
     }
     const reqData = {
-      userId: this.userInfor.id,
-      squadronId: this.userInfor.role,
-      businessSelfSumMark: this.getTotal() - (!isNaN(jiazhiTotal) ? jiazhiTotal : 0), //业务的总分
-      valueSelfSumMark: !isNaN(jiazhiTotal) ? jiazhiTotal : 0, //价值观总分
+      userId: this.userInfor.id, //用户id
+      userName: this.userInfor.name, //用户名
+      squadronId: this.userInfor.role, //中队id
+      businessSelfSumMark: this.getTotal('businessSelfSumMark'), //业务的总分
+      valueSelfSumMark: this.getTotal('valueSelfSumMark'), //价值观总分
       //价值观考核参数
       assessmentValues: jiazhiData,
       //4W报备统计参数
