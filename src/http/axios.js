@@ -29,11 +29,7 @@ let ajax = function $axios(options) {
         //   //   ? store.getState().loginReducer.token
         //   //   : null;
         // });
-        console.log('token123');
-        console.log(store.getState().loginReducer.token);
-        config.headers['Authorization'] = store.getState().loginReducer.token
-          ? store.getState().loginReducer.token
-          : null;
+        config.headers['k9token'] = store.getState().loginReducer.token ? store.getState().loginReducer.token : null;
         return config;
       },
 
