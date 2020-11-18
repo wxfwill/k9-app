@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="12px" viewBox="0 0 18 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>三角形</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="4-我的-我的任务-自评上报" transform="translate(-321.000000, -162.000000)" fill="#D8D8D8">
+            <g id="编组" transform="translate(0.000000, 128.000000)">
+                <polygon id="三角形" transform="translate(330.000000, 40.000000) rotate(-180.000000) translate(-330.000000, -40.000000) " points="330 34 339 46 321 46"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

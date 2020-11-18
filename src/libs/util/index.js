@@ -1,4 +1,5 @@
 require('./util.less');
+import moment from 'moment';
 //mask
 export const mask = {
   maskClass: 'mui-off-canvas-backdrop',
@@ -527,3 +528,10 @@ export const CallApp = function ({ callAppName, param, callbackName, callbackFun
 
 // WEBPACK FOOTER //
 // ./src/libs/util/index.js
+
+// 根据年月计算出一个月的开始和结束日期
+export const getMontDateRange = (year, month) => {
+  let startDate = moment([Number(year), Number(month) - 1]);
+  let endDate = moment(startDate).endOf('month');
+  return { start: moment(startDate).format('YYYY-MM-DD'), end: moment(endDate).format('YYYY-MM-DD') };
+};

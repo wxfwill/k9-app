@@ -65,3 +65,21 @@ export const myTreatmentRecord = (data) => {
     data,
   });
 };
+
+//自评上报-上报列表
+export const getPageSelfEvaluation = (data) => {
+  return axios({
+    url: '/api/performanceAssessment/getPageSelfEvaluation',
+    method: 'post',
+    data,
+  });
+};
+
+//自评上报-获取详情
+export const getSelfEvaluation = (data) => {
+  return axios({
+    url: '/api/performanceAssessment/getSelfEvaluation',
+    method: 'post',
+    data,
+  });
+};

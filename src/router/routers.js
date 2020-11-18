@@ -182,10 +182,22 @@ const OwnLeaveListDetails = (props) => (
   </Bundle>
 );
 
+/**自评上报列表 */
+const SelfAssessmentList = (props) => (
+  <Bundle load={() => import('page/own/SelfAssessment/index.js')}>{(SelfAssessmentList) => <SelfAssessmentList {...props} />}</Bundle>
+);
+
+/**自评上报详情 */
+const SelfAssessmentDetail = (props) => (
+  <Bundle load={() => import('page/own/SelfAssessment/detail.js')}>{(SelfAssessmentDetail) => <SelfAssessmentDetail {...props} />}</Bundle>
+);
+
 /**犬病上报列表 */
 const DogManage = (props) => (
   <Bundle load={() => import('components/own/DogManage/index.js')}>{(DogManage) => <DogManage {...props} />}</Bundle>
 );
+
+
 // ***************我的   end   *****************
 
 const PubEmedepDetails = (props) => (
@@ -561,6 +573,14 @@ export const routes = [
   {
     path: '/own/DogManageList',
     component: DogManage,
+  },
+  {
+    path: '/own/SelfAssessmentList',
+    component: SelfAssessmentList,
+  },
+  {
+    path: '/own/SelfAssessmentDetail',
+    component: SelfAssessmentDetail,
   },
   {
     path: '/news',

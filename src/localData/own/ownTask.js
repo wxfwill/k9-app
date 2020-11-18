@@ -31,6 +31,11 @@ export const appMenu = [
     link: '/own/DogManageList',
   },
   {
+    text: '自评上报',
+    icon: require('images/own/self-assessment.svg'),
+    link: '/own/SelfAssessmentList',
+  },
+  {
     text: '修改密码',
     icon: require('images/own/accent.svg'),
     link: '/updatePwd',
