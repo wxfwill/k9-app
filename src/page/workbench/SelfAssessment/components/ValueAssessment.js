@@ -139,10 +139,10 @@ class ValueAssessment extends Component {
       obj[item.itemExplain] = item.explain;
       //delete item.score;
     });
-    if (!isPass) {
-      Toast.fail('备注信息填写不完整！', 1);
-      return;
-    }
+    // if (!isPass) {
+    //   Toast.fail('备注信息填写不完整！', 1);
+    //   return;
+    // }
     this.props.onClose({ total: total, data: obj });
   };
 

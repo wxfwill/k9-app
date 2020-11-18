@@ -1,37 +1,48 @@
-import React, { Component } from 'react';
-import { List, DatePicker, Picker } from 'antd-mobile';
+import React from 'react';
+import { List, DatePicker, Picker, ListView } from 'antd-mobile';
 import Header from 'components/common/Header';
 import moment from 'moment';
 import NoData from 'components/common/No-data';
-
 require('style/publish/public.less');
 require('style/page/own/SelfAssessment.less');
 
 const Item = List.Item;
 const nowTimeStamp = Date.now();
 const now = new Date(nowTimeStamp);
-
 const approvalStateArr = [
   { label: '全部', value: null },
   { label: '未审批', value: 1 },
   { label: '已完成', value: 3 },
 ];
 
-class SelfAssessmentList extends Component {
+function MyBody(props) {
+  return <div className="am-list-body my-body">{props.children}</div>;
+}
+
+class SelfAssessmentList extends React.Component {
   constructor(props) {
     super(props);
     this.userInfor = JSON.parse(sessionStorage.getItem('user'));
+    const ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2,
+    });
     this.state = {
       currPage: 1,
       pageSize: 10,
+      totalPage: 0,
       repDate: now,
       approvalState: null,
       evaluationList: [],
+      isLoading: true,
+      hasMore: true,
+      dataSource: ds,
     };
   }
+
   componentDidMount() {
     this.getPageSelfEvaluation();
   }
+
   goToUrl = (id) => {
     this.props.history.push({
       pathname: '/own/SelfAssessmentDetail',
@@ -43,6 +54,8 @@ class SelfAssessmentList extends Component {
     this.setState(
       {
         repDate: date,
+        currPage: 1,
+        evaluationList: [],
       },
       () => {
         this.getPageSelfEvaluation();
@@ -71,6 +84,8 @@ class SelfAssessmentList extends Component {
     this.setState(
       {
         approvalState: value,
+        currPage: 1,
+        evaluationList: [],
       },
       () => {
         this.getPageSelfEvaluation();
@@ -79,7 +94,10 @@ class SelfAssessmentList extends Component {
   };
   //查询列表
   getPageSelfEvaluation = () => {
-    const { approvalState, currPage, pageSize } = this.state;
+    this.setState({
+      hasMore: false,
+    });
+    const { approvalState, currPage, pageSize, evaluationList, dataSource } = this.state;
     const reqData = {
       currPage: currPage,
       pageSize: pageSize,
@@ -94,14 +112,56 @@ class SelfAssessmentList extends Component {
     React.$ajax.own.getPageSelfEvaluation(reqData).then((res) => {
       if (res && res.code == 0) {
         const data = res.data;
-        this.setState({
-          evaluationList: data.list,
-        });
+        this.setState(
+          {
+            evaluationList: [...evaluationList, ...data.list],
+            isLoading: false,
+            hasMore: true,
+            totalPage: data.totalPage,
+          },
+          () => {
+            this.setState({
+              dataSource: dataSource.cloneWithRows(this.state.evaluationList),
+            });
+          }
+        );
       }
     });
   };
+
+  onEndReached = (event) => {
+    const { isLoading, hasMore, currPage, totalPage } = this.state;
+    if (isLoading && !hasMore) {
+      return;
+    }
+    if (currPage < totalPage) {
+      this.setState({ isLoading: true, currPage: currPage + 1 });
+      this.getPageSelfEvaluation();
+    }
+  };
+
   render() {
     const { repDate, approvalState, evaluationList } = this.state;
+    const row = (rowData) => {
+      const item = rowData;
+      return (
+        <div>
+          {item ? (
+            <Item
+              key={item.id}
+              arrow="horizontal"
+              thumb={require('images/own/self-assessment.svg')}
+              multipleLine
+              onClick={() => this.goToUrl(item.id)}
+              extra={item.selfSumMark}
+              className="custom-item"
+            >
+              {util.formatDate(new Date(item.reportingDate), 'yyyy-MM-dd')} 自评上报表
+            </Item>
+          ) : null}
+        </div>
+      );
+    };
     return (
       <div className="layer-main">
         <div className="parent-container">
@@ -133,25 +193,22 @@ class SelfAssessmentList extends Component {
                 </div>
               </div>
               <div className="main">
-                {evaluationList && evaluationList.length > 0 ? (
-                  evaluationList.map((item) => {
-                    return (
-                      <Item
-                        key={item.id}
-                        arrow="horizontal"
-                        thumb={require('images/own/self-assessment.svg')}
-                        multipleLine
-                        onClick={() => this.goToUrl(item.id)}
-                        extra={item.selfSumMark}
-                        className="custom-item"
-                      >
-                        {util.formatDate(new Date(item.reportingDate), 'yyyy-MM-dd')} 自评上报表
-                      </Item>
-                    );
-                  })
-                ) : (
-                  <NoData />
-                )}
+                <ListView
+                  ref={(el) => (this.lv = el)}
+                  dataSource={this.state.dataSource}
+                  renderFooter={() => (
+                    <div style={{ padding: 16, textAlign: 'center' }}>
+                      {this.state.isLoading ? 'Loading...' : evaluationList.length == 0 ? <NoData /> : '无更多数据了'}
+                    </div>
+                  )}
+                  renderBodyComponent={() => <MyBody />}
+                  renderRow={row}
+                  className="am-list"
+                  pageSize={1}
+                  scrollRenderAheadDistance={500}
+                  onEndReached={this.onEndReached}
+                  onEndReachedThreshold={10}
+                />
               </div>
             </div>
           </div>
@@ -160,4 +217,5 @@ class SelfAssessmentList extends Component {
     );
   }
 }
+
 module.exports = SelfAssessmentList;

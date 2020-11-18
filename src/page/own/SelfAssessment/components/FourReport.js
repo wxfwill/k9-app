@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { List, Card } from 'antd-mobile';
 import NoData from 'components/common/No-data';
 
-class OtherPoints extends Component {
+class FourReport extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,8 +36,8 @@ class OtherPoints extends Component {
         <div>
           <Card>
             <Card.Header
-              title="其它得分"
-              thumb={require('images/own/yewu.svg')}
+              title="4W报备得分"
+              thumb={require('images/own/self.svg')}
               extra={<span>{this.isShowMark(total)}</span>}
             />
             {setData && setData.length > 0 ? (
@@ -47,12 +47,13 @@ class OtherPoints extends Component {
                     <List>
                       <div className="title-score">
                         <b>
-                          得分{index + 1}
-                          <span>（自评分：{this.isShowMark(item.selfMark)}）</span>
+                          {item.reason}
+                          <span>
+                            （自评分：{this.isShowMark(item.selfMark)}；次数：{item.travel}）
+                          </span>
                         </b>
                         <p>{this.isShowMark(item.squadronMark)}</p>
                       </div>
-                      <div className="self-ass">{item.reason ? item.reason : '无内容'}</div>
                     </List>
                   </Card.Body>
                 );
@@ -67,4 +68,4 @@ class OtherPoints extends Component {
   }
 }
 
-module.exports = OtherPoints;
+module.exports = FourReport;

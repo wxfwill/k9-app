@@ -135,10 +135,10 @@ class OtherPoints extends Component {
           //delete item.key;
         })
       : null;
-    if (!isPass) {
-      Toast.fail('加减分原因填写不完整！', 1);
-      return;
-    }
+    // if (!isPass) {
+    //   Toast.fail('加减分原因填写不完整！', 1);
+    //   return;
+    // }
     this.props.onClose({ total: total, data: causeList });
   };
 

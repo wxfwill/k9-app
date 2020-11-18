@@ -1,4 +1,6 @@
 .own-self-assessment {
+  display: flex;
+  flex-direction: column;
   background-color: #f5f6f7 !important;
   .search-box {
     width: 100%;
@@ -6,6 +8,7 @@
     padding: 0.32rem 0;
     box-sizing: border-box;
     background-color: #fff;
+    height: 1.2rem;
     .condition {
       flex: 1;
       font-size: 0.32rem;
@@ -53,7 +56,14 @@
   .main {
     width: 9.36rem;
     margin: 0 auto;
-    padding-bottom: 0.32rem;
+    flex: 1;
+    .am-list-view-scrollview {
+      height: 100%;
+    }
+    .am-list-body {
+      background-color: transparent !important;
+      border: none !important;
+    }
     .am-list-item.custom-item {
       padding: 0 0.426667rem;
       min-height: auto;
@@ -70,12 +80,19 @@
       }
       .am-list-line {
         padding: 0 !important;
+        border: none !important;
         .am-list-content {
           font-size: 0.426667rem;
           color: #2d2e31;
           height: 0.6rem;
           line-height: 0.6rem;
           margin-left: 0.32rem;
+          > span {
+            font-size: 0.373333rem;
+            color: #adb0bc;
+            margin-left: 0.213333rem;
+            font-weight: 500;
+          }
         }
         .am-list-extra {
           color: #ff7575;
@@ -85,6 +102,8 @@
       }
     }
     &.detail {
+      padding-bottom: 0.32rem;
+      flex: none;
       .am-list-item.custom-item {
         height: 1.706667rem;
         .am-list-line {
@@ -125,6 +144,8 @@
           }
           .am-card-header-extra {
             color: #ff7575;
+            flex: none !important;
+            width: 1.6rem;
           }
         }
         .am-card-body {
@@ -145,7 +166,14 @@
                 font-size: 0.453333rem;
                 b {
                   color: #2d2e31;
+                  span {
+                    font-size: 0.373333rem;
+                    color: #adb0bc;
+                    margin-left: 0.213333rem;
+                    font-weight: 500;
+                  }
                 }
+
                 p {
                   color: #527ad9;
                 }

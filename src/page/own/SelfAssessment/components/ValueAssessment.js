@@ -46,6 +46,10 @@ class ValueAssessment extends Component {
     });
   }
 
+  isShowMark = (mark) => {
+    return mark ? mark + '分' : '';
+  };
+
   render() {
     const { mark, setData, defaultList } = this.state;
     return (
@@ -55,7 +59,7 @@ class ValueAssessment extends Component {
             <Card.Header
               title="价值观考核得分"
               thumb={require('images/own/jiazhi.svg')}
-              extra={<span>{mark ? mark : 0}分</span>}
+              extra={<span>{this.isShowMark(mark)}</span>}
             />
             {defaultList && defaultList.length > 0 ? (
               defaultList.map((item) => {
@@ -63,14 +67,13 @@ class ValueAssessment extends Component {
                   <Card.Body key={item.name}>
                     <List>
                       <div className="title-score">
-                        <b>{item.name}</b>
-                        <p>{setData[item.itemSelfMark] ? setData[item.itemSelfMark] : 0}分</p>
+                        <b>
+                          {item.name}
+                          <span>（自评分：{this.isShowMark(setData[item.itemSelfMark])}）</span>
+                        </b>
+                        <p>{this.isShowMark(setData[item.itemSquadronMark])}</p>
                       </div>
-                      <div className="self-ass">{setData[item.itemExplain] ? setData[item.itemExplain] : '无'}</div>
-                      <div className="opinion">
-                        <span>修改意见：</span>
-                        <p>{setData[item.itemSquadronMark] ? setData[item.itemSquadronMark] : 0}</p>
-                      </div>
+                      <div className="self-ass">{setData[item.itemExplain] ? setData[item.itemExplain] : '无内容'}</div>
                     </List>
                   </Card.Body>
                 );
