@@ -18,7 +18,7 @@ class OtherPoints extends Component {
   }
 
   isShowMark = (mark) => {
-    return mark ? mark + '分' : '';
+    return mark ? mark + '分' : '待审批';
   };
 
   render() {

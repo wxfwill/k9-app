@@ -68,7 +68,7 @@ class SelfAssessmentDetail extends Component {
             <div className="components own-self-assessment">
               <div className="main detail">
                 <div className="top">
-                  <Item multipleLine onClick={this.goToUrl} extra={total ? total + '分' : ''} className="custom-item">
+                  <Item multipleLine onClick={this.goToUrl} extra={total ? total + '分' : '待审批'} className="custom-item">
                     总分<span>(自评总分：{selftotal}分)</span>
                   </Item>
                 </div>
