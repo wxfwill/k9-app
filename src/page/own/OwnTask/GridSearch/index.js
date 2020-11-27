@@ -42,8 +42,9 @@ class OwnGridList extends Component {
     React.$ajax.own.myGridTaskList(per).then((res) => {
       if (res.code == 0) {
         let resultData = res.data;
+        let arrList = resultData.list ? resultData.list : [];
         // this.state.todoList = this.state.todoList.concat(resultData.list);
-        this.setState({ todoList: this.state.todoList.concat(resultData.list) });
+        this.setState({ todoList: this.state.todoList.concat(arrList) });
 
         if (this.state.todoList.length < resultData.totalCount) {
           // 可以滑动

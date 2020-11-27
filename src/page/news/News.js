@@ -6,6 +6,7 @@ import Header from 'components/common/Header';
 import Footer from 'components/common/Footer';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import NoData from 'components/common/No-data';
 
 const Item = List.Item;
 const Brief = Item.Brief;
@@ -28,6 +29,8 @@ const user = JSON.parse(sessionStorage.getItem('user'));
 class News extends Component {
   constructor(props) {
     super(props);
+    console.log(this.props.socketNewList.items);
+    console.log(9999);
 
     this.state = {
       newsTypeList: this.formaterList(this.props.socketNewList.items),
@@ -35,17 +38,19 @@ class News extends Component {
     };
   }
   formaterList = (list) => {
-    if (!util.isArray(list)) {
-      throw new Error(`list 参数必须为数组`);
+    // if (!util.isArray(list)) {
+    //   throw new Error(`list 参数必须为数组`);
+    // }
+    let newList = list ? list : [];
+    if (newList.length == 0) {
+      return [];
     }
-    if (list.length == 0) {
-      return;
-    }
-    list.map((item) => {
+    newList.map((item) => {
       item.icon = require(`images/news/new-${item.type}.svg`);
       item.desc = newsTypeDesc[item.type];
     });
-    return list;
+    console.log(newList);
+    return newList;
   };
   componentDidMount() {}
   componentWillUnmount() {
@@ -109,7 +114,7 @@ class News extends Component {
         />
         <div className="midder-content">
           <div className="inner-content">
-            {this.state.newsTypeList.length > 0 &&
+            {this.state.newsTypeList.length > 0 ? (
               this.state.newsTypeList.map((item, index) => {
                 return (
                   <List className="new-list" key={index} onClick={() => this.handleNewLIst(item)}>
@@ -138,7 +143,10 @@ class News extends Component {
                     </Item>
                   </List>
                 );
-              })}
+              })
+            ) : (
+              <NoData></NoData>
+            )}
           </div>
         </div>
         <Footer />

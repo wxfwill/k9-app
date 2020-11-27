@@ -67,6 +67,7 @@ class Own extends Component {
   }
   // 点击跳转
   handleLink = (item) => {
+    console.log(item);
     let { history } = this.props;
     history.push(item.link);
   };
