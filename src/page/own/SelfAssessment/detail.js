@@ -63,7 +63,7 @@ class SelfAssessmentDetail extends Component {
     return (
       <div className="layer-main">
         <div className="parent-container">
-          <Header title="自评上报详情" pointer="pointer" />
+          <Header title="我的考核详情" pointer="pointer" />
           <div className="child-container">
             <div className="components own-self-assessment">
               <div className="main detail">

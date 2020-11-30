@@ -30,7 +30,7 @@ class SelfAssessmentList extends React.Component {
       currPage: 1,
       pageSize: 10,
       totalPage: 0,
-      repDate: now,
+      repDate: null, //now,
       approvalState: null,
       evaluationList: [],
       isLoading: true,
@@ -156,7 +156,7 @@ class SelfAssessmentList extends React.Component {
               extra={item.selfSumMark}
               className="custom-item"
             >
-              {util.formatDate(new Date(item.reportingDate), 'yyyy-MM-dd')} 自评上报表
+              {util.formatDate(new Date(item.reportingDate), 'yyyy-MM-dd')} 考核表
             </Item>
           ) : null}
         </div>
@@ -165,13 +165,13 @@ class SelfAssessmentList extends React.Component {
     return (
       <div className="layer-main">
         <div className="parent-container">
-          <Header title="自评上报列表" pointer="pointer" />
+          <Header title="我的考核" pointer="pointer" />
           <div className="child-container">
             <div className="components own-self-assessment">
               <div className="search-box">
                 <div className="condition c-left">
                   <span className="label">考核时间：</span>
-                  <p className="cont">{util.formatDate(new Date(repDate), 'yyyy-MM')}</p>
+                  {repDate ? <p className="cont">{util.formatDate(new Date(repDate), 'yyyy-MM')}</p> : '全部'}
                   <img src={require('images/own/triangle.svg')} />
                   <DatePicker mode="month" value={repDate} onChange={(date) => this.getRepDate(date)}>
                     <List.Item></List.Item>

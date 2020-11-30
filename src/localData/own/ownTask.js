@@ -31,7 +31,7 @@ export const appMenu = [
     link: '/own/DogManageList',
   },
   {
-    text: '自评上报',
+    text: '我的考核',
     icon: require('images/own/self-assessment.svg'),
     link: '/own/SelfAssessmentList',
   },
