@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const commonSet = require('./webpack.common.js');
 // var OpenBrowserPlugin = require("open-browser-webpack-plugin");
 const { apiUrl } = require('./config.js');
+console.log('api===' + apiUrl);
 
 const config = {
   entry: ['babel-polyfill', 'react-hot-loader/patch', './src/app.js'],
