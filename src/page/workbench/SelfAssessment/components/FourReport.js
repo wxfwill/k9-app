@@ -81,8 +81,8 @@ class FourReport extends Component {
     const { causeList } = this.state;
     causeList.map((el) => {
       if (el.reason == item.reason) {
-        el.score = !isNaN(Number(e)) ? Number(e) : 0;
-        el.selfMark = !isNaN(Number(e)) ? Number(e) : 0;
+        el.score = !isNaN(Number(e)) && Number(e) >= 0 ? Number(e) : 0;
+        el.selfMark = !isNaN(Number(e)) && Number(e) >= 0 ? Number(e) : 0;
         this.setState({
           causeList: causeList,
         });
@@ -141,7 +141,7 @@ class FourReport extends Component {
                             <span>分数</span>
                             <Slider
                               value={item.score}
-                              min={-10}
+                              min={0}
                               max={10}
                               step={0.5}
                               onChange={this.getCustomScore(item)}
