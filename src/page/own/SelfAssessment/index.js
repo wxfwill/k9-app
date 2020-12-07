@@ -153,7 +153,7 @@ class SelfAssessmentList extends React.Component {
               thumb={require('images/own/self-assessment.svg')}
               multipleLine
               onClick={() => this.goToUrl(item.id)}
-              extra={item.selfSumMark}
+              extra={item.selfEvaluationSumMark}
               className="custom-item"
             >
               {util.formatDate(new Date(item.reportingDate), 'yyyy-MM-dd')} 考核表

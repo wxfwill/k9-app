@@ -95,7 +95,6 @@ class SelfAssessment extends Component {
 
   //获取价值观考核得分
   getValueAssessment = (data) => {
-    console.log(data, '获取价值观考核得分');
     this.setState({
       openjiazhi: false,
       jiazhiTotal: data.total,
@@ -105,7 +104,6 @@ class SelfAssessment extends Component {
 
   //获取4W报备得分
   getFourReport = (data) => {
-    console.log(data, '获取4W报备得分');
     this.setState({
       open4W: false,
       fourWTotal: data.total,
@@ -115,7 +113,6 @@ class SelfAssessment extends Component {
 
   //获取考勤得分
   getAttendanceScore = (data) => {
-    console.log(data, '获取考勤得分');
     this.setState({
       openCheckingin: false,
       checkinginTotal: data.total,
@@ -125,7 +122,6 @@ class SelfAssessment extends Component {
 
   //获取其它得分
   getOtherPoints = (data) => {
-    console.log(data, '获取考勤得分');
     this.setState({
       openOther: false,
       otherTotal: data.total,

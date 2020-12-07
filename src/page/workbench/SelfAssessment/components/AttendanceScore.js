@@ -1,4 +1,4 @@
-// 价值观考核得分
+// 考勤得分
 import React, { Component } from 'react';
 import { Button, Icon, List, Modal, Card, TextareaItem, Slider, Popover, InputItem } from 'antd-mobile';
 import { createForm } from 'rc-form';

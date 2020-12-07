@@ -5,6 +5,7 @@ import ValueAssessment from './components/ValueAssessment';
 import FourReport from './components/FourReport';
 import AttendanceScore from './components/AttendanceScore';
 import OtherPoints from './components/OtherPoints';
+import PoliceDog from './components/PoliceDog';
 
 const Item = List.Item;
 
@@ -22,6 +23,8 @@ class SelfAssessmentDetail extends Component {
       otherReasonsDTOS: null, //业务与内考核务参数
       fourWReportStatisticsDTOS: null, //4w报备参数
       attendanceStatisticsDTOS: null, //考勤参数
+      selfEvaluationSumMark: undefined, //总分
+      dogSquadronSumMark: 0, //警犬技能考核得分
     };
   }
   componentDidMount() {
@@ -43,6 +46,8 @@ class SelfAssessmentDetail extends Component {
           otherReasonsDTOS: data.otherReasonsDTOS,
           fourWReportStatisticsDTOS: data.fourWReportStatisticsDTOS,
           attendanceStatisticsDTOS: data.attendanceStatisticsDTOS,
+          selfEvaluationSumMark: data.selfEvaluationSumMark,
+          dogSquadronSumMark: data.dogSquadronSumMark,
         });
       }
     });
@@ -57,9 +62,11 @@ class SelfAssessmentDetail extends Component {
       otherReasonsDTOS,
       fourWReportStatisticsDTOS,
       attendanceStatisticsDTOS,
+      selfEvaluationSumMark,
+      dogSquadronSumMark,
     } = this.state;
-    const selftotal = businessSelfSumMark + valueSelfSumMark;
-    const total = businessSquadronSumMark + valueSquadronSumMark;
+    //const selftotal = businessSelfSumMark + valueSelfSumMark;
+    //const total = businessSquadronSumMark + valueSquadronSumMark;
     return (
       <div className="layer-main">
         <div className="parent-container">
@@ -68,8 +75,14 @@ class SelfAssessmentDetail extends Component {
             <div className="components own-self-assessment">
               <div className="main detail">
                 <div className="top">
-                  <Item multipleLine onClick={this.goToUrl} extra={total ? total + '分' : '待审批'} className="custom-item">
-                    总分<span>(自评总分：{selftotal}分)</span>
+                  <Item
+                    multipleLine
+                    onClick={this.goToUrl}
+                    extra={selfEvaluationSumMark ? selfEvaluationSumMark + '分' : '待审批'}
+                    className="custom-item"
+                  >
+                    总分
+                    {/* <span>(自评总分：{selftotal}分)</span> */}
                   </Item>
                 </div>
                 {/* 价值观考核详情 */}
@@ -78,6 +91,8 @@ class SelfAssessmentDetail extends Component {
                 <FourReport setData={fourWReportStatisticsDTOS} />
                 {/* 考勤得分 */}
                 <AttendanceScore setData={attendanceStatisticsDTOS} />
+                {/* 警犬技能考核平分 */}
+                <PoliceDog setData={dogSquadronSumMark} />
                 {/* 其它 */}
                 <OtherPoints setData={otherReasonsDTOS} />
               </div>
