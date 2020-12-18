@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import DetailComponent from 'components/DetailComponent/index.js';
 
-class GridSearchDetal extends Component {
+class ItinerancyDetal extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,12 +13,13 @@ class GridSearchDetal extends Component {
     const item = JSON.parse(util.urlParse(this.props.location.search).id);
     this.setState({
       details: [
-        { label: '主要内容', value: item.taskContent },
+        { label: '任务名称', value: item.planName },
         {
-          label: '开始时间',
-          value: item.startTime ? util.formatDate(new Date(item.startTime), 'yyyy-MM-dd hh:mm:ss') : null,
+          label: '日期',
+          value: item.taskTime ? util.formatDate(new Date(item.taskTime), 'yyyy-MM-dd hh:mm:ss') : null,
         },
-        { label: '发布人', value: item.operatorName },
+        { label: '参与人员', value: item.planUserNames },
+        { label: '任务描述', value: item.content },
       ],
     });
   }
@@ -28,4 +29,4 @@ class GridSearchDetal extends Component {
   }
 }
 
-export default withRouter(GridSearchDetal);
+export default withRouter(ItinerancyDetal);

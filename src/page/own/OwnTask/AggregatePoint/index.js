@@ -156,7 +156,12 @@ class OwnEmDepComponent extends Component {
             </div>
           </Item>
           {
-            <div className="task-btn">
+            <div
+              className="task-btn"
+              onClick={() => {
+                this.props.history.push(`/own/AggregatePointDetal?id=${JSON.stringify(item)}`);
+              }}
+            >
               <span className="task-txt">查看详情</span>
             </div>
           }

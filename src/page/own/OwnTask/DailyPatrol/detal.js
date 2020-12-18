@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import DetailComponent from 'components/DetailComponent/index.js';
 
-class GridSearchDetal extends Component {
+class DailyPatrolDetal extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,14 +11,21 @@ class GridSearchDetal extends Component {
   }
   componentDidMount() {
     const item = JSON.parse(util.urlParse(this.props.location.search).id);
+    console.log(item);
     this.setState({
       details: [
-        { label: '主要内容', value: item.taskContent },
+        { label: '任务名称', value: item.taskName },
         {
-          label: '开始时间',
+          label: '巡逻开始时间',
           value: item.startTime ? util.formatDate(new Date(item.startTime), 'yyyy-MM-dd hh:mm:ss') : null,
         },
-        { label: '发布人', value: item.operatorName },
+        {
+          label: '巡逻结束时间',
+          value: item.endTime ? util.formatDate(new Date(item.endTime), 'yyyy-MM-dd hh:mm:ss') : null,
+        },
+        { label: '巡逻地点', value: item.patrolsPlace },
+        { label: '巡逻人员', value: item.planUserNames },
+        { label: '巡逻说明', value: item.taskContent },
       ],
     });
   }
@@ -28,4 +35,4 @@ class GridSearchDetal extends Component {
   }
 }
 
-export default withRouter(GridSearchDetal);
+export default withRouter(DailyPatrolDetal);

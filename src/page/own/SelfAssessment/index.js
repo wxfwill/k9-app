@@ -105,8 +105,8 @@ class SelfAssessmentList extends React.Component {
         approvalState: approvalState, //审批状态
         repDateEnd: this.getTime('end'), //结束时间
         repDateStart: this.getTime('start'), // 开始时间
-        userId: [this.userInfor.id], //当前用户id
-        groupId: [this.userInfor.role], //当前用户所在的中队id
+        userId: this.userInfor.id ? [this.userInfor.id] : null, //当前用户id
+        groupId: this.userInfor.role ? [this.userInfor.role] : null, //当前用户所在的中队id
       },
     };
     React.$ajax.own.getPageSelfEvaluation(reqData).then((res) => {

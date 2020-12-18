@@ -196,6 +196,32 @@ const SelfAssessmentDetail = (props) => (
 const DogManage = (props) => (
   <Bundle load={() => import('components/own/DogManage/index.js')}>{(DogManage) => <DogManage {...props} />}</Bundle>
 );
+/**犬病上报详情 */
+const DogManageDetail = (props) => (
+  <Bundle load={() => import('page/own/DogManage/DogManageDetails.js')}>{(DogManageDetails) => <DogManageDetails {...props} />}</Bundle>
+);
+
+/**网格化搜捕详情 */
+const GridSearchDetal = (props) => (
+  <Bundle load={() => import('page/own/OwnTask/GridSearch/detal.js')}>{(GridSearchDetal) => <GridSearchDetal {...props} />}</Bundle>
+);
+/**日常巡逻详情 */
+const DailyPatrolDetal = (props) => (
+  <Bundle load={() => import('page/own/OwnTask/DailyPatrol/detal.js')}>{(DailyPatrolDetal) => <DailyPatrolDetal {...props} />}</Bundle>
+);
+/**紧急调配详情 */
+const EmergencyDeploymentDetal = (props) => (
+  <Bundle load={() => import('page/own/OwnTask/EmergencyDeployment/detal.js')}>{(EmergencyDeploymentDetal) => <EmergencyDeploymentDetal {...props} />}</Bundle>
+);
+/**定点集合详情 */
+const AggregatePointDetal = (props) => (
+  <Bundle load={() => import('page/own/OwnTask/AggregatePoint/detal.js')}>{(AggregatePointDetal) => <AggregatePointDetal {...props} />}</Bundle>
+);
+/**外勤任务详情 */
+const ItinerancyDetal = (props) => (
+  <Bundle load={() => import('page/own/OwnTask/Itinerancy/detal.js')}>{(ItinerancyDetal) => <ItinerancyDetal {...props} />}</Bundle>
+);
+
 
 
 // ***************我的   end   *****************
@@ -543,6 +569,26 @@ export const routes = [
     component: OwnTask,
   },
   {
+    path: '/own/GridSearchDetal',//网格化搜捕详情 
+    component: GridSearchDetal,
+  },
+  {
+    path: '/own/DailyPatrolDetal',//日常巡逻详情
+    component: DailyPatrolDetal,
+  },
+  {
+    path: '/own/EmergencyDeploymentDetal',//紧急调配详情
+    component: EmergencyDeploymentDetal,
+  },
+  {
+    path: '/own/AggregatePointDetal',//定点集合详情
+    component: AggregatePointDetal,
+  },
+  {
+    path: '/own/ItinerancyDetal',//外勤任务详情
+    component: ItinerancyDetal,
+  },
+  {
     path: '/own/TailView',
     component: TailView,
   },
@@ -573,6 +619,10 @@ export const routes = [
   {
     path: '/own/DogManageList',
     component: DogManage,
+  },
+  {
+    path: '/own/DogManageDetails',
+    component: DogManageDetail,
   },
   {
     path: '/own/SelfAssessmentList',

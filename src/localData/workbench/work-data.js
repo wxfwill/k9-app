@@ -37,11 +37,11 @@ export const dogMange = [
     text: ' 犬病上报',
     link: '/workbench/dogReport',
   },
-  {
-    icon: require('images/publish/work.svg'),
-    text: '工作上报',
-    link: '/workbench/workAssessment',
-  },
+  // {
+  //   icon: require('images/publish/work.svg'),
+  //   text: '工作上报',
+  //   link: '/workbench/workAssessment',
+  // },
   {
     icon: require('images/publish/self.svg'),
     text: '自评上报',

@@ -96,7 +96,8 @@ class OwnLevelComponent extends Component {
   handleNoNews = (item) => {
     console.log(item);
     const { history } = this.props;
-    history.push(`/publish/rollCallDetails?id=${item.id}`);
+    //history.push(`/publish/rollCallDetails?id=${item.id}`);
+    history.push(`/own/OwnLeaveListDetails?id=${item.id}`);
   };
   renderRow = (rowData) => {
     if (!rowData) {

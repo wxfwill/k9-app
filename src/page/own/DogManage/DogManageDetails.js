@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import DetailComponent from 'components/DetailComponent/index.js';
 
-class LevelDetails extends Component {
+class DogManageDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,24 +13,20 @@ class LevelDetails extends Component {
     // //获取详情
     const id = util.urlParse(this.props.location.search).id;
     id
-      ? React.$ajax.own.getLeaveInfo({ id: id }).then((res) => {
+      ? React.$ajax.own.getDogManageDetails({ id: id, ignorePageRequest: true }).then((res) => {
           if (res && res.code == 0) {
             const item = res.data;
             this.setState({
               details: [
-                { label: '请假类型', value: item.typeName },
+                { label: '警犬名称', value: item.dogName },
                 {
-                  label: '开始时间',
-                  value: item.leaveStartTime
-                    ? util.formatDate(new Date(item.leaveStartTime), 'yyyy-MM-dd hh:mm:ss')
-                    : null,
+                  label: '发病日期',
+                  value: item.morbidityTime ? util.formatDate(new Date(item.morbidityTime), 'yyyy-MM-dd') : null,
                 },
                 {
-                  label: '结束时间',
-                  value: item.leaveEndTime ? util.formatDate(new Date(item.leaveEndTime), 'yyyy-MM-dd hh:mm:ss') : null,
+                  label: '发病症状',
+                  value: item.symptom,
                 },
-                { label: '图片', value: item.fileList, type: 'img' },
-                { label: '请假事由', value: item.remark },
               ],
             });
           }
@@ -47,4 +43,4 @@ class LevelDetails extends Component {
   }
 }
 
-export default withRouter(LevelDetails);
+export default withRouter(DogManageDetails);

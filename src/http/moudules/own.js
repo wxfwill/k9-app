@@ -57,10 +57,26 @@ export const myTaskApplyList = (data) => {
     data,
   });
 };
+// 请假申请详情
+export const getLeaveInfo = (data) => {
+  return axios({
+    url: '/api/leaveRecord/leaveInfo',
+    method: 'post',
+    data,
+  });
+};
 // 犬病治疗--上报列表
 export const myTreatmentRecord = (data) => {
   return axios({
     url: '/api/app/pageMyTreatmentRecord',
+    method: 'post',
+    data,
+  });
+};
+//犬病上报详情
+export const  getDogManageDetails = (data) => {
+  return axios({
+    url: '/api/treatmentRecord/getDetailById',
     method: 'post',
     data,
   });
