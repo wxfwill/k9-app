@@ -1,0 +1,98 @@
+.SelectPersonnel-box {
+  display: flex;
+  flex-direction: column;
+  .search-box {
+    width: 9.2rem;
+    height: 2.48rem;
+    box-sizing: border-box;
+    padding-top: 0.64rem;
+    padding-bottom: 0.533333rem;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    .am-search {
+      width: 5.933333rem;
+      height: 1.306667rem;
+      padding: 0;
+      background-color: transparent;
+      .am-search-input {
+        height: 1.306667rem;
+        border-radius: 0.053333rem;
+        border: 0.026667rem solid #e2e2e2;
+        .am-search-value {
+          height: 1.306667rem;
+          line-height: 1.306667rem;
+        }
+        .am-search-synthetic-ph {
+          height: 1.306667rem;
+          line-height: 1.306667rem;
+          font-size: 0.426667rem;
+        }
+        .am-search-clear {
+          top: 0.22rem;
+        }
+      }
+    }
+    .am-list-item {
+      width: 2.96rem;
+      height: 1.306667rem;
+      min-height: auto;
+      background: #fff;
+      border-radius: 0.053333rem;
+      color: #adb0bc;
+      font-size: 0.426667rem;
+      border: 0.026667rem solid #e2e2e2;
+      .am-list-line {
+        padding-right: 0;
+        .am-list-extra {
+          text-align: left;
+          flex-basis: 68%;
+        }
+        .am-list-arrow-horizontal {
+          position: absolute;
+          right: 15px;
+        }
+      }
+    }
+  }
+  .person-box {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    ul {
+      li {
+        width: 2.8rem;
+        height: 1.093333rem;
+        line-height: 1.093333rem;
+        background: #f5f5f5;
+        border-radius: 0.053333rem;
+        color: #81838c;
+        font-size: 0.373333rem;
+        text-align: center;
+        margin-left: 0.4rem;
+        float: left;
+        margin-bottom: 0.4rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        padding: 0 0.4rem;
+      }
+      li.choice {
+        color: #fff;
+        background-color: #527ad9;
+      }
+    }
+    .no-data {
+      text-align: center;
+      line-height: 0.373333rem;
+      color: #999;
+    }
+  }
+}
+
+.assignPerson-foot {
+  .am-button-primary {
+    width: 9.2rem !important;
+  }
+}

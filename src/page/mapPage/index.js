@@ -31,20 +31,24 @@ const allDataList = [
     link: '/map/createTask',
   },
   {
-    title: '分配人员',
+    title: '分配队长',
     link: '/map/assignPerson',
   },
-  {
-    title: '发布任务',
-    link: '/map/pushTask',
-  },
+  // {
+  //   title: '发布任务',
+  //   link: '/map/pushTask',
+  // },
   {
     title: '添加团队人员',
     link: '/map/addTeamPerson',
   },
+  // {
+  //   title: '任务详情',
+  //   link: '/map/taskDetal',
+  // },
   {
-    title: '任务详情',
-    link: '/map/taskDetal',
+    title: '轨迹合并',
+    link: '/map/mergeTrajectory',
   },
 ];
 class CheckComponent extends Component {

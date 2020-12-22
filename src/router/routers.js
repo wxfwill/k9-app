@@ -184,12 +184,16 @@ const OwnLeaveListDetails = (props) => (
 
 /**自评上报列表 */
 const SelfAssessmentList = (props) => (
-  <Bundle load={() => import('page/own/SelfAssessment/index.js')}>{(SelfAssessmentList) => <SelfAssessmentList {...props} />}</Bundle>
+  <Bundle load={() => import('page/own/SelfAssessment/index.js')}>
+    {(SelfAssessmentList) => <SelfAssessmentList {...props} />}
+  </Bundle>
 );
 
 /**自评上报详情 */
 const SelfAssessmentDetail = (props) => (
-  <Bundle load={() => import('page/own/SelfAssessment/detail.js')}>{(SelfAssessmentDetail) => <SelfAssessmentDetail {...props} />}</Bundle>
+  <Bundle load={() => import('page/own/SelfAssessment/detail.js')}>
+    {(SelfAssessmentDetail) => <SelfAssessmentDetail {...props} />}
+  </Bundle>
 );
 
 /**犬病上报列表 */
@@ -198,31 +202,41 @@ const DogManage = (props) => (
 );
 /**犬病上报详情 */
 const DogManageDetail = (props) => (
-  <Bundle load={() => import('page/own/DogManage/DogManageDetails.js')}>{(DogManageDetails) => <DogManageDetails {...props} />}</Bundle>
+  <Bundle load={() => import('page/own/DogManage/DogManageDetails.js')}>
+    {(DogManageDetails) => <DogManageDetails {...props} />}
+  </Bundle>
 );
 
 /**网格化搜捕详情 */
 const GridSearchDetal = (props) => (
-  <Bundle load={() => import('page/own/OwnTask/GridSearch/detal.js')}>{(GridSearchDetal) => <GridSearchDetal {...props} />}</Bundle>
+  <Bundle load={() => import('page/own/OwnTask/GridSearch/detal.js')}>
+    {(GridSearchDetal) => <GridSearchDetal {...props} />}
+  </Bundle>
 );
 /**日常巡逻详情 */
 const DailyPatrolDetal = (props) => (
-  <Bundle load={() => import('page/own/OwnTask/DailyPatrol/detal.js')}>{(DailyPatrolDetal) => <DailyPatrolDetal {...props} />}</Bundle>
+  <Bundle load={() => import('page/own/OwnTask/DailyPatrol/detal.js')}>
+    {(DailyPatrolDetal) => <DailyPatrolDetal {...props} />}
+  </Bundle>
 );
 /**紧急调配详情 */
 const EmergencyDeploymentDetal = (props) => (
-  <Bundle load={() => import('page/own/OwnTask/EmergencyDeployment/detal.js')}>{(EmergencyDeploymentDetal) => <EmergencyDeploymentDetal {...props} />}</Bundle>
+  <Bundle load={() => import('page/own/OwnTask/EmergencyDeployment/detal.js')}>
+    {(EmergencyDeploymentDetal) => <EmergencyDeploymentDetal {...props} />}
+  </Bundle>
 );
 /**定点集合详情 */
 const AggregatePointDetal = (props) => (
-  <Bundle load={() => import('page/own/OwnTask/AggregatePoint/detal.js')}>{(AggregatePointDetal) => <AggregatePointDetal {...props} />}</Bundle>
+  <Bundle load={() => import('page/own/OwnTask/AggregatePoint/detal.js')}>
+    {(AggregatePointDetal) => <AggregatePointDetal {...props} />}
+  </Bundle>
 );
 /**外勤任务详情 */
 const ItinerancyDetal = (props) => (
-  <Bundle load={() => import('page/own/OwnTask/Itinerancy/detal.js')}>{(ItinerancyDetal) => <ItinerancyDetal {...props} />}</Bundle>
+  <Bundle load={() => import('page/own/OwnTask/Itinerancy/detal.js')}>
+    {(ItinerancyDetal) => <ItinerancyDetal {...props} />}
+  </Bundle>
 );
-
-
 
 // ***************我的   end   *****************
 
@@ -414,9 +428,13 @@ const ReportDetail = (props) => (
 const MapCreate = (props) => (
   <Bundle load={() => import('page/mapPage/createTask')}>{(MapCreate) => <MapCreate {...props} />}</Bundle>
 );
-// 创建任务后分配人员
+// 创建任务后分配队长
 const AssignPerson = (props) => (
   <Bundle load={() => import('page/mapPage/assignPerson')}>{(AssignPerson) => <AssignPerson {...props} />}</Bundle>
+);
+// 创建任务后分配队员
+const AddPlayers = (props) => (
+  <Bundle load={() => import('page/mapPage/addPlayers')}>{(AddPlayers) => <AddPlayers {...props} />}</Bundle>
 );
 // 发布任务
 const PushTask = (props) => (
@@ -430,6 +448,13 @@ const AddTeamPerson = (props) => (
 // 任务详情
 const MapTaskDetal = (props) => (
   <Bundle load={() => import('page/mapPage/taskDetal')}>{(MapTaskDetal) => <MapTaskDetal {...props} />}</Bundle>
+);
+
+// 轨迹合并
+const MergeTrajectory = (props) => (
+  <Bundle load={() => import('page/mapPage/mergeTrajectory')}>
+    {(MergeTrajectory) => <MergeTrajectory {...props} />}
+  </Bundle>
 );
 
 import NotFound from 'components/NotFound';
@@ -460,12 +485,20 @@ export const routes = [
     component: AssignPerson,
   },
   {
+    path: '/map/addPlayers',
+    component: AddPlayers,
+  },
+  {
     path: '/map/pushTask',
     component: PushTask,
   },
   {
     path: '/map/addTeamPerson',
     component: AddTeamPerson,
+  },
+  {
+    path: '/map/mergeTrajectory',
+    component: MergeTrajectory,
   },
   {
     path: '/workbench',
@@ -569,23 +602,23 @@ export const routes = [
     component: OwnTask,
   },
   {
-    path: '/own/GridSearchDetal',//网格化搜捕详情 
+    path: '/own/GridSearchDetal', //网格化搜捕详情
     component: GridSearchDetal,
   },
   {
-    path: '/own/DailyPatrolDetal',//日常巡逻详情
+    path: '/own/DailyPatrolDetal', //日常巡逻详情
     component: DailyPatrolDetal,
   },
   {
-    path: '/own/EmergencyDeploymentDetal',//紧急调配详情
+    path: '/own/EmergencyDeploymentDetal', //紧急调配详情
     component: EmergencyDeploymentDetal,
   },
   {
-    path: '/own/AggregatePointDetal',//定点集合详情
+    path: '/own/AggregatePointDetal', //定点集合详情
     component: AggregatePointDetal,
   },
   {
-    path: '/own/ItinerancyDetal',//外勤任务详情
+    path: '/own/ItinerancyDetal', //外勤任务详情
     component: ItinerancyDetal,
   },
   {

@@ -1,144 +1,92 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import { Modal, List, Button, WhiteSpace, WingBlank, Icon, Stepper } from 'antd-mobile';
+import { createForm } from 'rc-form';
+import { List, Button, InputItem, TextareaItem, DatePicker } from 'antd-mobile';
+import Header from 'components/common/Header';
+require('style/publish/public.less');
+require('style/page/mapPage/createTask.less');
 
-import ButtonComponent from 'components/mapPage/buttonComponent.js';
+const nowTimeStamp = Date.now();
+const now = new Date(nowTimeStamp);
 
-require('style/mapPage/style.less');
-function closest(el, selector) {
-  const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
-  while (el) {
-    if (matchesSelector.call(el, selector)) {
-      return el;
-    }
-    el = el.parentElement;
-  }
-  return null;
-}
 class CreateTask extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modal2: true,
-      val: 0,
-      val1: 0,
+      date: now,
+      area: '深圳市南山区塘朗山公园西北处20m',
     };
   }
-  showModal = (key) => (e) => {
-    e.preventDefault(); // 修复 Android 上点击穿透
-    this.setState({
-      [key]: true,
+  onSubmit = () => {
+    this.props.form.validateFields((error, value) => {
+      console.log(error, value);
     });
-  };
-  onClose = (key) => () => {
-    this.setState({
-      [key]: false,
-    });
-  };
-  onWrapTouchStart = (e) => {
-    // fix touch to scroll background page on iOS
-    if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
-      return;
-    }
-    const pNode = closest(e.target, '.am-modal-content');
-    if (!pNode) {
-      e.preventDefault();
-    }
-  };
-  onChange = (val) => {
-    // console.log(val);
-    this.setState({ val });
-  };
-  onChange1 = (val1) => {
-    // console.log(val);
-    this.setState({ val1 });
   };
   render() {
+    const { getFieldProps } = this.props.form;
     return (
-      <WingBlank>
-        <Button onClick={this.showModal('modal2')}>popup</Button>
-        <WhiteSpace />
-        <Modal
-          popup
-          visible={this.state.modal2}
-          onClose={this.onClose('modal2')}
-          animationType="slide-up"
-          afterClose={() => {
-            console.log('afterClose');
-          }}
-          className="mapPage"
-        >
-          <ButtonComponent middleColor="gray" />
-          <ButtonComponent middleColor="red" />
-          <ButtonComponent />
-          <div className="mapage-layer">
-            <div className="mapege-box">
-              <div className="stepper-box">
-                <List>
-                  <List.Item
-                    wrap
-                    extra={
-                      <Stepper
-                        style={{ width: '100%', minWidth: '100px' }}
-                        showNumber
-                        max={10}
-                        min={0}
-                        value={this.state.val}
-                        onChange={this.onChange}
-                      />
-                    }
+      <div className="layer-main">
+        <div className="parent-container">
+          <Header title="创建任务" pointer="pointer" />
+          <div className="child-container">
+            <div className="components createTask-box">
+              <div className="form-main">
+                <List className="list">
+                  <p className="title">任务名称</p>
+                  <InputItem
+                    {...getFieldProps('taskName', {
+                      initialValue: '',
+                      rules: [{ required: true, message: '任务名称不能为空！' }],
+                    })}
+                    placeholder="请输入任务名称"
+                  ></InputItem>
+                </List>
+                <List className="list">
+                  <p className="title">任务内容</p>
+                  <TextareaItem
+                    {...getFieldProps('taskContent')}
+                    clear
+                    placeholder="请输入任务内容"
+                    autoHeight
+                    rows={1}
+                  />
+                </List>
+                <List className="list">
+                  <p className="title">执行时间</p>
+                  <DatePicker
+                    {...getFieldProps('date', {
+                      initialValue: this.state.date,
+                      rules: [{ required: true, message: '请选择执行时间！' }],
+                    })}
+                    //onChange={(date) => this.setState({ date })}
+                    placeholder="请选择执行时间"
                   >
-                    请输入搜索范围（公里）
-                  </List.Item>
-                  <List.Item
-                    extra={
-                      <Stepper
-                        style={{ width: '100%', minWidth: '100px' }}
-                        showNumber
-                        max={10}
-                        min={0}
-                        value={this.state.val1}
-                        onChange={this.onChange1}
-                      />
-                    }
-                  >
-                    请输入网格数量
-                  </List.Item>
+                    <List.Item arrow="horizontal"></List.Item>
+                  </DatePicker>
+                </List>
+                <List className="list quyu-list">
+                  <p className="title">搜捕区域</p>
+                  <InputItem
+                    {...getFieldProps('area', {
+                      initialValue: this.state.area,
+                      rules: [{ required: true, message: '任务名称不能为空！' }],
+                    })}
+                    placeholder="请选择搜捕区域"
+                    editable={false}
+                    extra={<i className="edit-ico"></i>}
+                  ></InputItem>
                 </List>
               </div>
             </div>
-            <div className="btns">
-              <Button
-                onClick={() => {
-                  this.props.history.push('/check');
-                }}
-              >
-                取消
-              </Button>
-              <Button
-                type="primary"
-                onClick={() => {
-                  this.props.history.push('/map/pushTask');
-                }}
-              >
-                下一步
-              </Button>
-            </div>
           </div>
-          {/* <List renderHeader={() => <div>委托买入</div>} className="popup-list">
-            {['股票名称', '股票代码', '买入价格'].map((i, index) => (
-              <List.Item key={index}>{i}</List.Item>
-            ))}
-            <List.Item>
-              <Button type="primary" onClick={this.onClose('modal2')}>
-                买入
-              </Button>
-            </List.Item>
-          </List> */}
-        </Modal>
-      </WingBlank>
+          <div className="footer-common">
+            <Button type="primary" onClick={this.onSubmit}>
+              发布
+            </Button>
+          </div>
+        </div>
+      </div>
     );
   }
 }
-
-export default withRouter(CreateTask);
+const CreateTaskForm = createForm()(CreateTask);
+export default CreateTaskForm;

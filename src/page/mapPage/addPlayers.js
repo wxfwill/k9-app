@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SelectPersonnel from './components/SelectPersonnel';
 
-class AssignPerson extends Component {
+class AddPlayers extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -10,8 +10,8 @@ class AssignPerson extends Component {
     console.log(data);
   };
   render() {
-    return <SelectPersonnel title="分配队长" onSubmit={this.onSubmit} />;
+    return <SelectPersonnel title="分配队员" onSubmit={this.onSubmit} />;
   }
 }
 
-export default AssignPerson;
+export default AddPlayers;
