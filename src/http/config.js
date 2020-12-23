@@ -8,7 +8,7 @@ console.log(config);
 export default {
   method: 'get',
   // 基础url前缀
-  baseUrl: config.localUrl,
+  baseUrl: config.apiUrl,
   // 请求头信息
   headers: {
     'Content-Type': 'application/json;charset=UTF-8',
