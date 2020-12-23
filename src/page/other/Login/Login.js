@@ -56,6 +56,7 @@ class Login extends Component {
           const token = util.cookieUtil.get('token');
           Storage.setItem('token', res.data.token);
           history.push({ pathname: '/own', user: user });
+
           if (isAndroid) {
             window.AndroidWebView &&
               window.AndroidWebView.showInfoFromJs(
@@ -127,27 +128,16 @@ class Login extends Component {
 
         // const token = util.cookieUtil.get('token');
 
+        //传递登录信息给两步路
+        const reqData = {
+          userId: user.id,
+          userName: user.name,
+          token: res.data.token,
+        };
         if (isAndroid) {
-          window.AndroidWebView &&
-            window.AndroidWebView.showInfoFromJs(
-              JSON.stringify({
-                // token,
-                id: user.id,
-                gpsInterval: res.data.cfgs.gpsInterval,
-                braceletInterval: res.data.cfgs.braceletInterval,
-                account: user.account,
-              })
-            );
+          window.android.login(JSON.stringify(reqData));
         } else {
-          // window.webkit.messageHandlers.showInfoFromJs.postMessage(
-          //   JSON.stringify({
-          //     token,
-          //     id: user.id,
-          //     gpsInterval: res.data.cfgs.gpsInterval,
-          //     braceletInterval: res.data.cfgs.braceletInterval,
-          //     account: user.account,
-          //   })
-          // );
+          window.webkit.messageHandlers.login.postMessage(JSON.stringify(reqData)); //IOS
         }
         // CallApp({callAppName: 'showInfoFromJs', param: {token}})
       }
