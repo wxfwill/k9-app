@@ -7,9 +7,6 @@ import { saveAccount, savePassword, saveUserInfo, savePasswordData, saveToken } 
 
 const AgreeItem = Checkbox.AgreeItem;
 
-var u = navigator.userAgent;
-var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
-
 let Storage = {};
 if (localStorage) {
   Storage = localStorage;
@@ -57,7 +54,7 @@ class Login extends Component {
           Storage.setItem('token', res.data.token);
           history.push({ pathname: '/own', user: user });
 
-          if (isAndroid) {
+          if (util.isAndroid) {
             window.AndroidWebView &&
               window.AndroidWebView.showInfoFromJs(
                 JSON.stringify({
@@ -134,10 +131,11 @@ class Login extends Component {
           userName: user.name,
           token: res.data.token,
         };
-        if (isAndroid) {
-          window.android.login(JSON.stringify(reqData));
+        console.log(util.isAndroid, reqData, '---------');
+        if (util.isAndroid) {
+          window.android && window.android.login(JSON.stringify(reqData));
         } else {
-          window.webkit.messageHandlers.login.postMessage(JSON.stringify(reqData)); //IOS
+          window.webkit && window.webkit.messageHandlers.login.postMessage(JSON.stringify(reqData)); //IOS
         }
         // CallApp({callAppName: 'showInfoFromJs', param: {token}})
       }
@@ -251,7 +249,7 @@ class Login extends Component {
               记住密码
             </AgreeItem>
           </Flex>
-          {isAndroid ? (
+          {util.isAndroid ? (
             ''
           ) : (
             <Flex className="policy" align="center" justify="center">

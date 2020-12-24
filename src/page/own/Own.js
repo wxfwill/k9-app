@@ -48,6 +48,15 @@ class Own extends Component {
                 closeWebSocket();
                 Toast.info('退出成功');
                 history.push('/login');
+
+                //APP端退出登录
+                if (util.isAndroid) {
+                  window.android && window.android.signOut();
+                  console.log('退出安卓');
+                } else {
+                  window.webkit && window.webkit.messageHandlers.signOut.postMessage(); //IOS
+                  console.log('退出IOS');
+                }
               }
             });
           }),
