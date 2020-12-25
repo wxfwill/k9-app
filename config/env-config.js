@@ -9,11 +9,11 @@ const ENV_LIST = [
   },
   {
     envName: 'testOuternetDev', // 外网-dev
-    apiUrl: 'http://test8.hua-cloud.net:5519',
+    apiUrl: 'http://test8.hua-cloud.net:5520',
   },
   {
     envName: 'testOuternetTest', // 外网-test
-    apiUrl: 'http://test8.hua-cloud.net:5518',
+    apiUrl: 'http://test8.hua-cloud.net:5521',
   },
   {
     envName: 'pro', // 生产

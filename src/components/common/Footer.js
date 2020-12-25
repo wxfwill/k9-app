@@ -149,6 +149,3 @@ const loginActionToProps = (dispatch) => ({
 });
 
 export default connect(loginStateToProps, loginActionToProps)(withRouter(Footer));
-
-// WEBPACK FOOTER //
-// ./src/components/common/Footer.js
