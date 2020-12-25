@@ -59,6 +59,7 @@ class NewNoList extends Component {
     React.$ajax.news.gridSearchList(per).then((res) => {
       if (res.code == 0) {
         let resultData = res.data;
+        resultData.list = resultData.list ? resultData.list : [];
         this.state.todoList = this.state.todoList.concat(resultData.list);
 
         if (this.state.todoList.length < resultData.totalCount) {

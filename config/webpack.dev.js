@@ -75,9 +75,10 @@ const config = {
   module: commonSet.module,
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    // 挂载全局变量
+    // 挂载全局变量 process.env.BASE_WS
     new webpack.DefinePlugin({
       'process.env.BASE_URL': JSON.stringify(process.env.BASE_URL),
+      'process.env.BASE_WS': JSON.stringify(process.env.BASE_WS),
       'process.env.BASE_ENV': JSON.stringify(process.env.BASE_ENV),
     }),
     new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /zh-cn/),

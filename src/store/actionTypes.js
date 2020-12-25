@@ -9,5 +9,8 @@ export const USER_INFO = 'USER_INFO';
 // token
 export const USER_TOKEN = 'USER_TOKEN';
 
+// app底部列表
+export const APP_BUTTON_LIST = 'APP_BUTTON_LIST';
+
 // websocket  消息
 export const SOCKET_LIST_NEWS_MSG = 'SOCKET_LIST_NEWS_MSG';

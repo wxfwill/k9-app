@@ -3,8 +3,10 @@ let websocket,
 
 import store from 'store/index';
 
+console.log(process.env.BASE_WS);
+
 const user = store.getState().loginReducer.userInfo.user;
-let url = user && `${config.ws}/ws/webSocket/${user.id}`;
+let url = user && `${process.env.BASE_WS}/ws/webSocket/${user.id}`;
 
 let createWebsocket = () => {
   if (!url) return;

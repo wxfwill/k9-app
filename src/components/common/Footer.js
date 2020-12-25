@@ -49,7 +49,8 @@ class Footer extends Component {
   }
 
   componentDidMount() {
-    this.queryForApp();
+    // this.queryForApp();
+    // console.log(this.props.appBottomList);
   }
 
   //底部导航列表接口
@@ -75,13 +76,13 @@ class Footer extends Component {
   }
 
   render() {
-    const { navList } = this.state;
+    // const { navList } = this.state;
     return (
       <div className="footer">
         <div className="foorter-inner">
           <TabBar unselectedTintColor="#C9CCD4" tintColor="#3D5EBD" barTintColor="white" hidden={this.state.hidden}>
-            {navList && navList.length > 0
-              ? navList.map((item) => {
+            {this.props.appBottomList && this.props.appBottomList.length > 0
+              ? this.props.appBottomList.map((item) => {
                   return (
                     <TabBar.Item
                       title={item.title}
@@ -137,6 +138,7 @@ function loginStateToProps(state) {
     password: state.loginReducer.password,
     token: state.loginReducer.token,
     socketNewList: state.socketReducer.newLIst,
+    appBottomList: state.loginReducer.appList,
   };
 }
 

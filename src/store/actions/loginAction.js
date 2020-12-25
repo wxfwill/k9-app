@@ -1,4 +1,4 @@
-import { LOGIN_ACCOUNT, LOGIN_PASSWORD, USER_INFO, PASSWORD_DATA, USER_TOKEN } from '../actionTypes';
+import { LOGIN_ACCOUNT, LOGIN_PASSWORD, USER_INFO, PASSWORD_DATA, USER_TOKEN, APP_BUTTON_LIST } from '../actionTypes';
 
 export function saveAccount() {
   return {
@@ -30,5 +30,13 @@ export function saveToken(token) {
   return {
     type: USER_TOKEN,
     token,
+  };
+}
+
+// app底部列表
+export function saveAPPList(list) {
+  return {
+    type: APP_BUTTON_LIST,
+    list,
   };
 }

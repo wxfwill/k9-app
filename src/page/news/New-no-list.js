@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { ListView, List, Modal } from 'antd-mobile';
+import { ListView, List, Modal, Badge } from 'antd-mobile';
 import { connect } from 'react-redux';
 import NoData from 'components/common/No-data';
 import { saveSocketNewList } from 'store/actions/websocketAction';
@@ -63,6 +63,7 @@ class NewNoList extends Component {
     React.$ajax.news.gridSearchList(per).then((res) => {
       if (res.code == 0) {
         let resultData = res.data;
+        resultData.list = resultData.list ? resultData.list : [];
         this.state.todoList = this.state.todoList.concat(resultData.list);
 
         if (this.state.todoList.length < resultData.totalCount) {
@@ -203,17 +204,19 @@ class NewNoList extends Component {
             }
             align="top"
             thumb={
-              <span
-                style={{
-                  width: '1.333333rem',
-                  height: '1.333333rem',
-                  borderRadius: '0.213333rem',
-                  overflow: 'hidden',
-                  background: `url(${util.urlParse(this.props.location.search).icon}) left top no-repeat`,
-                  backgroundSize: '100% 100%',
-                  display: 'inline-block',
-                }}
-              />
+              <Badge dot={item.msgNew}>
+                <span
+                  style={{
+                    width: '1.333333rem',
+                    height: '1.333333rem',
+                    borderRadius: '0.213333rem',
+                    overflow: 'hidden',
+                    background: `url(${util.urlParse(this.props.location.search).icon}) left top no-repeat`,
+                    backgroundSize: '100% 100%',
+                    display: 'inline-block',
+                  }}
+                />
+              </Badge>
             }
             multipleLine
           >

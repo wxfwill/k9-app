@@ -3,7 +3,14 @@ import { Button, Toast, Checkbox, Flex, InputItem } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import { connect } from 'react-redux';
 import { createWebsocket } from 'components/common/websocket';
-import { saveAccount, savePassword, saveUserInfo, savePasswordData, saveToken } from 'store/actions/loginAction';
+import {
+  saveAccount,
+  savePassword,
+  saveUserInfo,
+  savePasswordData,
+  saveToken,
+  saveAPPList,
+} from 'store/actions/loginAction';
 
 const AgreeItem = Checkbox.AgreeItem;
 
@@ -82,6 +89,8 @@ class Login extends Component {
   }
   showClear = (msg) => {};
   handleSubmit() {
+    // 获取applist
+    this.queryForApp();
     let { policy } = this.state;
     if (policy) {
       // 获取表单的值
@@ -169,6 +178,15 @@ class Login extends Component {
   handleForgetPass = () => {
     Toast.info('请找管理员重置密码', 2);
   };
+  queryForApp() {
+    React.$ajax.footer.queryForApp().then((res) => {
+      console.log(res);
+      if (res && res.code == 0) {
+        let resData = res.data ? res.data : [];
+        this.props.getAppButtonList(resData);
+      }
+    });
+  }
   componentWillMount() {
     const remeberAccountVal = localStorage.getItem('remeberAccount');
     const remeberPassVal = localStorage.getItem('remeberPass');
@@ -285,6 +303,7 @@ const loginActionToProps = (dispatch) => ({
   userInfoAction: (data) => dispatch(saveUserInfo(data)),
   passwordAction: (data) => dispatch(savePasswordData(data)),
   tokenAction: (token) => dispatch(saveToken(token)),
+  getAppButtonList: (list) => dispatch(saveAPPList(list)),
 });
 
 const loginForm = createForm()(Login);

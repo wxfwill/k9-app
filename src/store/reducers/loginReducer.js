@@ -1,4 +1,4 @@
-import { LOGIN_ACCOUNT, LOGIN_PASSWORD, USER_INFO, PASSWORD_DATA, USER_TOKEN } from '../actionTypes';
+import { LOGIN_ACCOUNT, LOGIN_PASSWORD, USER_INFO, PASSWORD_DATA, USER_TOKEN, APP_BUTTON_LIST } from '../actionTypes';
 
 const initialzeState = {
   isRemeber: true,
@@ -6,6 +6,7 @@ const initialzeState = {
   password: '',
   userInfo: '',
   token: null,
+  appList: [],
 };
 
 export default function accountReducer(state = initialzeState, action) {
@@ -38,6 +39,11 @@ export default function accountReducer(state = initialzeState, action) {
       return {
         ...state,
         token: action.token,
+      };
+    case APP_BUTTON_LIST:
+      return {
+        ...state,
+        appList: action.list,
       };
     default:
       return state;
