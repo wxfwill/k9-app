@@ -1,14 +1,7 @@
-/** @format */
-
-// import globalUrl from '../../globalConfig.js';
-
-console.log('config');
-console.log(config);
-
 export default {
   method: 'get',
   // 基础url前缀
-  baseUrl: config.apiUrl,
+  baseUrl: process.env.BASE_URL,
   // 请求头信息
   headers: {
     'Content-Type': 'application/json;charset=UTF-8',

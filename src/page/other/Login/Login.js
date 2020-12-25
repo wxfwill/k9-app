@@ -137,7 +137,7 @@ class Login extends Component {
         if (isAndroid) {
           window.android.login(JSON.stringify(reqData));
         } else {
-          window.webkit.messageHandlers.login.postMessage(JSON.stringify(reqData)); //IOS
+          window.webkit && window.webkit.messageHandlers.login.postMessage(JSON.stringify(reqData)); //IOS
         }
         // CallApp({callAppName: 'showInfoFromJs', param: {token}})
       }

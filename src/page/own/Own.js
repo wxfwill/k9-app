@@ -54,11 +54,9 @@ class Own extends Component {
       },
     ]);
   };
-
   alertCancel = () => {
     console.log('取消');
   };
-
   componentDidMount() {}
 
   handleJump() {
