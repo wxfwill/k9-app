@@ -104,8 +104,9 @@ class Footer extends Component {
                             window.android && window.android.map();
                             console.log('android进入地图');
                           } else {
-                            window.webkit && window.webkit.messageHandlers.map.postMessage(); //IOS
+                            window.webkit && window.webkit.messageHandlers.map.postMessage(null); //IOS
                             console.log('IOS进入地图');
+                            alert('IOS进入地图');
                           }
                         }
                       }}

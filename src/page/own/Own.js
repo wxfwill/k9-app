@@ -54,8 +54,9 @@ class Own extends Component {
                   window.android && window.android.signOut();
                   console.log('退出安卓');
                 } else {
-                  window.webkit && window.webkit.messageHandlers.signOut.postMessage(); //IOS
+                  window.webkit && window.webkit.messageHandlers.signOut.postMessage(null); //IOS
                   console.log('退出IOS');
+                  alert('IOS退出');
                 }
               }
             });
