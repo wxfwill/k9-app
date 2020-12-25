@@ -24,13 +24,17 @@ class Footer extends Component {
     super(props);
     this.msgList = '';
     this.totalMsgNum = 0;
-    let flag = 'yellowTab';
+    // let flag = 'yellowTab';
+    let flag = '我';
     if (this.props.history.location.pathname == '/news') {
-      flag = 'blueTab';
+      // flag = 'blueTab';
+      flag = '消息';
     } else if (this.props.history.location.pathname == '/check') {
-      flag = 'redTab';
+      //flag = 'redTab';
+      flag = '地图';
     } else if (this.props.history.location.pathname == '/workbench') {
-      flag = 'greenTab';
+      //flag = 'greenTab';
+      flag = '工作台';
     }
 
     let user = this.props.userInfo.user;
@@ -40,28 +44,24 @@ class Footer extends Component {
       hidden: false,
       fullScreen: false,
       role: user.role,
+      navList: [],
     };
   }
 
-  componentWillMount() {}
-  componentWillUnmount() {
-    //		systomStatus.closeSocket();
+  componentDidMount() {
+    this.queryForApp();
   }
 
-  componentWillReceiveProps(nextProps) {
-    // if (Immutable.is(Immutable.Map(this.props.socketMsg), Immutable.Map(nextProps.socketMsg))) {
-    //   return;
-    // }
-    // const socketMsg = nextProps.socketMsg;
-    // if (socketMsg && socketMsg.msgType == "newMsg") {
-    //   const data = socketMsg.data;
-    //   this.totalMsgNum = 0;
-    //   this.state.unReadMsgNum = socketMsg.unReadMsgNum;
-    //   sessionStorage.setItem("unReadMsgNum", socketMsg.unReadMsgNum);
-    // } else if (socketMsg && socketMsg.msgType == "msgTipsApp") {
-    //   this.state.unReadMsgNum = socketMsg.unReadMsgNum;
-    //   sessionStorage.setItem("unReadMsgNum", socketMsg.unReadMsgNum);
-    // }
+  //底部导航列表接口
+  queryForApp() {
+    React.$ajax.footer.queryForApp().then((res) => {
+      console.log(res);
+      if (res && res.code == 0) {
+        this.setState({
+          navList: res.data,
+        });
+      }
+    });
   }
 
   renderContent(pageText) {
@@ -75,156 +75,48 @@ class Footer extends Component {
   }
 
   render() {
-    let { pathname } = this.props.location;
-    let unReadMsgNum = sessionStorage.getItem('unReadMsgNum') || 100;
+    const { navList } = this.state;
     return (
       <div className="footer">
-        {/*	<Link to="/news">
-					
-					<span className={pathname=="/news"?'active':''}>
-						<img src={pathname=="/news"?newsActivePic:newsPic} alt="消息"/>
-						<span>消息</span>
-					</span>
-					<span style={{color: 'red'}}>{this.state.unReadMsgNum}</span>
-				</Link>
-				<Link to="/round">
-					<span className={pathname=="/round"?'active':''}>
-						<img src={pathname=="/round"?mapActivePic:mapPic} alt="考核"/>
-						<span>考核</span>
-					</span>
-				</Link>
-				<Link to="/fight">
-					<span className={pathname=="/fight"?'active':''}>
-						<img src={pathname=="/fight"?releaseActivePic:releasePic} alt="发布"/>
-						<span>发布</span>
-					</span>
-				</Link>
-				<Link to="/own">
-					<span className={pathname=="/own"?'active':''}>
-						<img src={pathname=="/own"?ownActivePic:ownPic} alt="我的"/>
-						<span>我的</span>
-					</span>
-				</Link>*/}
         <div className="foorter-inner">
           <TabBar unselectedTintColor="#C9CCD4" tintColor="#3D5EBD" barTintColor="white" hidden={this.state.hidden}>
-            <TabBar.Item
-              title="消息"
-              key="news"
-              icon={{ uri: newsPic }}
-              selectedIcon={{ uri: newsActivePic }}
-              selected={this.state.selectedTab === 'blueTab'}
-              badge={this.props.socketNewList.total > 0 ? this.props.socketNewList.total : ''}
-              onPress={() => {
-                this.setState({
-                  selectedTab: 'blueTab',
-                });
-                this.props.history.push('/news');
-              }}
-              data-seed="logId"
-            >
-              {this.renderContent('消息')}
-            </TabBar.Item>
-            <TabBar.Item
-              icon={{ uri: mapPic }}
-              selectedIcon={{ uri: mapActivePic }}
-              title="地图"
-              key="check"
-              selected={this.state.selectedTab === 'redTab'}
-              onPress={() => {
-                this.setState({
-                  selectedTab: 'redTab',
-                });
-                this.props.history.push('/check');
-              }}
-              data-seed="logId1"
-            >
-              {this.renderContent('地图')}
-            </TabBar.Item>
-            <TabBar.Item
-              icon={{ uri: releasePic }}
-              selectedIcon={{ uri: releaseActivePic }}
-              title="工作台"
-              key="workbench"
-              selected={this.state.selectedTab === 'greenTab'}
-              onPress={() => {
-                this.setState({
-                  selectedTab: 'greenTab',
-                });
-                this.props.history.push('/workbench');
-              }}
-            >
-              {this.renderContent('工作台')}
-            </TabBar.Item>
-            <TabBar.Item
-              icon={{ uri: ownPic }}
-              selectedIcon={{ uri: ownActivePic }}
-              title="我"
-              key="own"
-              selected={this.state.selectedTab === 'yellowTab'}
-              onPress={() => {
-                this.setState({
-                  selectedTab: 'yellowTab',
-                });
-                this.props.history.push('/own');
-              }}
-            >
-              {this.renderContent('我')}
-            </TabBar.Item>
+            {navList && navList.length > 0
+              ? navList.map((item) => {
+                  return (
+                    <TabBar.Item
+                      title={item.title}
+                      key={item.id}
+                      icon={{ uri: item.normalIconUrl }}
+                      selectedIcon={{ uri: item.highlightIconUrl }}
+                      selected={this.state.selectedTab === item.title}
+                      badge={
+                        item.title == '消息' && this.props.socketNewList.total > 0 ? this.props.socketNewList.total : ''
+                      }
+                      onPress={() => {
+                        this.setState({
+                          selectedTab: item.title,
+                        });
+                        if (item.openType == 'url') {
+                          this.props.history.push(item.openAddr);
+                        } else {
+                          console.log('进入地图');
+                          if (util.isAndroid) {
+                            window.android && window.android.map();
+                            console.log('android进入地图');
+                          } else {
+                            window.webkit && window.webkit.messageHandlers.map.postMessage(); //IOS
+                            console.log('IOS进入地图');
+                          }
+                        }
+                      }}
+                    >
+                      {this.renderContent(item.title)}
+                    </TabBar.Item>
+                  );
+                })
+              : null}
           </TabBar>
         </div>
-        {/* <div style={{ display: this.state.role > 3 ? '' : 'none' }}>
-          <TabBar unselectedTintColor="#949494" tintColor="#15c619" barTintColor="white" hidden={this.state.hidden}>
-            <TabBar.Item
-              title="消息"
-              key="news"
-              icon={{ uri: newsPic }}
-              selectedIcon={{ uri: newsActivePic }}
-              selected={this.state.selectedTab === 'blueTab'}
-              badge={this.state.unReadMsgNum}
-              onPress={() => {
-                this.setState({
-                  selectedTab: 'blueTab',
-                });
-                this.props.history.push('/news');
-              }}
-              data-seed="logId"
-            >
-              {this.renderContent('消息')}
-            </TabBar.Item>
-            <TabBar.Item
-              icon={{ uri: mapPic }}
-              selectedIcon={{ uri: mapActivePic }}
-              title="考核"
-              key="check"
-              selected={this.state.selectedTab === 'redTab'}
-              onPress={() => {
-                this.setState({
-                  selectedTab: 'redTab',
-                });
-                this.props.history.push('/check');
-              }}
-              data-seed="logId1"
-            >
-              {this.renderContent('考核')}
-            </TabBar.Item>
-
-            <TabBar.Item
-              icon={{ uri: ownPic }}
-              selectedIcon={{ uri: ownActivePic }}
-              title="我的"
-              key="own"
-              selected={this.state.selectedTab === 'yellowTab'}
-              onPress={() => {
-                this.setState({
-                  selectedTab: 'yellowTab',
-                });
-                this.props.history.push('/own');
-              }}
-            >
-              {this.renderContent('我的')}
-            </TabBar.Item>
-          </TabBar>
-        </div> */}
       </div>
     );
   }
