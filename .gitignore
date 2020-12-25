@@ -2,6 +2,7 @@
 node_modules
 /dist
 /cluePushWeb
+/logs
 
 # local env files
 .env.local

@@ -16,7 +16,7 @@ import api from './http/index';
 React.$ajax = api;
 
 // 全局样式
-require('normalize.css');
+// require('normalize.css');
 require('style/app.less');
 import 'antd-mobile/dist/antd-mobile.less';
 

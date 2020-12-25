@@ -1,22 +1,22 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const srcPath = path.resolve(__dirname, './src');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const srcPath = path.resolve(__dirname, '../src');
+require('./env-config');
+const devMode = process.env.NODE_ENV == 'development';
+console.log('当前构建模式===' + process.env.NODE_ENV);
+console.log('当前打包环境===' + process.env.BASE_ENV);
 
 const commonSet = {
   entry: {
-    app: path.resolve(__dirname, './src/app.js'),
-    //vendor: ['react', 'react-dom', 'immutable','rc-form', ],
+    app: path.resolve(__dirname, '../src/app.js'),
   },
-  output: {
-    filename: 'assets/js/[name].js',
-    path: path.resolve(__dirname, './dist'),
-  },
-  devtool: 'cheap-module-eval-source-map',
   module: {
     rules: [
       {
         test: /\.bundle\.js$/,
+        // use: 'bundle-loader',
         use: [
           {
             loader: 'bundle-loader',
@@ -31,48 +31,73 @@ const commonSet = {
       {
         test: /\.(js|jsx)$/,
         use: 'babel-loader',
-        exclude: path.resolve(__dirname, './node_modules'),
+        exclude: path.resolve(__dirname, '../node_modules'),
       },
       {
         test: /\.(less|css)$/,
-        use: ['style-loader', 'css-loader?minimize', 'less-loader'],
-      },
-      {
-        test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
-      },
-      {
-        test: /\.(png|svg|jpg|gif)/,
         use: [
-          'file-loader?name=assets/images/[hash:8].[name].[ext]',
           {
-            loader: 'image-webpack-loader',
+            loader: MiniCssExtractPlugin.loader,
             options: {
-              bypassOnDebug: true,
+              publicPath: '../',
+            },
+          },
+          'css-loader',
+          {
+            loader: 'less-loader',
+            options: {
+              javascriptEnabled: true,
             },
           },
         ],
       },
       {
+        test: /\.(png|svg|jpg|gif)/,
+        use: [
+          'file-loader?name=assets/images/[hash:8].[name].[ext]',
+          // {
+          //   loader: 'image-webpack-loader',
+          //   options: {
+          //     bypassOnDebug: true,
+          //   },
+          // },
+        ],
+      },
+      {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
-        use: ['file-loader'],
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'fonts/[name].[hash:7].[ext]',
+            },
+          },
+        ],
       },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'learn redux',
+      title: 'k9 app',
       template: './template/index.html',
     }), //自动生成html
     new webpack.ProvidePlugin({
       util: 'util',
       config: 'config',
     }),
+    new MiniCssExtractPlugin({
+      filename: devMode ? 'css/[name].css' : 'css/[name]-[chunkhash:8].css', // hmr不支持hash命名
+      ignoreOrder: true, // 禁止检查顺序
+    }),
   ],
-  externals: {
-    jquery: 'window.jQuery',
-  },
+  // externals: {
+  //   jquery: 'window.jQuery',
+  // },
   resolve: {
+    // fallback: {
+    //   crypto: require.resolve('crypto-browserify'),
+    //   stream: require.resolve('stream-browserify'),
+    // },
     extensions: ['.js', '.json', '.jsx'],
     alias: {
       //配置路径常量
@@ -92,7 +117,6 @@ const commonSet = {
       websocket: `${srcPath}/websocket`,
       store: `${srcPath}/store`,
       config: path.resolve(__dirname, './config'),
-      mock: path.resolve(__dirname, './mock'),
     },
   },
 };
