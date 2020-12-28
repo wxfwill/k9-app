@@ -101,14 +101,9 @@ class Footer extends Component {
                           this.props.history.push(item.openAddr);
                         } else {
                           console.log('进入地图');
-                          if (util.isAndroid) {
-                            window.android && window.android.map();
-                            console.log('android进入地图');
-                          } else {
-                            window.webkit && window.webkit.messageHandlers.map.postMessage(null); //IOS
-                            console.log('IOS进入地图');
-                            alert('IOS进入地图');
-                          }
+                          util.CallApp({
+                            callAppName: 'map',
+                          });
                         }
                       }}
                     >

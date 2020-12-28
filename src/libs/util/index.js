@@ -535,6 +535,3 @@ export const getMontDateRange = (year, month) => {
   let endDate = moment(startDate).endOf('month');
   return { start: moment(startDate).format('YYYY-MM-DD'), end: moment(endDate).format('YYYY-MM-DD') };
 };
-
-//获取手机类型
-export const isAndroid = navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Linux') > -1; //android终端或者uc浏览器

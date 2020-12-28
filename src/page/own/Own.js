@@ -10,7 +10,7 @@ import { closeWebSocket } from 'components/common/websocket';
 import * as own from 'localData/own/ownTask';
 const Item = List.Item;
 const Brief = Item.Brief;
-const alert = Modal.alert;
+const $alert = Modal.alert;
 
 const ownPic = require('images/own/user.svg');
 
@@ -24,20 +24,20 @@ class Own extends Component {
     };
   }
   showAlert = () => {
-    const alertInstance = alert('提示', '确认退出吗?', [
+    const alertInstance = $alert('提示', '确认退出吗?', [
       { text: '取消', onPress: () => this.alertCancel(), style: 'default' },
       {
         text: '确定',
         onPress: () =>
-          new Promise((resolve) => {
+          //new Promise((resolve) => {
+          {
             let { history } = this.props;
             Toast.info('正在退出...');
             React.$ajax.login.loginOut().then((res) => {
               if (res.code == 0) {
+                //APP端退出登录
                 CallApp({
-                  callAppName: 'stopLocationService',
-                  callbackName: 'sendLocationInfoToJs',
-                  callbackFun: this.showClear,
+                  callAppName: 'signOut',
                 });
                 alertInstance.close();
                 // token
@@ -48,19 +48,11 @@ class Own extends Component {
                 closeWebSocket();
                 Toast.info('退出成功');
                 history.push('/login');
-
-                //APP端退出登录
-                if (util.isAndroid) {
-                  window.android && window.android.signOut();
-                  console.log('退出安卓');
-                } else {
-                  window.webkit && window.webkit.messageHandlers.signOut.postMessage(null); //IOS
-                  console.log('退出IOS');
-                  alert('IOS退出');
-                }
+                console.log(util.isAndroid);
               }
             });
-          }),
+          },
+        //}),
       },
     ]);
   };
