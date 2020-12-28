@@ -488,11 +488,10 @@ export const cookieUtil = {
 
 // 调用app方法，以及回掉
 export const CallApp = function ({ callAppName, param, callbackName, callbackFun }) {
-  // todo 增加判断param是否为空 JSON.stringify(param)
+  // 判断param是否为空 JSON.stringify(param)
   var u = navigator.userAgent;
   var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
-
-  // IOS 获取UUID
+  // IOS
   if (!isAndroid) {
     if (window.webkit) {
       if (param) {
@@ -503,7 +502,7 @@ export const CallApp = function ({ callAppName, param, callbackName, callbackFun
     } else {
       console.log('is no in app');
     }
-    // 安卓获取UUID
+    // 安卓
   } else {
     if (window.AndroidWebView) {
       if (param) {
@@ -511,23 +510,14 @@ export const CallApp = function ({ callAppName, param, callbackName, callbackFun
       } else {
         window.AndroidWebView[callAppName]();
       }
-
-      /*if(callbackName && !window[callbackName]) {
-                window[callbackName] = function(msg) {
-                    callbackFun(msg)
-                };
-            }*/
-      window[callbackName] = function (msg) {
-        callbackFun(msg);
-      };
     } else {
       console.log('is no in app');
     }
   }
+  window[callbackName] = function (msg) {
+    callbackFun(msg);
+  };
 };
-
-// WEBPACK FOOTER //
-// ./src/libs/util/index.js
 
 // 根据年月计算出一个月的开始和结束日期
 export const getMontDateRange = (year, month) => {

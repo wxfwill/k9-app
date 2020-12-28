@@ -10,8 +10,8 @@ import { closeWebSocket } from 'components/common/websocket';
 import * as own from 'localData/own/ownTask';
 const Item = List.Item;
 const Brief = Item.Brief;
-const $alert = Modal.alert;
-
+const alert = Modal.alert;
+let alertInstance = null;
 const ownPic = require('images/own/user.svg');
 
 require('style/own/own.less');
@@ -23,36 +23,80 @@ class Own extends Component {
       data: own.appMenu,
     };
   }
+  loginOutMeth = (msg) => {
+    console.log('App返回信息====' + msg);
+    alert('App返回信息====' + msg);
+    let { history } = this.props;
+    Toast.info('正在退出...');
+    React.$ajax.login.loginOut().then((res) => {
+      if (res.code == 0) {
+        alertInstance.close();
+        // token
+        this.props.tokenAction(null);
+        // 用户信息
+        this.props.userInfoAction('');
+        // 关闭socket
+        closeWebSocket();
+        Toast.info('退出成功');
+        history.push('/login');
+
+        //APP端退出登录
+        // if (util.isAndroid) {
+        //   window.android && window.android.signOut();
+        //   console.log('退出安卓');
+        // } else {
+        //   window.webkit && window.webkit.messageHandlers.signOut.postMessage(null); //IOS
+        //   console.log('退出IOS');
+        //   alert('IOS退出');
+        // }
+      }
+    });
+  };
   showAlert = () => {
-    const alertInstance = $alert('提示', '确认退出吗?', [
+    let _this = this;
+    alertInstance = alert('提示', '确认退出吗?', [
       { text: '取消', onPress: () => this.alertCancel(), style: 'default' },
       {
         text: '确定',
         onPress: () =>
-          //new Promise((resolve) => {
-          {
-            let { history } = this.props;
-            Toast.info('正在退出...');
-            React.$ajax.login.loginOut().then((res) => {
-              if (res.code == 0) {
-                //APP端退出登录
-                CallApp({
-                  callAppName: 'signOut',
-                });
-                alertInstance.close();
-                // token
-                this.props.tokenAction(null);
-                // 用户信息
-                this.props.userInfoAction('');
-                // 关闭socket
-                closeWebSocket();
-                Toast.info('退出成功');
-                history.push('/login');
-                console.log(util.isAndroid);
-              }
-            });
-          },
-        //}),
+          util.CallApp({
+            callAppName: 'signOut',
+            param: { jsMethod: 'jsLoginOut' },
+            callbackName: 'jsLoginOut',
+            callbackFun: _this.loginOutMeth,
+          }),
+        // new Promise((resolve) => {
+        //   let { history } = this.props;
+        //   Toast.info('正在退出...');
+        //   React.$ajax.login.loginOut().then((res) => {
+        //     if (res.code == 0) {
+        //       CallApp({
+        //         callAppName: 'stopLocationService',
+        //         callbackName: 'sendLocationInfoToJs',
+        //         callbackFun: this.showClear,
+        //       });
+        //       alertInstance.close();
+        //       // token
+        //       this.props.tokenAction(null);
+        //       // 用户信息
+        //       this.props.userInfoAction('');
+        //       // 关闭socket
+        //       closeWebSocket();
+        //       Toast.info('退出成功');
+        //       history.push('/login');
+
+        //       //APP端退出登录
+        //       if (util.isAndroid) {
+        //         window.android && window.android.signOut();
+        //         console.log('退出安卓');
+        //       } else {
+        //         window.webkit && window.webkit.messageHandlers.signOut.postMessage(null); //IOS
+        //         console.log('退出IOS');
+        //         alert('IOS退出');
+        //       }
+        //     }
+        //   });
+        // }),
       },
     ]);
   };
