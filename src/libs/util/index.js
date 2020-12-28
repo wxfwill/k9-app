@@ -268,14 +268,22 @@ export const getShowTimeAgain = (startTime, endTime) => {
   let start = new Date(startTime);
   let end = new Date(endTime);
   // 间隔
+  console.log(end.getTime() - start.getTime());
   let interval = parseInt((end.getTime() - start.getTime()) / 1000 / 60);
-  if (interval == 0) {
+  console.log(interval);
+  if (interval && interval * 60 < 60) {
     return '刚刚';
   } else if (interval < 60) {
     return interval.toString() + '分钟前';
   } else if (interval < 60 * 24) {
     return parseInt(interval / 60).toString() + '小时前';
-  } else if (end.getFullYear() == start.getFullYear()) {
+  } else if (60 * 24 < interval && interval < 60 * 24 * 2) {
+    return '1天前';
+  } else if (60 * 24 * 2 < interval && interval < 60 * 24 * 3) {
+    return '2天前';
+  } else if (60 * 24 * 3 < interval && interval < 60 * 24 * 4) {
+    return '3天前';
+  } else if (60 * 24 * 4 < interval && end.getFullYear() == start.getFullYear()) {
     return (
       leftAddZero(start.getMonth() + 1) +
       '-' +
