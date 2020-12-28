@@ -30,6 +30,7 @@ const logoPic = require('images/icon-logo.png');
 class Login extends Component {
   constructor(props) {
     super(props);
+    // this.isLogin();
     this.state = {
       isRemeberAccount: true, // 是否记住账户
       isRemeberAccVal: '',
@@ -39,6 +40,54 @@ class Login extends Component {
       modal: false,
     };
   }
+  isLogin = (msg) => {
+    //通过token判断登录是否有效
+    React.$ajax.login.checkLogin(msg).then((res) => {
+      if (res.code == 0) {
+        let { history } = this.props;
+        let user = JSON.parse(sessionStorage.getItem('user'));
+        history.push({ pathname: '/own', state: user });
+      }
+    });
+    // React.$ajax.post('/api/userCenter/checkLogin', (res) => {
+    //   if (res.code == 0) {
+    //        CallApp({callAppName: 'stopLocationService', callbackName: 'sendLocationInfoToJs', callbackFun: this.showClear})
+    //     let { history } = this.props;
+    //     let user = res.data === null ? '' : res.data.user;
+    //     const { rememberName, rememberPassword, username, password } = this.state;
+    //     sessionStorage.setItem('user', JSON.stringify(user));
+    //     sessionStorage.setItem('appMenu', JSON.stringify(res.data.appMenu));
+    //     rememberName ? Storage.setItem('k9username', username) : Storage.removeItem('k9username');
+    //     rememberPassword ? Storage.setItem('k9password', password) : Storage.removeItem('k9password');
+    //     const token = util.cookieUtil.get('token');
+    //     Storage.setItem('token', res.data.token);
+    //     history.push({ pathname: '/own', state: user });
+
+    //     if (util.isAndroid) {
+    //       window.AndroidWebView &&
+    //         window.AndroidWebView.showInfoFromJs(
+    //           JSON.stringify({
+    //             token,
+    //             id: user.id,
+    //             gpsInterval: res.data.cfgs.gpsInterval,
+    //             braceletInterval: res.data.cfgs.braceletInterval,
+    //             account: user.account,
+    //           })
+    //         );
+    //     } else {
+    //       // window.webkit.messageHandlers.showInfoFromJs.postMessage(
+    //       //   JSON.stringify({
+    //       //     token,
+    //       //     id: user.id,
+    //       //     gpsInterval: res.data.cfgs.gpsInterval,
+    //       //     braceletInterval: res.data.cfgs.braceletInterval,
+    //       //     account: user.account,
+    //       //   })
+    //       // );
+    //     }
+    //   }
+    // });
+  };
   showClear = (msg) => {};
   handleSubmit() {
     // 获取applist
@@ -96,6 +145,8 @@ class Login extends Component {
         util.CallApp({
           callAppName: 'login',
           param: reqData,
+          callbackName: 'checkIsLogin',
+          callbackFun: this.isLogin,
         });
       }
     });

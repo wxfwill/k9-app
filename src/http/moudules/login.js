@@ -55,3 +55,14 @@ export const updatePassword = (data) => {
     data,
   });
 };
+
+//判断登录是否有效
+export const checkLogin = (data) => {
+  return axios({
+    url: '/api/userCenter/checkLogin',
+    headers: {
+      k9token: data,
+    },
+    method: 'post',
+  });
+};

@@ -491,32 +491,32 @@ export const CallApp = function ({ callAppName, param, callbackName, callbackFun
   // 判断param是否为空 JSON.stringify(param)
   var u = navigator.userAgent;
   var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+  var otherParams = param ? param : '';
+  var resData = JSON.stringify({
+    jsMethod: callbackName ? callbackName : null,
+    ...otherParams,
+  });
+  console.log(resData,'------------');
   // IOS
   if (!isAndroid) {
     if (window.webkit) {
-      if (param) {
-        window.webkit.messageHandlers[callAppName].postMessage(JSON.stringify(param));
-      } else {
-        window.webkit.messageHandlers[callAppName].postMessage(JSON.stringify({ id: '' }));
-      }
+      window.webkit.messageHandlers[callAppName].postMessage(resData);
     } else {
       console.log('is no in app');
     }
     // 安卓
   } else {
-    if (window.AndroidWebView) {
-      if (param) {
-        window.AndroidWebView[callAppName](JSON.stringify(param));
-      } else {
-        window.AndroidWebView[callAppName]();
-      }
+    if (window.android) {
+      window.android[callAppName](resData);
     } else {
       console.log('is no in app');
     }
   }
-  window[callbackName] = function (msg) {
-    callbackFun(msg);
-  };
+  if (callbackName) {
+    window[callbackName] = function (msg) {
+      callbackFun(msg);
+    };
+  }
 };
 
 // 根据年月计算出一个月的开始和结束日期
