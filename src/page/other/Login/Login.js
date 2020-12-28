@@ -30,7 +30,10 @@ const logoPic = require('images/icon-logo.png');
 class Login extends Component {
   constructor(props) {
     super(props);
-    // this.isLogin();
+    let _this = this;
+    window.checkIsLogin = function (msg) {
+      _this.isLogin(msg);
+    };
     this.state = {
       isRemeberAccount: true, // 是否记住账户
       isRemeberAccVal: '',
@@ -40,55 +43,23 @@ class Login extends Component {
       modal: false,
     };
   }
-  isLogin = (msg) => {
+  isLogin = (token) => {
+    let { history } = this.props;
     //通过token判断登录是否有效
-    React.$ajax.login.checkLogin(msg).then((res) => {
-      if (res.code == 0) {
-        let { history } = this.props;
-        let user = JSON.parse(sessionStorage.getItem('user'));
-        history.push({ pathname: '/own', state: user });
-      }
-    });
-    // React.$ajax.post('/api/userCenter/checkLogin', (res) => {
-    //   if (res.code == 0) {
-    //        CallApp({callAppName: 'stopLocationService', callbackName: 'sendLocationInfoToJs', callbackFun: this.showClear})
-    //     let { history } = this.props;
-    //     let user = res.data === null ? '' : res.data.user;
-    //     const { rememberName, rememberPassword, username, password } = this.state;
-    //     sessionStorage.setItem('user', JSON.stringify(user));
-    //     sessionStorage.setItem('appMenu', JSON.stringify(res.data.appMenu));
-    //     rememberName ? Storage.setItem('k9username', username) : Storage.removeItem('k9username');
-    //     rememberPassword ? Storage.setItem('k9password', password) : Storage.removeItem('k9password');
-    //     const token = util.cookieUtil.get('token');
-    //     Storage.setItem('token', res.data.token);
-    //     history.push({ pathname: '/own', state: user });
-
-    //     if (util.isAndroid) {
-    //       window.AndroidWebView &&
-    //         window.AndroidWebView.showInfoFromJs(
-    //           JSON.stringify({
-    //             token,
-    //             id: user.id,
-    //             gpsInterval: res.data.cfgs.gpsInterval,
-    //             braceletInterval: res.data.cfgs.braceletInterval,
-    //             account: user.account,
-    //           })
-    //         );
-    //     } else {
-    //       // window.webkit.messageHandlers.showInfoFromJs.postMessage(
-    //       //   JSON.stringify({
-    //       //     token,
-    //       //     id: user.id,
-    //       //     gpsInterval: res.data.cfgs.gpsInterval,
-    //       //     braceletInterval: res.data.cfgs.braceletInterval,
-    //       //     account: user.account,
-    //       //   })
-    //       // );
-    //     }
-    //   }
-    // });
+    React.$ajax
+      .postData({
+        url: '/api/userCenter/checkLogin',
+        config: { headers: { 'Content-Type': 'application/json;charset=UTF-8', k9token: token || 123 } },
+      })
+      .then((res) => {
+        alert(res);
+        if (res.code == 0) {
+          history.push({ pathname: '/own' });
+        } else {
+          history.push({ pathname: '/login' });
+        }
+      });
   };
-  showClear = (msg) => {};
   handleSubmit() {
     // 获取applist
     this.queryForApp();
@@ -104,7 +75,6 @@ class Login extends Component {
       Toast.info('请先同意隐私政策', 2);
     }
   }
-  checkIsLogin = (token) => {};
   _login = (data) => {
     React.$ajax.login.postLogin(data).then((res) => {
       if (res && res.code == 0) {
@@ -146,8 +116,6 @@ class Login extends Component {
         util.CallApp({
           callAppName: 'login',
           param: reqData,
-          callbackName: 'checkIsLogin',
-          callbackFun: this.isLogin,
         });
       }
     });

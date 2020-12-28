@@ -24,12 +24,12 @@ let createWebsocket = () => {
   websocket.onclose = function (e) {
     console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean);
     console.log(React);
-    React.$ajax.postData('/api/userCenter/checkLogin').then((res) => {
-      if (res && res.code == 0) {
-        // 重新连接
-        reconnect();
-      }
-    });
+    // React.$ajax.postData('/api/userCenter/checkLogin').then((res) => {
+    //   if (res && res.code == 0) {
+    //     // 重新连接
+    //     reconnect();
+    //   }
+    // });
   };
 };
 

@@ -6,6 +6,19 @@ import * as news from './moudules/news';
 import * as own from './moudules/own';
 import * as footer from './moudules/footer';
 
+//通用相关接口 优先
+import axios from './axios';
+import configs from './config';
+
+const postData = ({ url, data, config }) => {
+  return axios({
+    url: url,
+    method: 'post',
+    data,
+    headers: config && config.headers ? config.headers : configs.headers,
+  });
+};
+
 // 默认全部导出
 export default {
   login,
@@ -13,4 +26,5 @@ export default {
   news,
   own,
   footer,
+  postData,
 };
