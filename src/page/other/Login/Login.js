@@ -55,6 +55,7 @@ class Login extends Component {
       Toast.info('请先同意隐私政策', 2);
     }
   }
+  checkIsLogin = (token) => {};
   _login = (data) => {
     React.$ajax.login.postLogin(data).then((res) => {
       if (res && res.code == 0) {

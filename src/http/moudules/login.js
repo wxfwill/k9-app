@@ -16,6 +16,13 @@ export const loginOut = () => {
     method: 'post',
   });
 };
+// 校验登录
+// export const loginOut = () => {
+//   return axios({
+//     url: 'api/userCenter/logout',
+//     method: 'post',
+//   });
+// };
 // 下载案件信息
 export const downCaseInfo = (params) => {
   return axios({

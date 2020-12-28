@@ -59,44 +59,44 @@ class Own extends Component {
       {
         text: '确定',
         onPress: () =>
-          util.CallApp({
-            callAppName: 'signOut',
-            param: { jsMethod: 'jsLoginOut' },
-            callbackName: 'jsLoginOut',
-            callbackFun: _this.loginOutMeth,
-          }),
-        // new Promise((resolve) => {
-        //   let { history } = this.props;
-        //   Toast.info('正在退出...');
-        //   React.$ajax.login.loginOut().then((res) => {
-        //     if (res.code == 0) {
-        //       CallApp({
-        //         callAppName: 'stopLocationService',
-        //         callbackName: 'sendLocationInfoToJs',
-        //         callbackFun: this.showClear,
-        //       });
-        //       alertInstance.close();
-        //       // token
-        //       this.props.tokenAction(null);
-        //       // 用户信息
-        //       this.props.userInfoAction('');
-        //       // 关闭socket
-        //       closeWebSocket();
-        //       Toast.info('退出成功');
-        //       history.push('/login');
+          // util.CallApp({
+          //   callAppName: 'signOut',
+          //   param: { jsMethod: 'jsLoginOut' },
+          //   callbackName: 'jsLoginOut',
+          //   callbackFun: _this.loginOutMeth,
+          // }),
+          new Promise((resolve) => {
+            let { history } = this.props;
+            Toast.info('正在退出...');
+            React.$ajax.login.loginOut().then((res) => {
+              if (res.code == 0) {
+                CallApp({
+                  callAppName: 'stopLocationService',
+                  callbackName: 'sendLocationInfoToJs',
+                  callbackFun: this.showClear,
+                });
+                alertInstance.close();
+                // token
+                this.props.tokenAction(null);
+                // 用户信息
+                this.props.userInfoAction('');
+                // 关闭socket
+                closeWebSocket();
+                Toast.info('退出成功');
+                history.push('/login');
 
-        //       //APP端退出登录
-        //       if (util.isAndroid) {
-        //         window.android && window.android.signOut();
-        //         console.log('退出安卓');
-        //       } else {
-        //         window.webkit && window.webkit.messageHandlers.signOut.postMessage(null); //IOS
-        //         console.log('退出IOS');
-        //         alert('IOS退出');
-        //       }
-        //     }
-        //   });
-        // }),
+                //APP端退出登录
+                if (util.isAndroid) {
+                  window.android && window.android.signOut();
+                  console.log('退出安卓');
+                } else {
+                  window.webkit && window.webkit.messageHandlers.signOut.postMessage(null); //IOS
+                  console.log('退出IOS');
+                  alert('IOS退出');
+                }
+              }
+            });
+          }),
       },
     ]);
   };

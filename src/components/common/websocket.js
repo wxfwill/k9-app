@@ -1,6 +1,8 @@
 let websocket,
   lockReconnect = false;
 
+import React from 'react';
+
 import store from 'store/index';
 
 console.log(process.env.BASE_WS);
@@ -21,13 +23,14 @@ let createWebsocket = () => {
   };
   websocket.onclose = function (e) {
     console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean);
+    console.log(React);
+    React.$ajax.postData('/api/userCenter/checkLogin').then((res) => {
+      if (res && res.code == 0) {
+        // 重新连接
+        reconnect();
+      }
+    });
   };
-  //   websocket.onmessage = function (event) {
-  //     lockReconnect = true;
-  //     console.log('后端返回的消息');
-  //     console.log(event);
-  //     //event 为服务端传输的消息，在这里可以处理
-  //   };
 };
 
 let reconnect = () => {
