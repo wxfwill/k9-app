@@ -21,12 +21,17 @@ let createWebsocket = () => {
   };
   websocket.onclose = function (e) {
     console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean);
-    React.$ajax.login.checkIsLogin().then((res) => {
-      if (res && res.code == 0) {
-        // 重新连接
-        reconnect();
-      }
-    });
+    if (e.code == 1006) {
+      closeCheck.reset().start();
+    } else {
+      closeCheck.reset();
+    }
+    // React.$ajax.login.checkIsLogin().then((res) => {
+    //   if (res && res.code == 0) {
+    //     // 重新连接
+    //     reconnect();
+    //   }
+    // });
   };
 };
 
@@ -39,6 +44,7 @@ let reconnect = () => {
   }, 2000);
 };
 
+// 心跳
 let heartCheck = {
   timeout: 60000, //60秒
   timeoutObj: null,
@@ -47,6 +53,7 @@ let heartCheck = {
     return this;
   },
   start: function () {
+    closeCheck.reset();
     this.timeoutObj = setInterval(function () {
       //心跳
       websocket && websocket.send(JSON.stringify({ serviceCode: 'ping' }));
@@ -54,9 +61,27 @@ let heartCheck = {
   },
 };
 
+// 非正常关闭时重连
+let closeCheck = {
+  time: 10000, //10秒
+  timeObj: null,
+  reset: function () {
+    clearInterval(this.timeObj);
+    return this;
+  },
+  start: function () {
+    this.timeObj = setInterval(function () {
+      console.log(6666);
+      lockReconnect = false;
+      reconnect();
+    }, this.time);
+  },
+};
+
 //关闭连接
 let closeWebSocket = () => {
   heartCheck.reset();
+  closeCheck.reset();
   websocket && websocket.close();
 };
 // 向后端发送数据
