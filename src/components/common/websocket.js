@@ -5,12 +5,10 @@ import React from 'react';
 
 import store from 'store/index';
 
-console.log(process.env.BASE_WS);
-
-const user = store.getState().loginReducer.userInfo.user;
-let url = user && `${process.env.BASE_WS}/ws/webSocket/${user.id}`;
-
 let createWebsocket = () => {
+  const user = store.getState().loginReducer.userInfo.user;
+  let url = user && `${process.env.BASE_WS}/ws/webSocket/${user.id}`;
+  console.log('url地址=====' + url);
   if (!url) return;
   websocket = new WebSocket(url);
   websocket.onopen = function () {
@@ -23,13 +21,12 @@ let createWebsocket = () => {
   };
   websocket.onclose = function (e) {
     console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean);
-    console.log(React);
-    // React.$ajax.postData('/api/userCenter/checkLogin').then((res) => {
-    //   if (res && res.code == 0) {
-    //     // 重新连接
-    //     reconnect();
-    //   }
-    // });
+    React.$ajax.login.checkIsLogin().then((res) => {
+      if (res && res.code == 0) {
+        // 重新连接
+        reconnect();
+      }
+    });
   };
 };
 

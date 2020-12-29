@@ -27,7 +27,7 @@ export default class Bundle extends Component {
     //注意这里，使用Promise对象; mod.default导出默认
     const self = this;
     props.load().then(function (mod) {
-      console.log(mod, 'mod');
+      // console.log(mod, 'mod');
       self.setState({
         mod: mod.default ? mod.default : mod,
       });
@@ -37,6 +37,3 @@ export default class Bundle extends Component {
     return this.state.mod ? this.props.children(this.state.mod) : null;
   }
 }
-
-// WEBPACK FOOTER //
-// ./src/router/Bundle.js

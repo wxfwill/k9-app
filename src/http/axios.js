@@ -20,15 +20,9 @@ let ajax = function $axios(options) {
     // request 拦截器
     instance.interceptors.request.use(
       (config) => {
-        Toast.loading('加载中...', 0);
-        // 设置accessToken
-        // store.subscribe(() => {
-        //   console.log('subscribe');
-        //   console.log(store.getState().loginReducer.token);
-        //   // config.headers['Authorization'] = store.getState().loginReducer.token
-        //   //   ? store.getState().loginReducer.token
-        //   //   : null;
-        // });
+        if (!options.isTips) {
+          Toast.loading('加载中...', 0);
+        }
         config.headers['k9token'] = store.getState().loginReducer.token ? store.getState().loginReducer.token : null;
         return config;
       },
@@ -43,7 +37,6 @@ let ajax = function $axios(options) {
         return Promise.reject(error); // 在调用的那边可以拿到(catch)你想返回的错误信息
       }
     );
-
     // response 拦截器
     instance.interceptors.response.use(
       (response) => {
@@ -64,7 +57,9 @@ let ajax = function $axios(options) {
         if (data.code == 0) {
           return data;
         } else {
-          data && Toast.info(data.msg);
+          if (!options.isTips) {
+            data && Toast.info(data.msg);
+          }
         }
       },
       (err) => {
