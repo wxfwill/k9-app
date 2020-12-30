@@ -504,7 +504,7 @@ export const CallApp = function ({ callAppName, param, callbackName, callbackFun
     jsMethod: callbackName ? callbackName : null,
     ...otherParams,
   });
-  console.log(resData,'------------');
+  console.log(resData, '------------');
   // IOS
   if (!isAndroid) {
     if (window.webkit) {
@@ -524,6 +524,10 @@ export const CallApp = function ({ callAppName, param, callbackName, callbackFun
     window[callbackName] = function (msg) {
       callbackFun(msg);
     };
+  } else {
+    if (callbackFun) {
+      callbackFun();
+    }
   }
 };
 

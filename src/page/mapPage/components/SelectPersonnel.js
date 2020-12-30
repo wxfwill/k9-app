@@ -13,12 +13,27 @@ class SelectPersonnel extends Component {
       allList: null,
       userName: '',
       teamId: '',
+      allData: null,
+      targetData: null,
     };
   }
   componentDidMount() {
     this.getCombatStaff();
     this.getUserGroup();
   }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState(
+      {
+        allData: nextProps.allData,
+        targetData: nextProps.targetData,
+      },
+      () => {
+        this.getCombatStaff();
+      }
+    );
+  }
+
   //获取中队列表
   getUserGroup = () => {
     React.$ajax.publish.getUserGroup().then((res) => {
@@ -36,11 +51,27 @@ class SelectPersonnel extends Component {
   };
   //获取成员列表
   getCombatStaff = () => {
-    const { userName, teamId } = this.state;
+    const { userName, teamId, allData, targetData } = this.state;
+    const { title } = this.props;
     React.$ajax.publish.getCombatStaff({ userName: userName, teamId: teamId }).then((res) => {
       if (res && res.code == 0) {
         res.data.map((item) => {
-          item.isChoice = false;
+          item.remark = false;
+          if (title == '分配队长' && targetData) {
+            if (item.id == targetData.userId) {
+              item.remark = true;
+            }
+          } else {
+            //分配队员
+          }
+          //判断人员是否已被选择
+          if (allData && allData.length > 0) {
+            allData.map((el) => {
+              if (item.id == el.userId) {
+                item.seleted = true;
+              }
+            });
+          }
         });
         this.setState({
           allMembers: res.data,
@@ -167,6 +198,7 @@ class SelectPersonnel extends Component {
                   value={userName}
                 />
                 <Picker
+                  extra="选单位"
                   data={groupList ? groupList : []}
                   cols={1}
                   onChange={(val) => {
@@ -185,8 +217,9 @@ class SelectPersonnel extends Component {
                       return (
                         <li
                           key={`${item.id}`}
-                          onClick={() => this.selectOption(item)}
+                          onClick={() => (item.seleted ? null : this.selectOption(item))}
                           className={item.remark ? 'choice' : ''}
+                          style={item.seleted ? { cursor: 'no-drop', color: '#CFCFD3' } : {}}
                         >
                           {item.name}
                         </li>
