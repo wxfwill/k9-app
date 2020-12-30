@@ -52,7 +52,6 @@ class Login extends Component {
         config: { headers: { 'Content-Type': 'application/json;charset=UTF-8', k9token: token || 123 } },
       })
       .then((res) => {
-        alert(res);
         if (res.code == 0) {
           history.push({ pathname: '/own' });
         } else {

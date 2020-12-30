@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { routes } from './routers';
 import { connect } from 'react-redux';
 // 路由配置
-class Router extends Component {
+class RouterArr extends Component {
   constructor(props) {
     super(props);
   }
@@ -51,4 +51,4 @@ const loginActionToProps = (dispatch) => ({
   tokenAction: (token) => dispatch(saveToken(token)),
 });
 
-export default connect(loginStateToProps, loginActionToProps)(Router);
+export default connect(loginStateToProps, loginActionToProps)(RouterArr);

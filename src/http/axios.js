@@ -3,6 +3,11 @@
 import axios from 'axios';
 import config from './config';
 import { Toast } from 'antd-mobile';
+// const history = require('history').createBrowserHistory();
+// import { createBrowserHistory } from 'history';
+// const history = createBrowserHistory({ forceRefresh: true });
+import { closeWebSocket } from 'components/common/websocket';
+import React from 'react';
 // 请求次数
 let repeat_count = 0;
 
@@ -56,6 +61,15 @@ let ajax = function $axios(options) {
         // 根据返回的code值来做不同的处理
         if (data.code == 0) {
           return data;
+        } else if (data.code == 10001) {
+          // token过期
+          data && Toast.info(data.msg);
+          // token
+          React.store.dispatch({ type: 'USER_TOKEN', token: null });
+          // 用户信息 USER_INFO
+          React.store.dispatch({ type: 'USER_INFO', userInfo: '' });
+          // 关闭socket
+          closeWebSocket();
         } else {
           if (!options.isTips) {
             data && Toast.info(data.msg);

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Router from 'router/index';
+import RouterArr from 'router/index';
 import 'lib-flexible/flexible.js';
 
 // redux
@@ -14,18 +14,18 @@ import { PersistGate } from 'redux-persist/lib/integration/react';
 // ajax请求
 import api from './http/index';
 React.$ajax = api;
+React.store = store;
 
 // 全局样式
 // require('normalize.css');
 require('style/app.less');
 import 'antd-mobile/dist/antd-mobile.less';
-
 class App extends React.Component {
   render() {
     return (
       <PersistGate loading={null} persistor={persistor}>
         <Provider store={store}>
-          <Router />
+          <RouterArr />
         </Provider>
       </PersistGate>
     );
