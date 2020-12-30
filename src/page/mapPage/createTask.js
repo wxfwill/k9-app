@@ -21,10 +21,15 @@ class CreateTask extends Component {
     //获取APP端网格相关数据
     const _this = this;
     window.jsGridData = function (data) {
-      this.setState({
-        taskData: data ? JSON.parse(data) : {},
-        taskPlace: data ? data.taskPlace : '',
-      });
+      this.setState(
+        {
+          taskData: data ? JSON.parse(data) : {},
+          taskPlace: data ? data.taskPlace : '',
+        },
+        () => {
+          alert(data);
+        }
+      );
     };
   }
   onSubmit = () => {
