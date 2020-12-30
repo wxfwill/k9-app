@@ -3,6 +3,11 @@
 import axios from 'axios';
 import config from './config';
 import { Toast } from 'antd-mobile';
+// const history = require('history').createBrowserHistory();
+// import { createBrowserHistory } from 'history';
+// const history = createBrowserHistory({ forceRefresh: true });
+import { closeWebSocket } from 'components/common/websocket';
+import React from 'react';
 // 请求次数
 let repeat_count = 0;
 
@@ -20,15 +25,9 @@ let ajax = function $axios(options) {
     // request 拦截器
     instance.interceptors.request.use(
       (config) => {
-        Toast.loading('加载中...', 0);
-        // 设置accessToken
-        // store.subscribe(() => {
-        //   console.log('subscribe');
-        //   console.log(store.getState().loginReducer.token);
-        //   // config.headers['Authorization'] = store.getState().loginReducer.token
-        //   //   ? store.getState().loginReducer.token
-        //   //   : null;
-        // });
+        if (!options.isTips) {
+          Toast.loading('加载中...', 0);
+        }
         config.headers['k9token'] = store.getState().loginReducer.token ? store.getState().loginReducer.token : null;
         return config;
       },
@@ -43,7 +42,6 @@ let ajax = function $axios(options) {
         return Promise.reject(error); // 在调用的那边可以拿到(catch)你想返回的错误信息
       }
     );
-
     // response 拦截器
     instance.interceptors.response.use(
       (response) => {
@@ -63,8 +61,19 @@ let ajax = function $axios(options) {
         // 根据返回的code值来做不同的处理
         if (data.code == 0) {
           return data;
-        } else {
+        } else if (data.code == 10001) {
+          // token过期
           data && Toast.info(data.msg);
+          // token
+          React.store.dispatch({ type: 'USER_TOKEN', token: null });
+          // 用户信息 USER_INFO
+          React.store.dispatch({ type: 'USER_INFO', userInfo: '' });
+          // 关闭socket
+          closeWebSocket();
+        } else {
+          if (!options.isTips) {
+            data && Toast.info(data.msg);
+          }
         }
       },
       (err) => {

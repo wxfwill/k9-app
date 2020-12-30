@@ -268,10 +268,8 @@ export const getShowTimeAgain = (startTime, endTime) => {
   let start = new Date(startTime);
   let end = new Date(endTime);
   // 间隔
-  console.log(end.getTime() - start.getTime());
   let interval = parseInt((end.getTime() - start.getTime()) / 1000 / 60);
-  console.log(interval);
-  if (interval && interval * 60 < 60) {
+  if (interval == 0) {
     return '刚刚';
   } else if (interval < 60) {
     return interval.toString() + '分钟前';

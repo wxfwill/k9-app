@@ -52,7 +52,6 @@ class Login extends Component {
         config: { headers: { 'Content-Type': 'application/json;charset=UTF-8', k9token: token || 123 } },
       })
       .then((res) => {
-        alert(res);
         if (res.code == 0) {
           history.push({ pathname: '/own' });
         } else {
@@ -61,8 +60,6 @@ class Login extends Component {
       });
   };
   handleSubmit() {
-    // 获取applist
-    this.queryForApp();
     let { policy } = this.state;
     if (policy) {
       // 获取表单的值
@@ -78,6 +75,8 @@ class Login extends Component {
   _login = (data) => {
     React.$ajax.login.postLogin(data).then((res) => {
       if (res && res.code == 0) {
+        // 获取applist
+        this.queryForApp();
         let { history } = this.props;
         Toast.info('登录成功', 1.5);
         let user = res.data.user;
@@ -99,11 +98,10 @@ class Login extends Component {
         console.log('token====' + res.data.token);
         this.props.tokenAction(res.data.token);
 
-        // 建立websocket
-        createWebsocket();
         // console.log(this.props.dispatch(saveToken(res.data.token)));
         history.push({ pathname: '/own', state: user });
-
+        // 建立websocket
+        createWebsocket();
         // const token = util.cookieUtil.get('token');
 
         //传递登录信息给两步路

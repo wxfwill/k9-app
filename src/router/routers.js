@@ -463,42 +463,52 @@ export const routes = [
   {
     path: '/',
     component: Login,
+    auth: false,
   },
   {
     path: '/login',
     component: Login,
+    auth: false,
   },
   {
     path: '/login/policy',
     component: LoginPolicy,
+    auth: false,
   },
   {
     path: '/map/taskDetal',
     component: MapTaskDetal,
+    auth: true,
   },
   {
     path: '/map/createTask',
     component: MapCreate,
+    auth: false,
   },
   {
     path: '/map/assignPerson',
     component: AssignPerson,
+    auth: false,
   },
   {
     path: '/map/addPlayers',
     component: AddPlayers,
+    auth: true,
   },
   {
     path: '/map/pushTask',
     component: PushTask,
+    auth: true,
   },
   {
     path: '/map/addTeamPerson',
     component: AddTeamPerson,
+    auth: false,
   },
   {
     path: '/map/mergeTrajectory',
     component: MergeTrajectory,
+    auth: false,
   },
   {
     path: '/workbench',
@@ -513,30 +523,37 @@ export const routes = [
   {
     path: '/workbench/round',
     component: AddPubRound,
+    auth: true,
   },
   {
     path: '/workbench/roundDetail',
     component: PubRoundDetails,
+    auth: true,
   },
   {
     path: '/workbench/training',
     component: AddPubTraining,
+    auth: true,
   },
   {
     path: '/workbench/trainingDetail',
     component: TrainingDetail,
+    auth: true,
   },
   {
     path: '/workbench/addEmedep',
     component: AddEmedep,
+    auth: true,
   },
   {
     path: '/workbench/ApprovalMangement',
     component: ApprovalMangement,
+    auth: true,
   },
   {
     path: '/workbench/addAggregate',
     component: AddAggregate,
+    auth: true,
   },
   {
     path: '/workbench/addItinerancy',
@@ -555,42 +572,52 @@ export const routes = [
   {
     path: '/workbench/rollCallList',
     component: PublishRollCallList,
+    auth: true,
   },
   {
     path: '/workbench/rollCallDetails',
     component: PublishRollCallDetails,
+    auth: true,
   },
   {
     path: '/workbench/vacation',
     component: PublishVacation,
+    auth: true,
   },
   {
     path: '/workbench/workAssessment',
     component: PublishWorkAssessment,
+    auth: true,
   },
   {
     path: '/workbench/dailyWorkReport',
     component: PublishDailyWorkReport,
+    auth: true,
   },
   {
     path: '/workbench/dailyDetails',
     component: PublishDailyDetails,
+    auth: true,
   },
   {
     path: '/workbench/rankingList',
     component: PublishRankingList,
+    auth: true,
   },
   {
     path: '/workbench/selfAssessment',
     component: PublishSelfAssessment,
+    auth: true,
   },
   {
     path: '/workbench/leaveList',
     component: PublishLeaveList,
+    auth: true,
   },
   {
     path: '/workbench/leaveDetails',
     component: PublishLeaveDetails,
+    auth: true,
   },
   {
     path: '/own',
@@ -600,70 +627,87 @@ export const routes = [
   {
     path: '/own/OwnTask',
     component: OwnTask,
+    auth: true,
   },
   {
     path: '/own/GridSearchDetal', //网格化搜捕详情
     component: GridSearchDetal,
+    auth: true,
   },
   {
     path: '/own/DailyPatrolDetal', //日常巡逻详情
     component: DailyPatrolDetal,
+    auth: true,
   },
   {
     path: '/own/EmergencyDeploymentDetal', //紧急调配详情
     component: EmergencyDeploymentDetal,
+    auth: true,
   },
   {
     path: '/own/AggregatePointDetal', //定点集合详情
     component: AggregatePointDetal,
+    auth: true,
   },
   {
     path: '/own/ItinerancyDetal', //外勤任务详情
     component: ItinerancyDetal,
+    auth: true,
   },
   {
     path: '/own/TailView',
     component: TailView,
+    auth: true,
   },
   {
     path: '/own/callList',
     component: OwnCallList,
+    auth: true,
   },
   {
     path: '/own/OwnCallDetails',
     component: OwnCallDetails,
+    auth: true,
   },
   {
     path: '/own/OwnApproval',
     component: OwnApproval,
+    auth: true,
   },
   {
     path: '/own/DogManageListDetal',
     component: OwnApprovalDetails,
+    auth: true,
   },
   {
     path: '/own/OwnLeaveList',
     component: OwnLeaveList,
+    auth: true,
   },
   {
     path: '/own/OwnLeaveListDetails',
     component: OwnLeaveListDetails,
+    auth: true,
   },
   {
     path: '/own/DogManageList',
     component: DogManage,
+    auth: true,
   },
   {
     path: '/own/DogManageDetails',
     component: DogManageDetail,
+    auth: true,
   },
   {
     path: '/own/SelfAssessmentList',
     component: SelfAssessmentList,
+    auth: true,
   },
   {
     path: '/own/SelfAssessmentDetail',
     component: SelfAssessmentDetail,
+    auth: true,
   },
   {
     path: '/news',
@@ -673,6 +717,7 @@ export const routes = [
   {
     path: '/news/list',
     component: NewsList,
+    auth: true,
   },
   {
     path: '/check',
