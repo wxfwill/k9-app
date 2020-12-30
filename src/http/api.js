@@ -5,6 +5,7 @@ import * as publish from './moudules/publish';
 import * as news from './moudules/news';
 import * as own from './moudules/own';
 import * as footer from './moudules/footer';
+import * as mapPage from './moudules/mapPage';
 
 //通用相关接口 优先
 import axios from './axios';
@@ -26,5 +27,6 @@ export default {
   news,
   own,
   footer,
+  mapPage,
   postData,
 };

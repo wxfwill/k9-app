@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { createForm } from 'rc-form';
-import { List, Button, InputItem, TextareaItem, DatePicker } from 'antd-mobile';
+import { List, Button, InputItem, TextareaItem, DatePicker, Toast } from 'antd-mobile';
 import Header from 'components/common/Header';
 require('style/publish/public.less');
 require('style/page/mapPage/createTask.less');
@@ -12,13 +12,46 @@ class CreateTask extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: now,
-      area: '深圳市南山区塘朗山公园西北处20m',
+      taskDate: now,
+      taskPlace: '111',
+      taskData: {},
+    };
+  }
+  componentDidMount() {
+    //获取APP端网格相关数据
+    const _this = this;
+    window.jsGridData = function (data) {
+      this.setState({
+        taskData: data ? JSON.parse(data) : {},
+        taskPlace: data ? data.taskPlace : '',
+      });
     };
   }
   onSubmit = () => {
     this.props.form.validateFields((error, value) => {
-      console.log(error, value);
+      if (!error) {
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        let { taskData } = this.state;
+        taskData.taskName = value.taskName; //任务名称
+        taskData.taskDate = util.formatDate(new Date(value.taskDate), 'yyyy-MM-dd hh:mm:ss'); //执行时间
+        taskData.taskContent = value.taskContent; //任务内容
+        taskData.publishUserId = user.id; //发布人id
+        taskData.publishUserName = user.name; //发布人名称
+        React.$ajax.mapPage.publishGridHuntingTask(taskData).then((res) => {
+          if (res && res.code == 0) {
+            Toast.success('创建成功!', 1);
+            this.openMap();
+          }
+        });
+      } else {
+        Toast.fail('表单填写不完整，请填写完整再提交!', 1);
+      }
+    });
+  };
+  openMap = () => {
+    //进入地图
+    util.CallApp({
+      callAppName: 'map',
     });
   };
   render() {
@@ -42,19 +75,13 @@ class CreateTask extends Component {
                 </List>
                 <List className="list">
                   <p className="title">任务内容</p>
-                  <TextareaItem
-                    {...getFieldProps('taskContent')}
-                    clear
-                    placeholder="请输入任务内容"
-                    autoHeight
-                    rows={1}
-                  />
+                  <TextareaItem {...getFieldProps('taskContent')} placeholder="请输入任务内容" autoHeight rows={1} />
                 </List>
                 <List className="list">
                   <p className="title">执行时间</p>
                   <DatePicker
-                    {...getFieldProps('date', {
-                      initialValue: this.state.date,
+                    {...getFieldProps('taskDate', {
+                      initialValue: this.state.taskDate,
                       rules: [{ required: true, message: '请选择执行时间！' }],
                     })}
                     //onChange={(date) => this.setState({ date })}
@@ -66,13 +93,13 @@ class CreateTask extends Component {
                 <List className="list quyu-list">
                   <p className="title">搜捕区域</p>
                   <InputItem
-                    {...getFieldProps('area', {
-                      initialValue: this.state.area,
+                    {...getFieldProps('taskPlace', {
+                      initialValue: this.state.taskPlace,
                       rules: [{ required: true, message: '任务名称不能为空！' }],
                     })}
                     placeholder="请选择搜捕区域"
                     editable={false}
-                    extra={<i className="edit-ico"></i>}
+                    extra={<i className="edit-ico" onClick={this.openMap}></i>}
                   ></InputItem>
                 </List>
               </div>
