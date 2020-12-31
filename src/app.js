@@ -17,9 +17,8 @@ React.$ajax = api;
 React.store = store;
 
 // 全局样式
-// require('normalize.css');
 require('style/app.less');
-import 'antd-mobile/dist/antd-mobile.less';
+
 class App extends React.Component {
   render() {
     return (

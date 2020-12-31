@@ -42,7 +42,18 @@ const commonSet = {
               publicPath: '../',
             },
           },
+          // {
+          //   loader: 'css-loader',
+          //   options: {
+          //     importLoaders: 1,
+          //   },
+          // },
           'css-loader',
+          'postcss-loader',
+          // {
+          //   loader: 'postcss-loader',
+          //   options: {},
+          // },
           {
             loader: 'less-loader',
             options: {
