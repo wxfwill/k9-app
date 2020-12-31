@@ -13,35 +13,29 @@ class CreateTask extends Component {
     super(props);
     this.state = {
       taskDate: now,
-      taskPlace: '111',
+      taskPlace: '',
       taskData: {},
+      isEdit: false, //搜捕区域是否编辑---默认不编辑
     };
   }
   componentDidMount() {
     //获取APP端网格相关数据
     const _this = this;
     window.jsGridData = function (data) {
-      this.setState(
-        {
-          taskData: data ? JSON.parse(data) : {},
-          taskPlace: data ? data.taskPlace : '',
-        },
-        () => {
-          alert(data);
-        }
-      );
+      alert(data);
+      _this.setState({
+        taskData: data ? JSON.parse(data) : {},
+        taskPlace: data ? JSON.parse(data).taskPlace : '',
+      });
     };
   }
   onSubmit = () => {
     this.props.form.validateFields((error, value) => {
       if (!error) {
-        const user = JSON.parse(sessionStorage.getItem('user'));
         let { taskData } = this.state;
         taskData.taskName = value.taskName; //任务名称
         taskData.taskDate = util.formatDate(new Date(value.taskDate), 'yyyy-MM-dd hh:mm:ss'); //执行时间
         taskData.taskContent = value.taskContent; //任务内容
-        taskData.publishUserId = user.id; //发布人id
-        taskData.publishUserName = user.name; //发布人名称
         React.$ajax.mapPage.publishGridHuntingTask(taskData).then((res) => {
           if (res && res.code == 0) {
             Toast.success('创建成功!', 1);
@@ -60,6 +54,7 @@ class CreateTask extends Component {
     });
   };
   render() {
+    const { isEdit } = this.state;
     const { getFieldProps } = this.props.form;
     return (
       <div className="layer-main">
@@ -103,8 +98,28 @@ class CreateTask extends Component {
                       rules: [{ required: true, message: '任务名称不能为空！' }],
                     })}
                     placeholder="请选择搜捕区域"
-                    editable={false}
-                    extra={<i className="edit-ico" onClick={this.openMap}></i>}
+                    editable={isEdit}
+                    extra={
+                      <i
+                        className="edit-ico"
+                        onClick={() => {
+                          this.setState(
+                            {
+                              isEdit: true,
+                            },
+                            () => {
+                              this.inputRef.focus();
+                            }
+                          );
+                        }}
+                      ></i>
+                    }
+                    onBlur={() => {
+                      this.setState({
+                        isEdit: false,
+                      });
+                    }}
+                    ref={(el) => (this.inputRef = el)}
                   ></InputItem>
                 </List>
               </div>
