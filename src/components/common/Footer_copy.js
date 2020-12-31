@@ -43,7 +43,7 @@ class Footer extends Component {
     };
   }
 
-  componentWillMount() {}
+  UNSAFE_componentWillMount() {}
   componentWillUnmount() {
     //		systomStatus.closeSocket();
   }

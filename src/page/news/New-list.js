@@ -37,7 +37,7 @@ class NewList extends Component {
     console.log(666);
   }
   addTask = () => {};
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     let obj = util.urlParse(this.props.location.search);
     if (JSON.stringify(obj) == '{}') {
       this.props.history.push('/news');

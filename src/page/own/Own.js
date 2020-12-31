@@ -110,7 +110,7 @@ class Own extends Component {
   logout = () => {
     this.showAlert();
   };
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     console.log('use');
     console.log(this.props.location);
   }

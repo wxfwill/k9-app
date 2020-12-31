@@ -3,11 +3,13 @@ import React, { Component } from 'react';
 export default class Bundle extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       mod: null,
+      props,
     };
   }
-  componentWillMount() {
+  componentDidMount() {
     this.load(this.props);
   }
   componentWillUnmount() {
@@ -20,6 +22,22 @@ export default class Bundle extends Component {
       this.load(nextProps);
     }
   }
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   console.log(prevState);
+  //   const { load, props } = nextProps;
+  //   if (load !== prevState.props.load) {
+  //     return {
+  //       load,
+  //       props: {
+  //         load,
+  //       },
+  //     };
+  //   }
+  //   return null;
+  // }
+  // componentDidUpdate() {
+  //   this.load(this.props);
+  // }
   load(props) {
     this.setState({
       mod: null,

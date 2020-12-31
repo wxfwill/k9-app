@@ -141,7 +141,7 @@ class AddComponent extends Component {
       }
     });
   }
-  componentWillMount() {}
+  UNSAFE_componentWillMount() {}
   componentDidMount() {
     this.requestAllMembers();
   }

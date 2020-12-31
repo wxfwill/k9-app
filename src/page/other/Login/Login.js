@@ -155,7 +155,7 @@ class Login extends Component {
       }
     });
   }
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const remeberAccountVal = localStorage.getItem('remeberAccount');
     const remeberPassVal = localStorage.getItem('remeberPass');
     if (remeberAccountVal) {

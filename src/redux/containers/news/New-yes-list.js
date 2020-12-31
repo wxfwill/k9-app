@@ -153,7 +153,7 @@ class NewNoList extends Component {
       this.setState({ height: hei });
     }
   }
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     // console.log("type======" + this.props.noType);
     // let obj = util.urlParse(this.props.location.search);
     // this.setState({ title: obj.title });

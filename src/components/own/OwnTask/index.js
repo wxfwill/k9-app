@@ -43,7 +43,7 @@ class OwnTask extends Component {
   changeTimeList = (time) => {
     this.setState({ date: time });
   };
-  componentWillMount() {}
+  UNSAFE_componentWillMount() {}
   componentDidMount() {
     this.setState({
       tabH:
