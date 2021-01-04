@@ -34,12 +34,13 @@ class CreateTask extends Component {
       if (!error) {
         let { taskData } = this.state;
         taskData.taskName = value.taskName; //任务名称
-        taskData.taskDate = util.formatDate(new Date(value.taskDate), 'yyyy-MM-dd hh:mm:ss'); //执行时间
+        taskData.taskDate = new Date(value.taskDate).getTime(); //util.formatDate(new Date(value.taskDate), 'yyyy-MM-dd hh:mm:ss'); //执行时间
         taskData.taskContent = value.taskContent; //任务内容
         React.$ajax.mapPage.publishGridHuntingTask(taskData).then((res) => {
           if (res && res.code == 0) {
             Toast.success('创建成功!', 1);
             this.openMap();
+            util.CallApp({ callAppName: 'createdTask', param: taskData }); //告诉两步路，创建任务成功
           }
         });
       } else {
