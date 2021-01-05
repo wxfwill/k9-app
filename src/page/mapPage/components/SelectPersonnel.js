@@ -18,7 +18,7 @@ class SelectPersonnel extends Component {
     };
   }
   componentDidMount() {
-    this.getCombatStaff();
+    this.queryUserList();
     this.getUserGroup();
   }
 
@@ -29,7 +29,7 @@ class SelectPersonnel extends Component {
         targetData: nextProps.targetData,
       },
       () => {
-        this.getCombatStaff();
+        this.queryUserList();
       }
     );
   }
@@ -50,35 +50,46 @@ class SelectPersonnel extends Component {
     });
   };
   //获取成员列表
-  getCombatStaff = () => {
+  queryUserList = () => {
     const { userName, teamId, allData, targetData } = this.state;
-    const { title } = this.props;
-    React.$ajax.publish.getCombatStaff({ userName: userName, teamId: teamId }).then((res) => {
-      if (res && res.code == 0) {
-        res.data.map((item) => {
-          item.remark = false;
-          if (title == '分配队长' && targetData) {
-            if (item.id == targetData.userId) {
-              item.remark = true;
-            }
-          } else {
-            //分配队员
-          }
-          //判断人员是否已被选择
-          if (allData && allData.length > 0) {
-            allData.map((el) => {
-              if (item.id == el.userId) {
-                item.seleted = true;
+    const { title, taskId } = this.props;
+    React.$ajax.mapPage
+      .queryUserList({
+        taskId: taskId ? taskId : '', //任务ID
+      })
+      .then((res) => {
+        if (res && res.code == 0) {
+          res.data.map((item) => {
+            item.remark = false;
+            if (title == '分配队长' && targetData) {
+              if (item.userId == targetData.userId) {
+                item.remark = true;
               }
-            });
-          }
-        });
-        this.setState({
-          allMembers: res.data,
-          allList: res.data,
-        });
-      }
-    });
+            } else {
+              //分配队员
+              if (targetData && targetData.length > 0) {
+                targetData.map((el) => {
+                  if (item.userId == el.userId) {
+                    item.remark = true;
+                  }
+                });
+              }
+            }
+            //判断人员是否已被选择
+            if (allData && allData.length > 0) {
+              allData.map((el) => {
+                if (item.userId == el.userId) {
+                  item.seleted = true;
+                }
+              });
+            }
+          });
+          this.setState({
+            allMembers: res.data,
+            allList: res.data,
+          });
+        }
+      });
   };
   // 选择人员
   selectOption = (data) => {
@@ -88,7 +99,7 @@ class SelectPersonnel extends Component {
     if (allMembers && allMembers.length > 0) {
       allMembers.map((item) => {
         title == '分配队长' ? (item.remark = false) : null;
-        if (data.id === item.id) {
+        if (data.userId === item.userId) {
           item.remark = !item.remark;
         }
         arr.push(item);
@@ -135,7 +146,7 @@ class SelectPersonnel extends Component {
       let arr = [];
       if (userName) {
         groupArr.map((item) => {
-          item.name.indexOf(userName) > -1 || item.number.indexOf(userName) > -1 ? arr.push(item) : '';
+          item.userName.indexOf(userName) > -1 || item.number.indexOf(userName) > -1 ? arr.push(item) : '';
         });
         this.setState({
           allMembers: arr,
@@ -149,7 +160,7 @@ class SelectPersonnel extends Component {
       let arr = [];
       if (userName) {
         allList.map((item) => {
-          item.name.indexOf(userName) > -1 || item.number.indexOf(userName) > -1 ? arr.push(item) : '';
+          item.userName.indexOf(userName) > -1 || item.number.indexOf(userName) > -1 ? arr.push(item) : '';
         });
         console.log(arr);
         this.setState({
@@ -182,12 +193,22 @@ class SelectPersonnel extends Component {
     }
   };
   render() {
-    const { title } = this.props;
+    const { title, jumpCallBack } = this.props;
     const { groupList, allMembers, userName, teamId } = this.state;
     return (
       <div className="layer-main">
         <div className="parent-container">
-          <Header title={title ? title : '选择人员'} pointer="pointer" />
+          <Header
+            title={title ? title : '选择人员'}
+            pointer="pointer"
+            jumpCallBack={
+              jumpCallBack
+                ? () => {
+                    jumpCallBack();
+                  }
+                : null
+            }
+          />
           <div className="child-container">
             <div className="components SelectPersonnel-box">
               <div className="search-box">
@@ -216,12 +237,18 @@ class SelectPersonnel extends Component {
                     {allMembers.map((item) => {
                       return (
                         <li
-                          key={`${item.id}`}
-                          onClick={() => (item.seleted ? null : this.selectOption(item))}
+                          key={`${item.userId}`}
+                          onClick={() =>
+                            (item.seleted || item.isChose) == 1 && !item.remark ? null : this.selectOption(item)
+                          }
                           className={item.remark ? 'choice' : ''}
-                          style={item.seleted ? { cursor: 'no-drop', color: '#CFCFD3' } : {}}
+                          style={
+                            (item.seleted || item.isChose) == 1 && !item.remark
+                              ? { cursor: 'no-drop', color: '#CFCFD3' }
+                              : {}
+                          }
                         >
-                          {item.name}
+                          {item.userName}
                         </li>
                       );
                     })}

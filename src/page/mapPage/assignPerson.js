@@ -27,15 +27,8 @@ class AssignPerson extends Component {
     util.CallApp({
       callAppName: 'assignCaptain',
       param: {
-        userId: data.id,
-        userName: data.name,
-      },
-      //callbackName: 'jsAssignLeader',
-      callbackFun: () => {
-        //进入地图
-        util.CallApp({
-          callAppName: 'map',
-        });
+        userId: data.userId,
+        userName: data.userName,
       },
     });
   };
@@ -49,16 +42,26 @@ class AssignPerson extends Component {
         }
       });
     }
-    this.setState(
-      {
-        allData: dataObj.all ? dataObj.all : null,
-        targetData: dataObj.target ? dataObj.target : null,
-      }
-    );
+    this.setState({
+      allData: dataObj.all ? dataObj.all : null,
+      targetData: dataObj.target ? dataObj.target : null,
+    });
   };
   render() {
     const { targetData, allData } = this.state;
-    return <SelectPersonnel title="分配队长" onSubmit={this.onSubmit} allData={allData} targetData={targetData} />;
+    return (
+      <SelectPersonnel
+        title="分配队长"
+        onSubmit={this.onSubmit}
+        allData={allData}
+        targetData={targetData}
+        jumpCallBack={() => {
+          util.CallApp({
+            callAppName: 'close',
+          });
+        }}
+      />
+    );
   }
 }
 

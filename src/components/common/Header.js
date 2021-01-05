@@ -149,13 +149,13 @@ class Header extends Component {
     this.props.handleRightTitleClick();
   };
   render() {
-    const { user, title, pointer, history, customContent, isSet, isSearch, noColor, customRightTitle } = this.props;
+    const { user, title, pointer, history, customContent, isSet, isSearch, noColor, customRightTitle, jumpCallBack } = this.props;
 
     let className = noColor ? 'header nobgcolor' : 'header';
     return (
       <div className={className} ref={this.props.myRef}>
         {typeof pointer !== 'undefined' ? (
-          <Icon className="header-pointer" size="md" type="left" onClick={this.jump.bind(this)}></Icon>
+          <Icon className="header-pointer" size="md" type="left" onClick={jumpCallBack ? ()=>{jumpCallBack()}:this.jump.bind(this)}></Icon>
         ) : null}
         {typeof user !== 'undefined' ? (
           <div className="user-container">

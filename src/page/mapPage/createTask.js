@@ -39,19 +39,12 @@ class CreateTask extends Component {
         React.$ajax.mapPage.publishGridHuntingTask(taskData).then((res) => {
           if (res && res.code == 0) {
             Toast.success('创建成功!', 1);
-            this.openMap();
             util.CallApp({ callAppName: 'createdTask', param: taskData }); //告诉两步路，创建任务成功
           }
         });
       } else {
         Toast.fail('表单填写不完整，请填写完整再提交!', 1);
       }
-    });
-  };
-  openMap = () => {
-    //进入地图
-    util.CallApp({
-      callAppName: 'map',
     });
   };
   render() {

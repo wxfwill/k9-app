@@ -432,10 +432,6 @@ const MapCreate = (props) => (
 const AssignPerson = (props) => (
   <Bundle load={() => import('page/mapPage/assignPerson')}>{(AssignPerson) => <AssignPerson {...props} />}</Bundle>
 );
-// 创建任务后分配队员
-const AddPlayers = (props) => (
-  <Bundle load={() => import('page/mapPage/addPlayers')}>{(AddPlayers) => <AddPlayers {...props} />}</Bundle>
-);
 // 发布任务
 const PushTask = (props) => (
   <Bundle load={() => import('page/mapPage/pushTask')}>{(PushTask) => <PushTask {...props} />}</Bundle>
@@ -489,11 +485,6 @@ export const routes = [
     path: '/map/assignPerson',
     component: AssignPerson,
     auth: false,
-  },
-  {
-    path: '/map/addPlayers',
-    component: AddPlayers,
-    auth: true,
   },
   {
     path: '/map/pushTask',
