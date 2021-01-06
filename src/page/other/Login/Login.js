@@ -103,12 +103,20 @@ class Login extends Component {
         // 建立websocket
         createWebsocket();
         // const token = util.cookieUtil.get('token');
-
+        let issue = 0;
+        if (res.data.roles && res.data.roles.length > 0) {
+          res.data.roles.map((item) => {
+            if (item.roleCode === 'gridHuntingLeader') {
+              issue = 1;
+            }
+          });
+        }
         //传递登录信息给两步路
         const reqData = {
           userId: user.id,
           userName: user.name,
           token: res.data.token,
+          issue: issue, //1是指导员可以发布任务，0不能发布任务
         };
         console.log(util.isAndroid, reqData, '---------');
         util.CallApp({
