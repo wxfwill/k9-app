@@ -41,7 +41,9 @@ class NewNoList extends Component {
     });
     this.state = {
       currPage: 1,
-      finished: false,
+      param: {
+        finished: false,
+      },
       pageSize: 10,
       sortFieldName: '',
       sortType: 'desc',
@@ -90,8 +92,8 @@ class NewNoList extends Component {
   componentDidMount() {
     // this.setState({ isLoading: true });
     console.log('componentDidMount===123456');
-    let { currPage, finished, pageSize, sortFieldName, sortType } = this.state;
-    this.handleSearchList({ currPage, finished, pageSize, sortFieldName, sortType });
+    let { currPage, param, pageSize, sortFieldName, sortType } = this.state;
+    this.handleSearchList({ currPage, param, pageSize, sortFieldName, sortType });
     this.props.onRef && this.props.onRef('parent', this);
   }
   onEndReached = (event) => {
@@ -101,8 +103,8 @@ class NewNoList extends Component {
     this.setState({ isLoading: true });
     this.setState({ currPage: ++this.state.currPage });
 
-    let { currPage, finished, pageSize, sortFieldName, sortType } = this.state;
-    this.handleSearchList({ currPage, finished, pageSize, sortFieldName, sortType });
+    let { currPage, param, pageSize, sortFieldName, sortType } = this.state;
+    this.handleSearchList({ currPage, param, pageSize, sortFieldName, sortType });
   };
   noData = () => {
     console.log('未处理');
@@ -227,11 +229,11 @@ class NewNoList extends Component {
             </div>
             <div className="new-desc">
               <span className="content">开始时间:</span>
-              {util.formatDate(new Date(item.planStartTime), 'yyyy-MM-dd hh:mm')}
+              {util.formatDate(new Date(item.startTime), 'yyyy-MM-dd hh:mm')}
             </div>
             <div className="new-desc">
               <span className="content">发布人:</span>
-              {item.operatorName}
+              {item.publishUserName}
             </div>
           </Item>
           {item.status == 1 ? (

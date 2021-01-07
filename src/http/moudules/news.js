@@ -4,7 +4,7 @@ import axios from '../axios';
 // 网格化搜捕
 export const gridSearchList = (data) => {
   return axios({
-    url: '/api/appMsgTips/pageMyGridSearchTask',
+    url: '/api/app/pageMyGridSearchTask',
     method: 'post',
     data,
   });
