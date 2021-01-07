@@ -37,7 +37,10 @@ class NewNoList extends Component {
     });
     this.state = {
       currPage: 1,
-      finished: true,
+      param: {
+        finished: true,
+      },
+
       pageSize: 10,
       sortFieldName: '',
       sortType: 'desc',
@@ -85,8 +88,8 @@ class NewNoList extends Component {
   };
   componentDidMount() {
     this.setState({ isLoading: true });
-    let { currPage, finished, pageSize, sortFieldName, sortType } = this.state;
-    this.handleSearchList({ currPage, finished, pageSize, sortFieldName, sortType });
+    let { currPage, param, pageSize, sortFieldName, sortType } = this.state;
+    this.handleSearchList({ currPage, param, pageSize, sortFieldName, sortType });
     this.props.onRef && this.props.onRef('parent', this);
   }
   onEndReached = (event) => {
@@ -96,8 +99,8 @@ class NewNoList extends Component {
     this.setState({ isLoading: true });
     this.setState({ currPage: ++this.state.currPage });
 
-    let { currPage, finished, pageSize, sortFieldName, sortType } = this.state;
-    this.handleSearchList({ currPage, finished, pageSize, sortFieldName, sortType });
+    let { currPage, param, pageSize, sortFieldName, sortType } = this.state;
+    this.handleSearchList({ currPage, param, pageSize, sortFieldName, sortType });
   };
   noData = () => {
     console.log('未处理');

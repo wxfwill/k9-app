@@ -14,7 +14,22 @@ const Brief = Item.Brief;
 require('style/own/own.less');
 require('style/fontawesome/font-awesome.less');
 
-import * as news from 'localData/news/mockData';
+// import * as news from 'localData/news/mockData';
+
+function formaterList(list) {
+  // if (!util.isArray(list)) {
+  //   throw new Error(`list 参数必须为数组`);
+  // }
+  let newList = list ? list : [];
+  if (newList.length == 0) {
+    return [];
+  }
+  newList.map((item) => {
+    item.icon = require(`images/news/new-${item.type}.svg`);
+    item.desc = newsTypeDesc[item.type];
+  });
+  return newList;
+}
 
 const newsTypeDesc = {
   6: '网格化搜捕描述',
@@ -34,7 +49,8 @@ class News extends Component {
 
     this.state = {
       newsTypeList: this.formaterList(this.props.socketNewList.items),
-      newList: news.newsTypeData,
+      // newsTypeList: [],
+      // newList: news.newsTypeData,
     };
   }
   formaterList = (list) => {
@@ -49,7 +65,6 @@ class News extends Component {
       item.icon = require(`images/news/new-${item.type}.svg`);
       item.desc = newsTypeDesc[item.type];
     });
-    console.log(newList);
     return newList;
   };
   componentDidMount() {}
@@ -58,6 +73,16 @@ class News extends Component {
       return;
     };
   }
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   console.log(prevState.newsTypeList);
+  //   if (nextProps.socketNewList.items !== prevState.newsTypeList) {
+  //     console.log(nextProps.socketNewList.items);
+  //     return {
+  //       newsTypeList: formaterList(nextProps.socketNewList.items),
+  //     };
+  //   }
+  //   return null;
+  // }
   componentWillReceiveProps(nextProps) {
     this.setState({
       newsTypeList: this.formaterList(nextProps.socketNewList.items),
@@ -105,6 +130,8 @@ class News extends Component {
     history.push({ pathname: `/news/list`, search: `?title=${encodeURI(item.typeNote)}&icon=${item.icon}` });
   };
   render() {
+    console.log(this.state.newsTypeList);
+    console.log('消息数量===' + this.props.socketNewList.total);
     return (
       <div className="Own">
         <Header
