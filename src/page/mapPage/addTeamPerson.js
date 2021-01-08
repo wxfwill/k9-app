@@ -12,15 +12,14 @@ class TaskDetal extends Component {
     super(props);
     this.state = {
       teamPersons: null,
-      taskId: '796703405245599744',
-      subTaskId: '796703405287542784',
-      subTaskNumber: '1',
+      taskId: '',
+      subTaskId: '',
+      subTaskNumber: '',
       isModal: false,
     };
   }
 
   componentDidMount() {
-    this.queryUserPointList();
     //获取APP端网格相关数据
     const _this = this;
     window.jsTaskData = function (data) {
