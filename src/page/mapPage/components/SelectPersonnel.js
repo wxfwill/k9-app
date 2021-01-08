@@ -18,7 +18,16 @@ class SelectPersonnel extends Component {
     };
   }
   componentDidMount() {
-    this.queryUserList();
+    //this.queryUserList();
+    this.setState(
+      {
+        allData: this.props.allData,
+        targetData: this.props.targetData,
+      },
+      () => {
+        this.queryUserList();
+      }
+    );
     this.getUserGroup();
   }
 
@@ -66,14 +75,14 @@ class SelectPersonnel extends Component {
                 item.remark = true;
               }
             } else {
-              //分配队员
-              if (targetData && targetData.length > 0) {
-                targetData.map((el) => {
-                  if (item.userId == el.userId) {
-                    item.remark = true;
-                  }
-                });
-              }
+              // //分配队员
+              // if (targetData && targetData.length > 0) {
+              //   targetData.map((el) => {
+              //     if (item.userId == el.userId && el.userType != 1) {
+              //       item.remark = true;
+              //     }
+              //   });
+              // }
             }
             //判断人员是否已被选择
             if (allData && allData.length > 0) {
@@ -238,15 +247,9 @@ class SelectPersonnel extends Component {
                       return (
                         <li
                           key={`${item.userId}`}
-                          onClick={() =>
-                            (item.seleted || item.isChose) == 1 && !item.remark ? null : this.selectOption(item)
-                          }
+                          onClick={() => (item.seleted || item.isChose == 1 ? null : this.selectOption(item))}
                           className={item.remark ? 'choice' : ''}
-                          style={
-                            (item.seleted || item.isChose) == 1 && !item.remark
-                              ? { cursor: 'no-drop', color: '#CFCFD3' }
-                              : {}
-                          }
+                          style={item.seleted || item.isChose == 1 ? { cursor: 'no-drop', color: '#CFCFD3' } : {}}
                         >
                           {item.userName}
                         </li>

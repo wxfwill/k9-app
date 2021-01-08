@@ -67,13 +67,18 @@ class AddPlayers extends Component {
       // 添加队员
       React.$ajax.mapPage
         .saveUserList({
-          gridHuntingUserTaskDTOS: userArr,
+          gridHuntingUserTasks: userArr,
           taskId: taskData.taskId, //任务id
           subTaskId: taskData.subTaskId, //区域id
         })
         .then((res) => {
           if (res && res.code == 0) {
             console.log(res);
+            Toast.success('操作成功!', 1);
+            this.props.refresh();
+            util.CallApp({
+              callAppName: 'modifyMembers',
+            });
           }
         });
     }

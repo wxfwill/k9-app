@@ -1,22 +1,26 @@
 import React, { Component } from 'react';
-import { List, SwipeAction } from 'antd-mobile';
+import { List, SwipeAction, Toast, Modal } from 'antd-mobile';
 import Header from 'components/common/Header';
 import AddPlayers from './addPlayers';
 require('style/publish/public.less');
 require('style/page/mapPage/addTeamPerson.less');
+
+const $alert = Modal.alert;
 
 class TaskDetal extends Component {
   constructor(props) {
     super(props);
     this.state = {
       teamPersons: null,
-      taskId: '',
-      subTaskId: '',
+      taskId: '796703405245599744',
+      subTaskId: '796703405287542784',
+      subTaskNumber: '1',
       isModal: false,
     };
   }
 
   componentDidMount() {
+    this.queryUserPointList();
     //获取APP端网格相关数据
     const _this = this;
     window.jsTaskData = function (data) {
@@ -24,6 +28,7 @@ class TaskDetal extends Component {
         {
           taskId: data ? JSON.parse(data).taskId : '', //任务id
           subTaskId: data ? JSON.parse(data).subTaskId : '', //区域id
+          subTaskNumber: data ? JSON.parse(data).subTaskNumber : '', //区域编号
         },
         () => {
           _this.queryUserPointList();
@@ -49,17 +54,29 @@ class TaskDetal extends Component {
   };
   //删除队员
   removePlayer = (id) => {
-    React.$ajax.mapPage
-      .deleteUser({
-        taskId: this.state.taskId, //任务id
-        userTaskId: id,
-      })
-      .then((res) => {
-        if (res && res.code == 0) {
-          Toast.success('操作成功!', 1);
-          this.queryUserPointList();
-        }
-      });
+    const alertInstance = $alert('删除', '是否确认？', [
+      { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+      {
+        text: '确认',
+        onPress: () => {
+          React.$ajax.mapPage
+            .deleteUser({
+              taskId: this.state.taskId, //任务id
+              userTaskId: id,
+            })
+            .then((res) => {
+              alertInstance.close();
+              if (res && res.code == 0) {
+                Toast.success('操作成功!', 1);
+                this.queryUserPointList();
+                util.CallApp({
+                  callAppName: 'modifyMembers',
+                });
+              }
+            });
+        },
+      },
+    ]);
   };
   //打开
   openModal = () => {
@@ -68,12 +85,12 @@ class TaskDetal extends Component {
     });
   };
   render() {
-    const { teamPersons, taskId, subTaskId, isModal } = this.state;
+    const { teamPersons, taskId, subTaskId, subTaskNumber, isModal } = this.state;
     return (
       <div className="layer-main">
         <div className="parent-container">
           <Header
-            title={'搜捕区域' + subTaskId}
+            title={'搜捕区域' + subTaskNumber}
             pointer="pointer"
             jumpCallBack={() => {
               util.CallApp({
@@ -99,7 +116,7 @@ class TaskDetal extends Component {
                                       style: { backgroundColor: '#FF7575', color: 'white' },
                                     },
                                   ]
-                                : null
+                                : []
                             }
                             onOpen={() => console.log('global open')}
                             onClose={() => console.log('global close')}
@@ -110,10 +127,13 @@ class TaskDetal extends Component {
                                 <span>{item.number}</span>
                                 {item.userType == 1 ? <p className="zuzhang"></p> : null}
                               </div>
-                              <p className="fr">海拔：{item.elevation}m</p>
+                              <p className="fr">海拔：{item.elevation ? item.elevation + 'm' : ''}</p>
                             </div>
                             <div className="other-infor">
-                              <p>最新定位时间：{util.formatDate(new Date(item.locTime), 'yyyy-MM-dd hh:mm:ss')}</p>
+                              <p>
+                                最新定位时间：
+                                {item.locTime ? util.formatDate(new Date(item.locTime), 'yyyy-MM-dd hh:mm:ss') : ''}
+                              </p>
                               <p>
                                 经纬度：{item.longitude} {item.latitude}
                               </p>
@@ -138,6 +158,7 @@ class TaskDetal extends Component {
           isModal={isModal}
           taskData={{ taskId: taskId, subTaskId: subTaskId, teamPersons: teamPersons }}
           openModal={this.openModal}
+          refresh={this.queryUserPointList}
         />
       </div>
     );
