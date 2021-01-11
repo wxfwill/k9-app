@@ -16,7 +16,7 @@ class AggregatePointDetal extends Component {
         { label: '任务名称', value: item.taskName },
         {
           label: '集合时间',
-          value: item.assembleTime ? util.formatDate(new Date(item.assembleTime), 'yyyy-MM-dd hh:mm:ss') : null,
+          value: item.assembleTime ? util.formatDate(item.assembleTime, 'yyyy-MM-dd hh:mm:ss') : null,
         },
         { label: '集合点', value: item.location },
         { label: '人员', value: item.planUserNames },

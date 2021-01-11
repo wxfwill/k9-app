@@ -202,7 +202,7 @@ class AddComponent extends Component {
       return false;
     }
     this.isRequest = true;
-    data.startDateStr = util.formatDate(new Date(data.startDateStr), 'yyyy-MM-dd');
+    data.startDateStr = util.formatDate(data.startDateStr, 'yyyy-MM-dd');
     data.userIds = userIds;
     data.location = location;
     data.drawShapeDTO = {

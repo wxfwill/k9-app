@@ -224,15 +224,19 @@ class NewNoList extends Component {
           >
             <div className="new-title">{item.taskName}</div>
             <div className="new-desc">
-              <span className="content">主要内容:</span>
+              <span className="content">主要内容: </span>
               {item.taskContent}
             </div>
             <div className="new-desc">
-              <span className="content">开始时间:</span>
-              {util.formatDate(new Date(item.startTime), 'yyyy-MM-dd hh:mm')}
+              <span className="content">开始时间: </span>
+              {/* {util.formatDate(
+                new Date('Mon Jan 11 2021 12:43:02 GMT+0800 (中国标准时间)').getTime(),
+                'yyyy/MM/dd hh:mm'
+              )} */}
+              {util.formatDate(item.startTime, 'yyyy-MM-dd hh:mm')}
             </div>
             <div className="new-desc">
-              <span className="content">发布人:</span>
+              <span className="content">发布人: </span>
               {item.publishUserName}
             </div>
           </Item>

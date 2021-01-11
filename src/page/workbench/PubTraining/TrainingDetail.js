@@ -30,7 +30,7 @@ class TrainingDetail extends Component {
     this.setState({
       details: [
         { label: '训练科目', value: item.subjectName },
-        { label: '开始时间', value: item.trainDate ? util.formatDate(new Date(item.trainDate), 'yyyy-MM-dd') : null },
+        { label: '开始时间', value: item.trainDate ? util.formatDate(item.trainDate, 'yyyy-MM-dd') : null },
         { label: '场地类型', value: item.planId },
         { label: '巡逻地点', value: item.placeName },
         { label: '训练人员', value: item.planUserNames },

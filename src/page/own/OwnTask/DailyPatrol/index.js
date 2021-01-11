@@ -148,7 +148,7 @@ class DailyPatrol extends Component {
             <div className="new-title">{item.taskName}</div>
             <div className="new-desc">
               <span className="content">巡逻时间:</span>
-              {util.formatDate(new Date(item.planStartTime), 'yyyy-MM-dd hh:mm')}
+              {util.formatDate(item.planStartTime, 'yyyy-MM-dd hh:mm')}
             </div>
             <div className="new-desc">
               <span className="content">巡逻人员:</span>

@@ -153,9 +153,9 @@ class AddPubRoundComponent extends Component {
         this.isRequest = true;
         const dataObj = {
           drawShapeDTO: this.state.taskInfo.drawShapeDTO,
-          endTime: util.formatDate(new Date(this.state.endTime), 'yyyy-MM-dd hh:mm:ss'),
+          endTime: util.formatDate((this.state.endTime), 'yyyy-MM-dd hh:mm:ss'),
           patrolsLocation: this.state.taskInfo.patrolsLocation,
-          startTime: util.formatDate(new Date(this.state.startTime), 'yyyy-MM-dd hh:mm:ss'),
+          startTime: util.formatDate((this.state.startTime), 'yyyy-MM-dd hh:mm:ss'),
           taskContent: value.taskContent,
           taskName: value.taskName,
           id: this.state.id,

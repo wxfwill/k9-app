@@ -123,7 +123,7 @@ class RollCallListForm extends Component {
               />
             }
           >
-            {util.formatDate(new Date(item.opTime), 'yyyy-MM-dd')}
+            {util.formatDate(item.opTime, 'yyyy-MM-dd')}
             {'  点名记录'}
           </Item>
         </List>

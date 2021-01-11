@@ -21,13 +21,11 @@ class LevelDetails extends Component {
                 { label: '请假类型', value: item.typeName },
                 {
                   label: '开始时间',
-                  value: item.leaveStartTime
-                    ? util.formatDate(new Date(item.leaveStartTime), 'yyyy-MM-dd hh:mm:ss')
-                    : null,
+                  value: item.leaveStartTime ? util.formatDate(item.leaveStartTime, 'yyyy-MM-dd hh:mm:ss') : null,
                 },
                 {
                   label: '结束时间',
-                  value: item.leaveEndTime ? util.formatDate(new Date(item.leaveEndTime), 'yyyy-MM-dd hh:mm:ss') : null,
+                  value: item.leaveEndTime ? util.formatDate(item.leaveEndTime, 'yyyy-MM-dd hh:mm:ss') : null,
                 },
                 { label: '图片', value: item.fileList, type: 'img' },
                 { label: '请假事由', value: item.remark },

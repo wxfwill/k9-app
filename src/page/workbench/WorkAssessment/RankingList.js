@@ -43,11 +43,9 @@ class RankingList extends Component {
                         value={this.state.date}
                         onChange={(date) => this.setState({ date })}
                       >
-                        <List.Item arrow="horizontal">
-                          {util.formatDate(new Date(this.state.date), 'yyyy-MM-dd')}
-                        </List.Item>
+                        <List.Item arrow="horizontal">{util.formatDate(this.state.date, 'yyyy-MM-dd')}</List.Item>
                       </DatePicker>
-                      <p>{util.formatDate(new Date(this.state.date), 'yyyy-MM-dd')}</p>
+                      <p>{util.formatDate(this.state.date, 'yyyy-MM-dd')}</p>
                       <Icon type="down" />
                     </div>
                   </div>

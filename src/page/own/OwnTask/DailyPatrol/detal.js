@@ -17,11 +17,11 @@ class DailyPatrolDetal extends Component {
         { label: '任务名称', value: item.taskName },
         {
           label: '巡逻开始时间',
-          value: item.startTime ? util.formatDate(new Date(item.startTime), 'yyyy-MM-dd hh:mm:ss') : null,
+          value: item.startTime ? util.formatDate(item.startTime, 'yyyy-MM-dd hh:mm:ss') : null,
         },
         {
           label: '巡逻结束时间',
-          value: item.endTime ? util.formatDate(new Date(item.endTime), 'yyyy-MM-dd hh:mm:ss') : null,
+          value: item.endTime ? util.formatDate(item.endTime, 'yyyy-MM-dd hh:mm:ss') : null,
         },
         { label: '巡逻地点', value: item.patrolsPlace },
         { label: '巡逻人员', value: item.planUserNames },

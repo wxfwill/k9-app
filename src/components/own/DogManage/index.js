@@ -125,7 +125,7 @@ class DogManage extends Component {
             }
           >
             {`${item.trainerName}  `}
-            {util.formatDate(new Date(item.applyTime), 'yyyy-MM-dd')}
+            {util.formatDate(item.applyTime, 'yyyy-MM-dd')}
             {`-${item.breedName}`}
           </Item>
         </List>

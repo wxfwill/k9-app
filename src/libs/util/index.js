@@ -233,6 +233,11 @@ export const getShowTime = (time) => {
 /* 格式化时间戳
  */
 export function formatDate(_date, fmt) {
+  if (!_date) {
+    // 不存在
+    return '暂无时间';
+  }
+  _date = new Date(parseFloat(_date));
   if (/(y+)/.test(fmt)) {
     fmt = fmt.replace(RegExp.$1, (_date.getFullYear() + '').substr(4 - RegExp.$1.length));
   }
