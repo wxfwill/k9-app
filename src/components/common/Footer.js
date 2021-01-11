@@ -94,14 +94,15 @@ class Footer extends Component {
                         item.title == '消息' && this.props.socketNewList.total > 0 ? this.props.socketNewList.total : ''
                       }
                       onPress={() => {
-                        if (item.title === '搜捕') {
-                          return;
+                        if (item.title !== '搜捕') {
+                          this.setState({
+                            selectedTab: item.title,
+                          });
                         }
-                        this.setState({
-                          selectedTab: item.title,
-                        });
                         if (item.openType == 'url') {
-                          this.props.history.push(item.openAddr);
+                          if (item.title !== '搜捕') {
+                            this.props.history.push(item.openAddr);
+                          }
                         } else {
                           console.log('进入地图');
                           util.CallApp({
