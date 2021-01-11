@@ -50,7 +50,7 @@ class Footer extends Component {
 
   componentDidMount() {
     // this.queryForApp();
-    // console.log(this.props.appBottomList);
+    console.log(this.props.appBottomList);
   }
 
   //底部导航列表接口

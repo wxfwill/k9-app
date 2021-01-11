@@ -33,7 +33,7 @@ function formaterList(list) {
 
 const newsTypeDesc = {
   6: '网格化搜捕描述',
-  3: '训练了一只狗',
+  3: '训练了一只狗呀',
   4: '日常遛狗',
   5: '紧急事件处理',
   1: '休假描述',

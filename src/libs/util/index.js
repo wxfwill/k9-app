@@ -232,16 +232,16 @@ export const getShowTime = (time) => {
 };
 /* 格式化时间戳
  */
-export function formatDate(date, fmt) {
+export function formatDate(_date, fmt) {
   if (/(y+)/.test(fmt)) {
-    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+    fmt = fmt.replace(RegExp.$1, (_date.getFullYear() + '').substr(4 - RegExp.$1.length));
   }
   let o = {
-    'M+': date.getMonth() + 1,
-    'd+': date.getDate(),
-    'h+': date.getHours(),
-    'm+': date.getMinutes(),
-    's+': date.getSeconds(),
+    'M+': _date.getMonth() + 1,
+    'd+': _date.getDate(),
+    'h+': _date.getHours(),
+    'm+': _date.getMinutes(),
+    's+': _date.getSeconds(),
   };
   for (let k in o) {
     if (new RegExp(`(${k})`).test(fmt)) {
@@ -265,8 +265,19 @@ const leftAddZero = (time) => {
 
 // 时间展示 刚刚 几分钟前 日期
 export const getShowTimeAgain = (startTime, endTime) => {
-  let start = new Date(startTime);
-  let end = new Date(endTime);
+  var u = navigator.userAgent,
+    start,
+    end;
+  var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+  if (isAndroid) {
+    start = new Date(startTime);
+    end = new Date(endTime);
+  } else {
+    let _start = startTime && startTime.replace(/\-/g, '/');
+    let _end = endTime && endTime.replace(/\-/g, '/');
+    start = new Date(_start);
+    end = new Date(_end);
+  }
   // 间隔
   let interval = parseInt((end.getTime() - start.getTime()) / 1000 / 60);
   if (interval == 0) {
