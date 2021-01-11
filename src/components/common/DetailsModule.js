@@ -53,7 +53,7 @@ class DetailsModule extends Component {
         <div className="infor-list">
           <p>时间</p>
           <div className="infor-cont">
-            <p>{callInfo.opTime ? util.formatDate(new Date(callInfo.opTime), 'yyyy-MM-dd hh:mm:ss') : '--'}</p>
+            <p>{callInfo.opTime ? util.formatDate(callInfo.opTime, 'yyyy-MM-dd hh:mm:ss') : '--'}</p>
           </div>
         </div>
         <div className="infor-list">

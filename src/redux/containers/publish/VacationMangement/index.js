@@ -69,9 +69,9 @@ class Vacation extends Component {
         if (!isReturn) {
           return false;
         }
-        formData.append('leaveStartTimeStr', util.formatDate(new Date(this.state.start), 'yyyy-MM-dd hh:mm:ss'));
-        formData.append('leaveEndTimeStr', util.formatDate(new Date(this.state.end), 'yyyy-MM-dd hh:mm:ss'));
-        formData.append('applyTimeStr', util.formatDate(new Date(now), 'yyyy-MM-dd hh:mm:ss'));
+        formData.append('leaveStartTimeStr', util.formatDate(this.state.start, 'yyyy-MM-dd hh:mm:ss'));
+        formData.append('leaveEndTimeStr', util.formatDate(this.state.end, 'yyyy-MM-dd hh:mm:ss'));
+        formData.append('applyTimeStr', util.formatDate(now, 'yyyy-MM-dd hh:mm:ss'));
         formData.append('duration', this.state.val);
         formData.append('type', Number(subData.type[0]));
         formData.append('remark', subData.remark);

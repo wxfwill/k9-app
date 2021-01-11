@@ -52,7 +52,7 @@ class DogReport extends Component {
       return;
     }
     const user = JSON.parse(sessionStorage.getItem('user'));
-    const dataObj = { dogId, morbidityTime: util.formatDate(new Date(date), 'yyyy-MM-dd'), symptom, userId: user.id };
+    const dataObj = { dogId, morbidityTime: util.formatDate(date, 'yyyy-MM-dd'), symptom, userId: user.id };
     React.$ajax.publish.reportDisease(dataObj).then((res) => {
       if (res && res.code == 0) {
         toast('上报成功！');

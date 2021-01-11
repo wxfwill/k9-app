@@ -16,7 +16,7 @@ class GridSearchDetal extends Component {
         { label: '主要内容', value: item.taskContent },
         {
           label: '开始时间',
-          value: item.startTime ? util.formatDate(new Date(item.startTime), 'yyyy-MM-dd hh:mm:ss') : null,
+          value: item.startTime ? util.formatDate(item.startTime, 'yyyy-MM-dd hh:mm:ss') : null,
         },
         { label: '发布人', value: item.operatorName },
       ],

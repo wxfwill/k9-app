@@ -131,7 +131,7 @@ class TaskDetal extends Component {
                             <div className="other-infor">
                               <p>
                                 最新定位时间：
-                                {item.locTime ? util.formatDate(new Date(item.locTime), 'yyyy-MM-dd hh:mm:ss') : ''}
+                                {item.locTime ? util.formatDate(item.locTime, 'yyyy-MM-dd hh:mm:ss') : ''}
                               </p>
                               <p>
                                 经纬度：{item.longitude} {item.latitude}

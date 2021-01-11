@@ -16,7 +16,7 @@ class EmergencyDeploymentDetal extends Component {
         { label: '任务名称', value: item.taskName },
         {
           label: '日期',
-          value: item.planStartDate ? util.formatDate(new Date(item.planStartDate), 'yyyy-MM-dd') : null,
+          value: item.planStartDate ? util.formatDate(item.planStartDate, 'yyyy-MM-dd') : null,
         },
         { label: '作战区域', value: item.location },
         { label: '作战类型', value: item.combatTypeName },

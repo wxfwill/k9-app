@@ -32,7 +32,7 @@ class OwnTask extends Component {
       herderH: 0,
       tabType: '0',
       key: 0,
-      date: util.formatDate(new Date(Date.now()), 'yyyy-MM-dd'),
+      date: util.formatDate(Date.now(), 'yyyy-MM-dd'),
     };
   }
   componentWillUnmount() {

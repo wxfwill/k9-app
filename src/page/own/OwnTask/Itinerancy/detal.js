@@ -16,7 +16,7 @@ class ItinerancyDetal extends Component {
         { label: '任务名称', value: item.planName },
         {
           label: '日期',
-          value: item.taskTime ? util.formatDate(new Date(item.taskTime), 'yyyy-MM-dd hh:mm:ss') : null,
+          value: item.taskTime ? util.formatDate(item.taskTime, 'yyyy-MM-dd hh:mm:ss') : null,
         },
         { label: '参与人员', value: item.planUserNames },
         { label: '任务描述', value: item.content },

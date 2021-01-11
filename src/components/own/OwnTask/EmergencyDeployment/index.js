@@ -148,7 +148,7 @@ class EmergencyDeployment extends Component {
             <div className="new-title">{item.taskName}</div>
             <div className="new-desc">
               <span className="content">开始时间:</span>
-              {util.formatDate(new Date(item.planStartDate), 'yyyy-MM-dd hh:mm')}
+              {util.formatDate(item.planStartDate, 'yyyy-MM-dd hh:mm')}
             </div>
             <div className="new-desc">
               <span className="content">训练人员:</span>

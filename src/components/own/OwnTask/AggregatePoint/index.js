@@ -148,7 +148,7 @@ class OwnEmDepComponent extends Component {
             <div className="new-title">{item.taskName}</div>
             <div className="new-desc">
               <span className="content">开始时间:</span>
-              {util.formatDate(new Date(item.assembleTime), 'yyyy-MM-dd')}
+              {util.formatDate(item.assembleTime, 'yyyy-MM-dd')}
             </div>
             <div className="new-desc">
               <span className="content">集合地点:</span>

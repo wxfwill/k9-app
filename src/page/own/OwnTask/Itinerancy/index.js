@@ -148,7 +148,7 @@ class Itinerancy extends Component {
             <div className="new-title">{item.content}</div>
             <div className="new-desc">
               <span className="content">开始时间:</span>
-              {util.formatDate(new Date(item.taskTime), 'yyyy-MM-dd')}
+              {util.formatDate(item.taskTime, 'yyyy-MM-dd')}
             </div>
             <div className="new-desc">
               <span className="content">执行人员:</span>

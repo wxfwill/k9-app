@@ -148,7 +148,7 @@ class Drill extends Component {
             <div className="new-title">{item.subjectName}</div>
             <div className="new-desc">
               <span className="content">开始时间:</span>
-              {util.formatDate(new Date(item.trainDate), 'yyyy-MM-dd hh:mm')}
+              {util.formatDate(item.trainDate, 'yyyy-MM-dd hh:mm')}
             </div>
             <div className="new-desc">
               <span className="content">训练人员:</span>
