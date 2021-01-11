@@ -29,9 +29,9 @@ class Footer extends Component {
     if (this.props.history.location.pathname == '/news') {
       // flag = 'blueTab';
       flag = '消息';
-    } else if (this.props.history.location.pathname == '/check') {
-      //flag = 'redTab';
-      flag = '地图';
+      // } else if (this.props.history.location.pathname == '/check') {
+      //   //flag = 'redTab';
+      //   flag = '地图';
     } else if (this.props.history.location.pathname == '/workbench') {
       //flag = 'greenTab';
       flag = '工作台';
@@ -94,6 +94,9 @@ class Footer extends Component {
                         item.title == '消息' && this.props.socketNewList.total > 0 ? this.props.socketNewList.total : ''
                       }
                       onPress={() => {
+                        if (item.title === '搜捕') {
+                          return;
+                        }
                         this.setState({
                           selectedTab: item.title,
                         });
