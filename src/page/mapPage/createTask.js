@@ -32,10 +32,11 @@ class CreateTask extends Component {
   onSubmit = () => {
     this.props.form.validateFields((error, value) => {
       if (!error) {
-        let { taskData } = this.state;
+        let { taskData, taskPlace } = this.state;
         taskData.taskName = value.taskName; //任务名称
         taskData.taskDate = new Date(value.taskDate).getTime(); //util.formatDate(new Date(value.taskDate), 'yyyy-MM-dd hh:mm:ss'); //执行时间
         taskData.taskContent = value.taskContent; //任务内容
+        taskData.taskPlace = value.taskPlace ? value.taskPlace : taskPlace;
         React.$ajax.mapPage.publishGridHuntingTask(taskData).then((res) => {
           if (res && res.code == 0) {
             Toast.success('创建成功!', 1);
