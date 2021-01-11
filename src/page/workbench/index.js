@@ -87,7 +87,16 @@ class PublishComponent extends Component {
                 <Grid
                   data={this.state.taskData}
                   columnNum={3}
-                  onClick={(el, index) => this.handleGridItem(el, index)}
+                  onClick={(el, index) => {
+                    if(el.text==='网格化搜捕') {
+                      console.log('进入地图');
+                      util.CallApp({
+                        callAppName: 'map',
+                      });
+                    }else{
+                      this.handleGridItem(el, index)
+                    }
+                  }}
                   className="work-item"
                 />
               </Card.Body>

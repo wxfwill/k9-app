@@ -91,6 +91,13 @@ class Header extends Component {
   }
   onSelect = (opt) => {
     console.log(opt);
+    if(opt.props.value=='网格化搜捕') {
+        console.log('进入地图');
+        util.CallApp({
+          callAppName: 'map',
+        });
+        return;
+    }
     let { history } = this.props;
     this.setState({
       poverVisibe: false,
