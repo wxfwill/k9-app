@@ -51,6 +51,17 @@ class NewNoList extends Component {
       height: (document.documentElement.clientHeight * 3) / 4,
     };
   }
+  dicFormat = (title) => {
+    let obj = {
+      网格化搜捕: '/api/app/pageMyGridSearchTask',
+      训练计划: null,
+      日常巡逻: null,
+      紧急调配: null,
+      假期管理: null,
+      值班提醒: null,
+    };
+    return obj[title] ? obj[title] : null;
+  };
   componentWillUnmount() {
     this.setState = (state, callback) => {
       return;
@@ -59,7 +70,13 @@ class NewNoList extends Component {
     console.log('离开了');
   }
   handleSearchList = (per) => {
-    React.$ajax.news.gridSearchList(per).then((res) => {
+    let url = this.dicFormat(this.props.typeTitle);
+    if (!url) {
+      this.setState({ isLoading: false });
+      return;
+    }
+    console.log(url);
+    React.$ajax.postData({ url, data: per }).then((res) => {
       if (res.code == 0) {
         let resultData = res.data;
         resultData.list = resultData.list ? resultData.list : [];

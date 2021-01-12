@@ -31,7 +31,7 @@ class Own extends Component {
         onPress: () =>
           new Promise((resolve) => {
             let { history } = this.props;
-            Toast.info('正在退出...');
+            Toast.info('正在退出...', 1, () => {}, false);
             React.$ajax.login.loginOut().then((res) => {
               if (res.code == 0) {
                 CallApp({
@@ -46,8 +46,8 @@ class Own extends Component {
                 this.props.userInfoAction('');
                 // 关闭socket
                 closeWebSocket();
-                Toast.info('退出成功');
-                history.push('/login');
+                // Toast.info('退出成功88', 1, () => {}, false);
+                // history.push('/login');
               }
             });
           }),

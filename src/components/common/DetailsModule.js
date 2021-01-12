@@ -48,6 +48,7 @@ class DetailsModule extends Component {
   };
   render() {
     const { callInfo } = this.state;
+    console.log(process.env.BASE_URL);
     return (
       <div>
         <div className="infor-list">
@@ -61,7 +62,7 @@ class DetailsModule extends Component {
           <div className="infor-cont">
             {callInfo.photoNames && callInfo.photoNames.length > 0 ? (
               <img
-                src={`${config.localUrl}/api/attendance/img?fileName=${callInfo.photoNames[0]}`}
+                src={`${process.env.BASE_URL}/api/attendance/img?fileName=${callInfo.photoNames[0]}`}
                 onClick={this.showModal('modal1')}
               />
             ) : (
@@ -93,12 +94,12 @@ class DetailsModule extends Component {
           wrapProps={{ onTouchStart: this.onWrapTouchStart }}
         >
           <WingBlank>
-            <Carousel autoplay={false} infinite>
+            <Carousel autoplay={false} infinite={false} dots={false}>
               {callInfo.photoNames &&
                 callInfo.photoNames.map((file, index) => (
                   <a key={index} style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}>
                     <img
-                      src={`${config.localUrl}/api/attendance/img?fileName=${file}`}
+                      src={`${process.env.BASE_URL}/api/attendance/img?fileName=${file}`}
                       alt=""
                       style={{ width: '100%', verticalAlign: 'top' }}
                       onLoad={() => {
