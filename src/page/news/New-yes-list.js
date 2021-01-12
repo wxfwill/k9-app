@@ -171,7 +171,7 @@ class NewNoList extends Component {
     let item = rowData;
     return (
       item && (
-        <List className="new-list-type" key={item.rowData}>
+        <List className="new-list-type" key={item.rowData} onClick={this.props.intoMap}>
           <Item
             extra={
               <div

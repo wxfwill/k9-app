@@ -66,6 +66,13 @@ class NewList extends Component {
     this.setState({ tabType: item.sub });
     console.log(this.parent.noData());
   };
+  //进入地图
+  intoMap = () => {
+    console.log('进入地图');
+    util.CallApp({
+      callAppName: 'map',
+    });
+  };
   render() {
     return (
       this.state.title && (
@@ -93,10 +100,11 @@ class NewList extends Component {
                 onRef={this.onRef.bind(this)}
                 tabHeight={this.state.tabH}
                 headerH={this.state.herderH}
+                intoMap={this.intoMap}
               ></NewNoList>
             </div>
             <div style={{ boxSizing: 'border-box', height: '100%' }}>
-              <NewYesList tabHeight={this.state.tabH} headerH={this.state.herderH}></NewYesList>
+              <NewYesList tabHeight={this.state.tabH} headerH={this.state.herderH} intoMap={this.intoMap}></NewYesList>
             </div>
           </Tabs>
         </div>

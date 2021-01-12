@@ -103,6 +103,12 @@ class Own extends Component {
   // 点击跳转
   handleLink = (item) => {
     console.log(item);
+    if (item.text == '轨迹查看') {
+      util.CallApp({
+        callAppName: 'map',
+      });
+      return;
+    }
     let { history } = this.props;
     history.push(item.link);
   };

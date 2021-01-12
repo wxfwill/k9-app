@@ -159,21 +159,22 @@ class NewNoList extends Component {
     // this.setState({ title: obj.title });
   }
   handleNoNews = (item) => {
+    this.props.intoMap();
     console.log(item);
-    sendMessage({ serviceCode: 'readMsg', payload: item.msgIds.join(',') }, (data) => {
-      console.log('发送成功readMsg成功');
-      console.log(JSON.parse(data));
-      let res = JSON.parse(data);
-      if (res.code === 0) {
-        console.log('阅读消息');
-        console.log(res);
-        // 消息统计 减1
-        if (res.serviceCode == 'statisticsMsgTips') {
-          console.log('jing 111111111');
-          this.props.SocketNewListActions(res.data);
-        }
-      }
-    });
+    // sendMessage({ serviceCode: 'readMsg', payload: item.msgIds.join(',') }, (data) => {
+    //   console.log('发送成功readMsg成功');
+    //   console.log(JSON.parse(data));
+    //   let res = JSON.parse(data);
+    //   if (res.code === 0) {
+    //     console.log('阅读消息');
+    //     console.log(res);
+    //     // 消息统计 减1
+    //     if (res.serviceCode == 'statisticsMsgTips') {
+    //       console.log('jing 111111111');
+    //       this.props.SocketNewListActions(res.data);
+    //     }
+    //   }
+    // });
   };
   renderRow = (rowData) => {
     let index = this.state.todoList.length - 1;
