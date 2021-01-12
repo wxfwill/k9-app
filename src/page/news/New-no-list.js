@@ -55,6 +55,17 @@ class NewNoList extends Component {
       // height: (document.documentElement.clientHeight * 3) / 4,
     };
   }
+  dicFormat = (title) => {
+    let obj = {
+      网格化搜捕: '/api/app/pageMyGridSearchTask',
+      训练计划: null,
+      日常巡逻: null,
+      紧急调配: null,
+      假期管理: null,
+      值班提醒: null,
+    };
+    return obj[title] ? obj[title] : null;
+  };
   componentWillUnmount() {
     this.setState = (state, callback) => {
       return;
@@ -62,7 +73,13 @@ class NewNoList extends Component {
     dataBlobs = {};
   }
   handleSearchList = (per) => {
-    React.$ajax.news.gridSearchList(per).then((res) => {
+    let url = this.dicFormat(this.props.typeTitle);
+    if (!url) {
+      this.setState({ isLoading: false });
+      return;
+    }
+    console.log(url);
+    React.$ajax.postData({ url, data: per }).then((res) => {
       if (res.code == 0) {
         let resultData = res.data;
         resultData.list = resultData.list ? resultData.list : [];
@@ -158,23 +175,30 @@ class NewNoList extends Component {
     // let obj = util.urlParse(this.props.location.search);
     // this.setState({ title: obj.title });
   }
+  //进入地图
+  intoMap = () => {
+    console.log('进入地图');
+    util.CallApp({
+      callAppName: 'map',
+    });
+  };
   handleNoNews = (item) => {
-    this.props.intoMap();
     console.log(item);
-    // sendMessage({ serviceCode: 'readMsg', payload: item.msgIds.join(',') }, (data) => {
-    //   console.log('发送成功readMsg成功');
-    //   console.log(JSON.parse(data));
-    //   let res = JSON.parse(data);
-    //   if (res.code === 0) {
-    //     console.log('阅读消息');
-    //     console.log(res);
-    //     // 消息统计 减1
-    //     if (res.serviceCode == 'statisticsMsgTips') {
-    //       console.log('jing 111111111');
-    //       this.props.SocketNewListActions(res.data);
-    //     }
-    //   }
-    // });
+    sendMessage({ serviceCode: 'readMsg', payload: item.msgIds.join(',') }, (data) => {
+      console.log('发送成功readMsg成功');
+      console.log(JSON.parse(data));
+      let res = JSON.parse(data);
+      if (res.code === 0) {
+        console.log('阅读消息');
+        console.log(res);
+        // 消息统计 减1
+        if (res.serviceCode == 'statisticsMsgTips') {
+          console.log('jing 111111111');
+          this.props.SocketNewListActions(res.data);
+          this.intoMap();
+        }
+      }
+    });
   };
   renderRow = (rowData) => {
     let index = this.state.todoList.length - 1;

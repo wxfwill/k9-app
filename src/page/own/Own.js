@@ -82,7 +82,7 @@ class Own extends Component {
                 this.props.userInfoAction('');
                 // 关闭socket
                 closeWebSocket();
-                Toast.info('退出成功');
+                Toast.info('退出成功', 1, null, false);
                 history.push('/login');
               }
             });
@@ -145,7 +145,7 @@ class Own extends Component {
                 <p className="user-name">{user.user && user.user.name}</p>
                 <Brief>职务：中队长</Brief>
                 <Brief>部门：{'警犬大队三中队'}</Brief>
-                <Brief>电话：{1333333333}</Brief>
+                <Brief>电话：{user.user && user.user.telphone}</Brief>
               </Item>
             </List>
             <div className="list-wrap">
