@@ -128,8 +128,23 @@ class Own extends Component {
   onChange = (key) => {
     console.log(key);
   };
+  formatRoles = (list) => {
+    if (list && list.length > 0) {
+      return list.map((item, index) => {
+        return (
+          <span key={index}>
+            <i>{item.roleName || item.name}</i>
+            {index == list.length - 1 ? null : '/'}
+          </span>
+        );
+      });
+    } else {
+      return null;
+    }
+  };
   render() {
     let user = this.props.userInfo;
+    console.log(user);
     return (
       <div className="Own">
         <Header title="我" noColor="own" />
@@ -143,9 +158,9 @@ class Own extends Component {
                 //   onClick={this.handleJump.bind(this)}
               >
                 <p className="user-name">{user.user && user.user.name}</p>
-                <Brief>职务：中队长</Brief>
-                <Brief>部门：{'警犬大队三中队'}</Brief>
-                <Brief>电话：{user.user && user.user.telphone}</Brief>
+                <Brief>职务：{this.formatRoles(user.roles)}</Brief>
+                <Brief>部门：{this.formatRoles(user.orgs)}</Brief>
+                <Brief>电话：{user.user.telphone ? user.user.telphone : '无'}</Brief>
               </Item>
             </List>
             <div className="list-wrap">

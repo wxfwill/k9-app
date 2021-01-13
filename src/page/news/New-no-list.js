@@ -36,6 +36,10 @@ class NewNoList extends Component {
     //   rowHasChanged: (row1, row2) => row1 !== row2,
     //   sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
     // });
+    let _this = this;
+    window.refreshH5 = function () {
+      _this.isRefreshH5();
+    };
     const ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2,
     });
@@ -113,6 +117,12 @@ class NewNoList extends Component {
     this.handleSearchList({ currPage, param, pageSize, sortFieldName, sortType });
     this.props.onRef && this.props.onRef('parent', this);
   }
+  isRefreshH5 = () => {
+    console.log('app回调过了');
+    let { currPage, param, pageSize, sortFieldName, sortType } = this.state;
+    this.handleSearchList({ currPage, param, pageSize, sortFieldName, sortType });
+    this.props.onRef && this.props.onRef('parent', this);
+  };
   onEndReached = (event) => {
     if (!this.state.hasMore) {
       return;
@@ -180,6 +190,7 @@ class NewNoList extends Component {
     console.log('进入地图');
     util.CallApp({
       callAppName: 'map',
+      callbackName: 'refreshH5',
     });
   };
   handleNoNews = (item) => {
