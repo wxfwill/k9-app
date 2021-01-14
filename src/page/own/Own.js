@@ -12,15 +12,18 @@ const Item = List.Item;
 const Brief = Item.Brief;
 const alert = Modal.alert;
 let alertInstance = null;
-const ownPic = require('images/own/user.svg');
 
 require('style/own/own.less');
 
 class Own extends Component {
   constructor(props) {
     super(props);
+    let userInfos = this.props.userInfo.user;
     this.state = {
       data: own.appMenu,
+      userImg: userInfos.photo
+        ? `${process.env.BASE_URL}/api/user/showImg?fileName=${userInfos.photo}`
+        : require('images/own/user.svg'),
     };
   }
   loginOutMeth = (msg) => {
@@ -153,7 +156,7 @@ class Own extends Component {
             <List className="border-b-n">
               <Item
                 //  arrow="horizontal"
-                thumb={<img src={ownPic} alt="user" className="user-img" />}
+                thumb={<img src={this.state.userImg} alt="user" className="user-img" />}
                 multipleLine
                 //   onClick={this.handleJump.bind(this)}
               >

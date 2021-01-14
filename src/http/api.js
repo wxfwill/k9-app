@@ -20,6 +20,15 @@ const postData = ({ url, data, config }) => {
   });
 };
 
+const getData = ({ url, data, config }) => {
+  return axios({
+    url: url,
+    method: 'get',
+    params: data,
+    headers: config && config.headers ? config.headers : configs.headers,
+  });
+};
+
 // 默认全部导出
 export default {
   login,
@@ -29,4 +38,5 @@ export default {
   footer,
   mapPage,
   postData,
+  getData,
 };
