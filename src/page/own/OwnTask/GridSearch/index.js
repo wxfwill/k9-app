@@ -21,7 +21,9 @@ class OwnGridList extends Component {
     });
     this.state = {
       currPage: 1,
-      finished: null,
+      param: {
+        finished: null,
+      },
       pageSize: 10,
       sortFieldName: '',
       taskCreateDate: null,
@@ -72,8 +74,8 @@ class OwnGridList extends Component {
     this.setState({ isLoading: true });
     this.setState({ currPage: ++this.state.currPage });
 
-    let { currPage, finished, pageSize, sortFieldName, sortType, taskCreateDate } = this.state;
-    this.handleSearchList({ currPage, finished, pageSize, sortFieldName, sortType, taskCreateDate });
+    let { currPage, param, pageSize, sortFieldName, sortType, taskCreateDate } = this.state;
+    this.handleSearchList({ currPage, param, pageSize, sortFieldName, sortType, taskCreateDate });
   };
   noData = () => {
     console.log('未处理');
@@ -91,8 +93,8 @@ class OwnGridList extends Component {
     if (this.props.date !== nextProps.date) {
       console.log(456);
       this.setState({ taskCreateDate: nextProps.date, todoList: [], currPage: 1 }, () => {
-        let { currPage, finished, pageSize, sortFieldName, sortType, taskCreateDate } = this.state;
-        this.handleSearchList({ currPage, finished, pageSize, sortFieldName, sortType, taskCreateDate });
+        let { currPage, param, pageSize, sortFieldName, sortType, taskCreateDate } = this.state;
+        this.handleSearchList({ currPage, param, pageSize, sortFieldName, sortType, taskCreateDate });
       });
     }
   }
@@ -111,7 +113,11 @@ class OwnGridList extends Component {
                 className="finsh"
                 style={{
                   background: `url(${
-                    item.status == 1 ? require('images/news/notodo.svg') : require('images/news/running.svg')
+                    item.taskStatus == 0
+                      ? require('images/news/notodo.svg')
+                      : item.taskStatus == 3
+                      ? require('images/news/finsh.svg')
+                      : require('images/news/running.svg')
                   }) left top no-repeat`,
                   backgroundSize: '100% 100%',
                   width: '100%',
@@ -148,11 +154,11 @@ class OwnGridList extends Component {
             </div>
             <div className="new-desc">
               <span className="content">开始时间:</span>
-              {util.formatDate(item.planStartTime, 'yyyy-MM-dd hh:mm')}
+              {util.formatDate(item.startTime, 'yyyy-MM-dd hh:mm')}
             </div>
             <div className="new-desc">
               <span className="content">发布人:</span>
-              {item.operatorName}
+              {item.publishUserName}
             </div>
           </Item>
           {
