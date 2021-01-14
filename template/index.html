@@ -89,11 +89,11 @@
       document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"'+'>'+'<'+'/'+'script>');
 		}
 
-	if(window.AndroidWebView){
-		window.onKeyCodeBack = function(){
-			var hrefHash = window.location.hash;
-			if(hrefHash == '#/login' || hrefHash == '#/own' || hrefHash == '#/publish' || hrefHash == '#/news' || hrefHash == '#/check'){
-				window.AndroidWebView.onExit();
+	if(window.android){
+		window.JsReturn = function(){
+			var hrefHash = window.location.pathname;
+			if(hrefHash == '/k9-app/login' || hrefHash == '/k9-app/own' || hrefHash == '/k9-app/workbench' || hrefHash == '/k9-app/news'){
+				window.android.JSReturn();
 			}else{
 				window.history.back();
 			}

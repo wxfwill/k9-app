@@ -43,10 +43,6 @@ class Login extends Component {
       modal: false,
     };
   }
-  componentDidMount() {
-    //手机自带返回按钮，登录之后不允许返回登录页
-    this.props.token ? this.isLogin(this.props.token) : null;
-  }
   isLogin = (token) => {
     let { history } = this.props;
     //通过token判断登录是否有效
