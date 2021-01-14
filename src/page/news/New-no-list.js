@@ -116,7 +116,6 @@ class NewNoList extends Component {
   }
   isRefreshH5 = () => {
     console.log('app回调过了');
-    alert('APP调用H5刷新方法');
     this.setState({ todoList: [] }, () => {
       let { currPage, param, pageSize, sortFieldName, sortType } = this.state;
       this.handleSearchList({ currPage, param, pageSize, sortFieldName, sortType });
