@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="143px" height="48px" viewBox="0 0 143 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>已完成</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="4-我的-我的任务-网格化搜捕" transform="translate(-583.000000, -1006.000000)">
+            <g id="大组件/任务列表卡片备份" transform="translate(24.000000, 1006.000000)">
+                <g id="编组-2">
+                    <g id="标签/执行中" transform="translate(559.000000, 0.000000)">
+                        <g id="已完成">
+                            <path d="M0,0 L127,0 C135.836556,-1.623249e-15 143,7.163444 143,16 L143,48 L143,48 L23,48 C17.6666667,48 12.9733333,44.48 11.48,39.36 L0,0 L0,0 Z" id="矩形" fill="#E9EAEE"></path>
+                            <text font-family="PingFang-SC-Medium, PingFang SC" font-size="28" font-weight="400" fill="#ADB0BC">
+                                <tspan x="35" y="34">已完成</tspan>
+                            </text>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
