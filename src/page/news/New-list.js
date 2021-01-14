@@ -88,7 +88,7 @@ class NewList extends Component {
               this.handleClickTab(tab, index);
             }}
           >
-            <div style={{ boxSizing: 'border-box' }}>
+            <div style={{ boxSizing: 'border-box', height: '100%' }}>
               <NewNoList
                 onRef={this.onRef.bind(this)}
                 tabHeight={this.state.tabH}

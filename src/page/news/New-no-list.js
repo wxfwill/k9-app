@@ -36,10 +36,10 @@ class NewNoList extends Component {
     //   rowHasChanged: (row1, row2) => row1 !== row2,
     //   sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
     // });
-    let _this = this;
-    window.refreshH5 = function () {
-      _this.isRefreshH5();
-    };
+    // let _this = this;
+    // window.refreshH5 = function () {
+    //   // _this.isRefreshH5();
+    // };
     const ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2,
     });
@@ -87,25 +87,22 @@ class NewNoList extends Component {
       if (res.code == 0) {
         let resultData = res.data;
         resultData.list = resultData.list ? resultData.list : [];
-        this.state.todoList = this.state.todoList.concat(resultData.list);
-
-        if (this.state.todoList.length < resultData.totalCount) {
-          // 可以滑动
-          this.state.hasMore = true;
-        } else {
-          this.state.hasMore = false;
-        }
-        // let newData = Object.assign({}, this.state.perObj, { currPage: ++1});
-        // this.setState({ perObj: newData });
-        // this.setState({
-        //   dataSource: this.state.dataSource.cloneWithRows(genData(this.state.perObj.currentPage)),
-        //   isLoading: false,
-        // })
-        this.setState(function (prevState) {
-          return {
-            dataSource: prevState.dataSource.cloneWithRows(this.state.todoList),
-            isLoading: false,
-          };
+        let { todoList } = this.state;
+        let newArr = todoList.concat(resultData.list);
+        // this.state.todoList = this.state.todoList.concat(resultData.list);
+        this.setState({ todoList: newArr }, () => {
+          if (this.state.todoList.length < resultData.totalCount) {
+            // 可以滑动
+            this.state.hasMore = true;
+          } else {
+            this.state.hasMore = false;
+          }
+          this.setState(function (prevState) {
+            return {
+              dataSource: prevState.dataSource.cloneWithRows(this.state.todoList),
+              isLoading: false,
+            };
+          });
         });
       }
     });
@@ -119,8 +116,12 @@ class NewNoList extends Component {
   }
   isRefreshH5 = () => {
     console.log('app回调过了');
-    let { currPage, param, pageSize, sortFieldName, sortType } = this.state;
-    this.handleSearchList({ currPage, param, pageSize, sortFieldName, sortType });
+    alert('APP调用H5刷新方法');
+    this.setState({ todoList: [] }, () => {
+      let { currPage, param, pageSize, sortFieldName, sortType } = this.state;
+      this.handleSearchList({ currPage, param, pageSize, sortFieldName, sortType });
+    });
+
     this.props.onRef && this.props.onRef('parent', this);
   };
   onEndReached = (event) => {
@@ -191,6 +192,7 @@ class NewNoList extends Component {
     util.CallApp({
       callAppName: 'map',
       callbackName: 'refreshH5',
+      callbackFun: this.isRefreshH5,
     });
   };
   handleNoNews = (item) => {
@@ -315,7 +317,8 @@ class NewNoList extends Component {
           renderRow={(rowData, i) => this.renderRow(rowData, i)}
           renderSeparator={separator}
           style={{
-            height: this.state.height,
+            // height: this.state.height,
+            height: '100%',
             overflow: 'auto',
           }}
           pageSize={1}

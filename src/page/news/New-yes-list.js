@@ -286,7 +286,8 @@ class NewNoList extends Component {
           renderRow={(rowData, i) => this.renderRow(rowData, i)}
           renderSeparator={separator}
           style={{
-            height: this.state.height,
+            // height: this.state.height,
+            height: '100%',
             overflow: 'auto',
           }}
           pageSize={1}

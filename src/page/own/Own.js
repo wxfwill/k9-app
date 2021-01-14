@@ -139,7 +139,7 @@ class Own extends Component {
         );
       });
     } else {
-      return null;
+      return '无';
     }
   };
   render() {
