@@ -23,6 +23,7 @@ class SelectPersonnel extends Component {
       {
         allData: this.props.allData,
         targetData: this.props.targetData,
+        jumpCallBack: this.props.jumpCallBack,
       },
       () => {
         this.queryUserList();
@@ -36,6 +37,7 @@ class SelectPersonnel extends Component {
       {
         allData: nextProps.allData,
         targetData: nextProps.targetData,
+        jumpCallBack: nextProps.jumpCallBack,
       },
       () => {
         this.queryUserList();
@@ -202,8 +204,8 @@ class SelectPersonnel extends Component {
     }
   };
   render() {
-    const { title, jumpCallBack } = this.props;
-    const { groupList, allMembers, userName, teamId } = this.state;
+    const { title } = this.props;
+    const { groupList, allMembers, userName, teamId, jumpCallBack } = this.state;
     return (
       <div className="layer-main">
         <div className="parent-container">
