@@ -175,10 +175,13 @@ class NewNoList extends Component {
     // let obj = util.urlParse(this.props.location.search);
     // this.setState({ title: obj.title });
   }
-  intoMap = () => {
+  intoMap = (taskId) => {
     console.log('进入地图');
     util.CallApp({
       callAppName: 'map',
+      param: {
+        taskId: taskId,
+      },
     });
   };
   renderRow = (rowData) => {
@@ -194,7 +197,7 @@ class NewNoList extends Component {
     let item = rowData;
     return (
       item && (
-        <List className="new-list-type" key={item.rowData} onClick={this.intoMap}>
+        <List className="new-list-type" key={item.rowData} onClick={() => this.intoMap(item.taskId)}>
           <Item
             extra={
               <div
