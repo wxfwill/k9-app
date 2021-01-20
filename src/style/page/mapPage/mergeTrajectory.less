@@ -1,77 +1,87 @@
 .mergeTrajectory-box {
   background-color: #f5f6f7 !important;
-  .content {
+  .radio-list {
     padding: 0.32rem;
     padding-bottom: 0;
     box-sizing: border-box;
     .am-card {
       border: none;
       border-radius: 0.213333rem;
+      font-weight: 500;
+      padding-bottom: 0;
+      min-height: auto;
       margin-bottom: 0.32rem;
-      .am-card-header {
-        padding: 0.213333rem 0.32rem;
-        .am-card-header-content {
-          font-size: 0.453333rem;
-          color: #81838c;
-          line-height: 0.64rem;
-        }
-        .am-card-header-extra {
-          .delete {
-            font-size: 0.426667rem;
-            color: #ff7575;
-            vertical-align: middle;
-          }
-        }
-      }
       .am-card-body {
-        border-color: #e6e6e6;
-        padding: 0.426667rem 0.453333rem;
-        .pers-box {
-          background-color: #f8f8f8;
+        border: none !important;
+        padding: 0.4rem 0.213333rem;
+        min-height: auto;
+        .radio-cont {
           display: flex;
-          justify-content: space-between;
           align-items: center;
-          border-radius: 0.106667rem;
-          padding: 0.24rem 0.32rem;
-          .pers-infor {
+          .radio-ico {
+            width: 0.426667rem;
+            height: 0.426667rem;
+            margin-right: 0.213333rem;
+            border: 0.013333rem solid #dbdbdb;
+            border-radius: 50%;
+            &.choose {
+              border: none;
+              background-image: url(../../../images/mapPage/check.png);
+              background-size: 100% 100%;
+            }
+          }
+          .radio-infor {
             flex: 1;
-            .name {
+            dt {
               font-size: 0.453333rem;
               color: #2d2e31;
               line-height: 0.64rem;
               span {
-                font-size: 0.426667rem;
                 color: #81838c;
                 margin-left: 0.16rem;
               }
             }
-            p {
+            dd {
               font-size: 0.373333rem;
+              font-weight: 500;
               color: #adb0bc;
               line-height: 0.533333rem;
-              margin-top: 0.16rem;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
             }
           }
-          .select {
-            font-size: 0.453333rem;
-            color: #adb0bc;
-            line-height: 0.64rem;
-          }
-          .am-icon {
-            color: #cecece;
-          }
-        }
-        .line {
-          font-size: 0;
-          text-align: center;
-          margin: 0.2rem 0;
-          i {
-            height: 0.453333rem;
-            display: inline-block;
-            border-right: 1px dashed #cecece;
+          .check {
+            width: 1.066667rem;
+            font-size: 0.426667rem;
+            color: #527ad9;
+            text-align: center;
           }
         }
       }
+    }
+  }
+}
+
+.mergeTrajectory-foot {
+  height: 1.333333rem !important;
+  box-sizing: border-box;
+  border-top: 0.013333rem solid #e5e5e5;
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+  padding-top: 0.213333rem;
+  padding-bottom: 0.213333rem;
+  .btn {
+    width: 50%;
+    text-align: center;
+    height: 0.906667rem;
+    font-size: 0.453333rem;
+    font-weight: 500;
+    color: #527ad9;
+    line-height: 0.906667rem;
+    &.cancel {
+      border-right: 0.013333rem solid #e5e5e5;
+      color: #81838c;
     }
   }
 }
