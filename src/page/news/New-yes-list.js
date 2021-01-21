@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { ListView, List, Modal } from 'antd-mobile';
+import { ListView, List, Modal, Badge } from 'antd-mobile';
 import NoData from 'components/common/No-data';
+import { connect } from 'react-redux';
+import { sendMessage } from 'components/common/websocket';
+import { saveSocketNewList } from 'store/actions/websocketAction';
 // require("style/own/own.less");
 const Item = List.Item;
 const alert = Modal.alert;
@@ -40,7 +43,6 @@ class NewNoList extends Component {
       param: {
         finished: true,
       },
-
       pageSize: 10,
       sortFieldName: '',
       sortType: 'desc',
@@ -175,13 +177,37 @@ class NewNoList extends Component {
     // let obj = util.urlParse(this.props.location.search);
     // this.setState({ title: obj.title });
   }
-  intoMap = (taskId) => {
-    console.log('进入地图');
-    util.CallApp({
-      callAppName: 'map',
-      param: {
-        taskId: taskId,
-      },
+  isRefreshH5 = () => {
+    console.log('app回调过了');
+    this.setState({ todoList: [] }, () => {
+      let { currPage, param, pageSize, sortFieldName, sortType } = this.state;
+      this.handleSearchList({ currPage, param, pageSize, sortFieldName, sortType });
+    });
+
+    this.props.onRef && this.props.onRef('parent', this);
+  };
+  intoMap = (item) => {
+    sendMessage({ serviceCode: 'readMsg', payload: item.msgIds.join(',') }, (data) => {
+      console.log('已读消息成功');
+      console.log(JSON.parse(data));
+      let res = JSON.parse(data);
+      if (res.code === 0) {
+        console.log('阅读消息');
+        console.log(res);
+        // 消息统计 减1
+        if (res.serviceCode == 'statisticsMsgTips') {
+          this.props.SocketNewListActions(res.data);
+          console.log('进入地图');
+          util.CallApp({
+            callAppName: 'map',
+            param: {
+              taskId: item.taskId,
+            },
+            callbackName: 'refreshH5',
+            callbackFun: this.isRefreshH5,
+          });
+        }
+      }
     });
   };
   renderRow = (rowData) => {
@@ -197,7 +223,7 @@ class NewNoList extends Component {
     let item = rowData;
     return (
       item && (
-        <List className="new-list-type" key={item.rowData} onClick={() => this.intoMap(item.taskId)}>
+        <List className="new-list-type" key={item.rowData} onClick={() => this.intoMap(item)}>
           <Item
             extra={
               <div
@@ -218,17 +244,19 @@ class NewNoList extends Component {
             }
             align="top"
             thumb={
-              <span
-                style={{
-                  width: '1.333333rem',
-                  height: '1.333333rem',
-                  borderRadius: '0.213333rem',
-                  overflow: 'hidden',
-                  background: `url(${util.urlParse(this.props.location.search).icon}) left top no-repeat`,
-                  backgroundSize: '100% 100%',
-                  display: 'inline-block',
-                }}
-              />
+              <Badge dot={item.msgNew}>
+                <span
+                  style={{
+                    width: '1.333333rem',
+                    height: '1.333333rem',
+                    borderRadius: '0.213333rem',
+                    overflow: 'hidden',
+                    background: `url(${util.urlParse(this.props.location.search).icon}) left top no-repeat`,
+                    backgroundSize: '100% 100%',
+                    display: 'inline-block',
+                  }}
+                />
+              </Badge>
             }
             multipleLine
           >
@@ -306,4 +334,11 @@ class NewNoList extends Component {
   }
 }
 
-export default withRouter(NewNoList);
+const mapStateToProps = (state) => ({
+  socketNewList: state.socketReducer.newLIst,
+});
+const mapDispatchToProps = (dispatch) => ({
+  SocketNewListActions: (list) => dispatch(saveSocketNewList(list)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(NewNoList));

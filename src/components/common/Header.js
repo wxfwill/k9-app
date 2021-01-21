@@ -91,12 +91,12 @@ class Header extends Component {
   }
   onSelect = (opt) => {
     console.log(opt);
-    if(opt.props.value=='网格化搜捕') {
-        console.log('进入地图');
-        util.CallApp({
-          callAppName: 'map',
-        });
-        return;
+    if (opt.props.value == '网格化搜捕') {
+      console.log('进入地图');
+      util.CallApp({
+        callAppName: 'map',
+      });
+      return;
     }
     let { history } = this.props;
     this.setState({
@@ -137,9 +137,7 @@ class Header extends Component {
     });
   };
   handleChange = (data) => {
-    console.log('ok');
-    console.log(data);
-    let time = util.formatDate(data, 'yyyy-MM-dd');
+    let time = util.formatDate(new Date(data).getTime(), 'yyyy-MM-dd');
     this.setState({ customContent1: time });
     this.setState({ date: data });
     this.setState({ isShow: !this.state.isShow });

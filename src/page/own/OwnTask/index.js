@@ -41,6 +41,7 @@ class OwnTask extends Component {
     };
   }
   changeTimeList = (time) => {
+    console.log(time);
     this.setState({ date: time });
   };
   UNSAFE_componentWillMount() {}
