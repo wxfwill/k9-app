@@ -111,7 +111,7 @@ class MergeTrajectory extends Component {
                                   {item.userName} <span>{item.number}</span>
                                 </dt>
                                 <dd>
-                                  经纬度：{item.lat} {item.lng}
+                                  经纬度：{item.lat} , {item.lng}
                                 </dd>
                               </dl>
                               <div className="check">
