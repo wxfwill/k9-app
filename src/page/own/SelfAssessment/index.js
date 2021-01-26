@@ -163,57 +163,59 @@ class SelfAssessmentList extends React.Component {
       );
     };
     return (
-      <div className="layer-main">
-        <div className="parent-container">
-          <Header title="我的考核" pointer="pointer" />
-          <div className="child-container">
-            <div className="components own-self-assessment">
-              <div className="search-box">
-                <div className="condition c-left">
-                  <span className="label">考核时间：</span>
-                  {repDate ? <p className="cont">{util.formatDate(repDate, 'yyyy-MM')}</p> : '全部'}
-                  <img src={require('images/own/triangle.svg')} />
-                  <DatePicker mode="month" value={repDate} onChange={(date) => this.getRepDate(date)}>
-                    <List.Item></List.Item>
-                  </DatePicker>
+      this.state.dataSource && (
+        <div className="layer-main">
+          <div className="parent-container">
+            <Header title="我的考核" pointer="pointer" />
+            <div className="child-container">
+              <div className="components own-self-assessment">
+                <div className="search-box">
+                  <div className="condition c-left">
+                    <span className="label">考核时间：</span>
+                    {repDate ? <p className="cont">{util.formatDate(repDate, 'yyyy-MM')}</p> : '全部'}
+                    <img src={require('images/own/triangle.svg')} />
+                    <DatePicker mode="month" value={repDate} onChange={(date) => this.getRepDate(date)}>
+                      <List.Item></List.Item>
+                    </DatePicker>
+                  </div>
+                  <div className="condition c-right">
+                    <span className="label">审批状态：</span>
+                    <p className="cont">{approvalState == null ? '全部' : approvalState == 1 ? '未审批' : '已完成'}</p>
+                    <img src={require('images/own/triangle.svg')} />
+                    <Picker
+                      data={approvalStateArr}
+                      value={[approvalState]}
+                      cols={1}
+                      className="forss"
+                      onChange={(arr) => this.getApprovalState(arr[0])}
+                    >
+                      <List.Item></List.Item>
+                    </Picker>
+                  </div>
                 </div>
-                <div className="condition c-right">
-                  <span className="label">审批状态：</span>
-                  <p className="cont">{approvalState == null ? '全部' : approvalState == 1 ? '未审批' : '已完成'}</p>
-                  <img src={require('images/own/triangle.svg')} />
-                  <Picker
-                    data={approvalStateArr}
-                    value={[approvalState]}
-                    cols={1}
-                    className="forss"
-                    onChange={(arr) => this.getApprovalState(arr[0])}
-                  >
-                    <List.Item></List.Item>
-                  </Picker>
+                <div className="main">
+                  <ListView
+                    ref={(el) => (this.lv = el)}
+                    dataSource={this.state.dataSource}
+                    renderFooter={() => (
+                      <div style={{ padding: 16, textAlign: 'center' }}>
+                        {this.state.isLoading ? 'Loading...' : evaluationList.length == 0 ? <NoData /> : '无更多数据了'}
+                      </div>
+                    )}
+                    renderBodyComponent={() => <MyBody />}
+                    renderRow={row}
+                    className="am-list"
+                    pageSize={1}
+                    scrollRenderAheadDistance={500}
+                    onEndReached={this.onEndReached}
+                    onEndReachedThreshold={10}
+                  />
                 </div>
-              </div>
-              <div className="main">
-                <ListView
-                  ref={(el) => (this.lv = el)}
-                  dataSource={this.state.dataSource}
-                  renderFooter={() => (
-                    <div style={{ padding: 16, textAlign: 'center' }}>
-                      {this.state.isLoading ? 'Loading...' : evaluationList.length == 0 ? <NoData /> : '无更多数据了'}
-                    </div>
-                  )}
-                  renderBodyComponent={() => <MyBody />}
-                  renderRow={row}
-                  className="am-list"
-                  pageSize={1}
-                  scrollRenderAheadDistance={500}
-                  onEndReached={this.onEndReached}
-                  onEndReachedThreshold={10}
-                />
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )
     );
   }
 }
