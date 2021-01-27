@@ -65,9 +65,8 @@ class RollCall extends Component {
         if (!isReturn) {
           return false;
         }
-        formData.append('content', subData.remark);
+        formData.append('content', subData.remark ? subData.remark:'');
         React.$ajax.publish.rollCallSaveRec(formData).then((res) => {
-          console.log(res, '==-==========------====000000');
           if (res && res.code == 0) {
             Toast.info('提交成功!');
             this.setState({
