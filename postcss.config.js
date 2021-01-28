@@ -20,7 +20,7 @@ module.exports = {
       {
         rootValue: 75,
         propList: ['*', '!border*'],
-        selectorBlackList: ['am-'],
+        selectorBlackList: ['am-', 'weui'],
         minPixelValue: 1,
       },
     ],
