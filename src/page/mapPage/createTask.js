@@ -54,7 +54,15 @@ class CreateTask extends Component {
     return (
       <div className="layer-main">
         <div className="parent-container">
-          <Header title="创建任务" pointer="pointer" />
+          <Header
+            title="创建任务"
+            pointer="pointer"
+            jumpCallBack={() => {
+              util.CallApp({
+                callAppName: 'close',
+              });
+            }}
+          />
           <div className="child-container">
             <div className="components createTask-box">
               <div className="form-main">
