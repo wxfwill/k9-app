@@ -7,6 +7,7 @@ export const rollCallSaveRec = (data) => {
     url: '/api/attendance/saveRec',
     method: 'post',
     data,
+    timeout: 50000,
   });
 };
 
@@ -34,6 +35,7 @@ export const leaveSaveInfo = (data) => {
     url: '/api/leaveRecord/saveInfo',
     method: 'post',
     data,
+    timeout: 50000,
   });
 };
 

@@ -81,16 +81,16 @@ class Vacation extends Component {
         formData.append('type', Number(subData.type[0]));
         formData.append('remark', subData.remark);
         let _this = this;
-        loading.show('提交中');
+        //loading.show('提交中');
         React.$ajax.publish.leaveSaveInfo(formData).then((res) => {
           if (res && res.code == 0) {
             let { history } = _this.props;
             Toast.info('申请成功!');
             history.goBack();
-            loading.hide();
+            //loading.hide();
           } else {
             Toast.info(res.msg);
-            loading.hide();
+            //loading.hide();
             return;
           }
         });
