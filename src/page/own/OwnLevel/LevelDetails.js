@@ -27,7 +27,7 @@ class LevelDetails extends Component {
                   label: '结束时间',
                   value: item.leaveEndTime ? util.formatDate(item.leaveEndTime, 'yyyy-MM-dd hh:mm:ss') : null,
                 },
-                { label: '图片', value: item.fileList, type: 'img' },
+                { label: '图片', value: item.fileList, type: 'img', imgUrl: 'leaveRecord' },
                 { label: '请假事由', value: item.remark },
               ],
             });
