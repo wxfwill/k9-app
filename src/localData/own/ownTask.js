@@ -35,11 +35,6 @@ export const appMenu = [
     icon: require('images/own/self-assessment.svg'),
     link: '/own/SelfAssessmentList',
   },
-  {
-    text: '修改密码',
-    icon: require('images/own/accent.svg'),
-    link: '/updatePwd',
-  },
 ];
 
 // 我的任务 tabs

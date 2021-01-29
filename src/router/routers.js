@@ -453,6 +453,11 @@ const MergeTrajectory = (props) => (
   </Bundle>
 );
 
+// 设置
+const SysSetList = (props) => (
+  <Bundle load={() => import('page/own/SysSet/List')}>{(SysSetList) => <SysSetList {...props} />}</Bundle>
+);
+
 import NotFound from 'components/NotFound';
 
 export const routes = [
@@ -618,6 +623,11 @@ export const routes = [
   {
     path: '/own/OwnTask',
     component: OwnTask,
+    auth: true,
+  },
+  {
+    path: '/own/SysSetList',
+    component: SysSetList,
     auth: true,
   },
   {

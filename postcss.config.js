@@ -19,7 +19,7 @@ module.exports = {
       'postcss-pxtorem',
       {
         rootValue: 75,
-        propList: ['*', '!border*'],
+        propList: ['*', '!border*', '*Px'],
         selectorBlackList: ['am-', 'weui'],
         minPixelValue: 1,
       },

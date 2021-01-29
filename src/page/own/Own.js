@@ -145,6 +145,10 @@ class Own extends Component {
       return '无';
     }
   };
+  handleSet = () => {
+    let { history } = this.props;
+    history.push('/own/SysSetList');
+  };
   render() {
     let user = this.props.userInfo;
     console.log(user);
@@ -160,11 +164,20 @@ class Own extends Component {
                 multipleLine
                 //   onClick={this.handleJump.bind(this)}
               >
-                <p className="user-name">{user.user && user.user.name}</p>
+                <p className="user-name">
+                  {user.user && user.user.name}
+                  {/* <span className="sysSet">
+                    <img src={require('images/own/set.png')} alt="设置" />
+                    设置
+                  </span> */}
+                </p>
                 <Brief>职务：{this.formatRoles(user.roles)}</Brief>
                 <Brief>部门：{this.formatRoles(user.orgs)}</Brief>
                 <Brief>电话：{user.user.telphone ? user.user.telphone : '无'}</Brief>
               </Item>
+              <div className="sysSet" onClick={this.handleSet}>
+                <img src={require('images/own/set.png')} alt="设置" />
+              </div>
             </List>
             <div className="list-wrap">
               {this.state.data.map((item, index) => {
