@@ -22,7 +22,6 @@ class CreateTask extends Component {
     //获取APP端网格相关数据
     const _this = this;
     window.jsGridData = function (data) {
-      alert(data);
       _this.setState({
         taskData: data ? JSON.parse(data) : {},
         taskPlace: data ? JSON.parse(data).taskPlace : '',

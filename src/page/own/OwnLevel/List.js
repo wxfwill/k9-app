@@ -124,7 +124,7 @@ class OwnLevelComponent extends Component {
               />
             }
           >
-            {`${item.name}-${util.formatDate(new Date(item.applyTime), 'yyyy-MM-dd')} 请假申请`}
+            {`${item.name}-${util.formatDate(item.applyTime, 'yyyy-MM-dd')} 请假申请`}
           </Item>
         </List>
       )

@@ -173,7 +173,7 @@ const OwnApprovalDetails = (props) => (
 );
 // 请假申请列表
 const OwnLeaveList = (props) => (
-  <Bundle load={() => import('page/own/OwnLevel/list')}>{(OwnLeaveList) => <OwnLeaveList {...props} />}</Bundle>
+  <Bundle load={() => import('page/own/OwnLevel/List')}>{(OwnLeaveList) => <OwnLeaveList {...props} />}</Bundle>
 );
 // 请假申请详情
 const OwnLeaveListDetails = (props) => (

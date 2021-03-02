@@ -14,7 +14,6 @@ class AssignPerson extends Component {
     const _this = this;
     window.jsAssignLeader = function (data) {
       console.log(data, '分配队长APP返回数据');
-      alert(data);
       _this.getAssignLeader(data);
     };
   }

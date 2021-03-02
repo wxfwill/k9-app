@@ -63,10 +63,14 @@ class DetailComponent extends Component {
                               item.value.map((element, key) => {
                                 return (
                                   <img
-                                    src={`${config.localUrl}/api/attendance/img?fileName=${element.fileName}`}
+                                    src={`${config.localUrl}/api/${
+                                      item.imgUrl ? item.imgUrl : 'attendance'
+                                    }/img?fileName=${element.fileName}`}
                                     onClick={this.showModal(
                                       'modal1',
-                                      `${config.localUrl}/api/attendance/img?fileName=${element.fileName}`
+                                      `${config.localUrl}/api/${
+                                        item.imgUrl ? item.imgUrl : 'attendance'
+                                      }/img?fileName=${element.fileName}`
                                     )}
                                     key={key}
                                   />
